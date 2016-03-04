@@ -1,6 +1,7 @@
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="bundle/initialization.jspf" %>
 <%@include file="bundle/router.jspf" %>
+<c:set var="bundleCategories" value="${CategoryHelper.getCategories(kapp)}"/>
 
 <bundle:layout page="${bundle.path}/layouts/layout.jsp">
     <bundle:variable name="head">
@@ -26,14 +27,14 @@
                 <div class="col-md-8">
                     <h2>Service Items</h2>
                     <%-- For each of the categories --%>
-                    <c:forEach items="${kapp.categories}" var="category">
+                    <c:forEach items="${bundleCategories}" var="category">
                         <%-- If the category is not hidden, and it contains at least 1 form --%>
-                        <c:if test="${fn:toLowerCase(category.getAttribute('Hidden').value) ne 'true' && not empty category.forms}">
+                        <c:if test="${!category.hasAttributeValue('Hidden',true)}">
                             <div class="category">
-                                <h3>${text.escape(category.name)}</h3>
+                                <h3>${text.escape(category.getDisplayName())}</h3>
                                 <div class="row">
                                     <%-- Show the first x number of forms of the category --%>
-                                    <c:forEach items="${category.forms}" var="categoryForm" begin="0" end="8">
+                                    <c:forEach items="${category.getForms()}" var="categoryForm" begin="0" end="8">
                                     <%-- Only show New or Active forms --%>
                                     <c:if test="${categoryForm.status eq 'New' || categoryForm.status eq 'Active'}">
                                     <%-- Render the form panel --%>

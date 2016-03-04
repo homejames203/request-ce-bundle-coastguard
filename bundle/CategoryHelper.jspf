@@ -1,0 +1,166 @@
+<%@page import="com.google.common.collect.ComparisonChain" %>
+<%@page import="com.google.common.collect.Ordering" %>
+<%@page import="com.kineticdata.bundles.Text" %>
+
+<%!
+    public static class CategoryHelper {
+    
+        Set<BundleCategory> categories;
+        Map<String, BundleCategory> categoriesByName;
+        
+        public CategoryHelper() {
+            this.categories = null;
+            this.categoriesByName = null;
+        }
+        
+        public List<BundleCategory> getCategories(Kapp kapp) {
+            if (this.categories != null){
+                return new ArrayList<BundleCategory>(categories);
+            }
+            this.categories = new TreeSet<BundleCategory>();
+            this.categoriesByName = new HashMap<String, BundleCategory>();
+            
+            List<BundleCategory> allCategories = new ArrayList<BundleCategory>();
+            for (Category category : kapp.getCategories()){
+                BundleCategory bundleCategory = new BundleCategory(category);
+                allCategories.add(bundleCategory);
+                this.categoriesByName.put(category.getName(), bundleCategory);
+            }
+            
+            while (!allCategories.isEmpty()){
+                BundleCategory bundleCategory = allCategories.remove(0);
+                if (bundleCategory.hasAttribute("Parent")){
+                    String parentName = bundleCategory.getAttributeValue("Parent");
+                    if (categoriesByName.get(parentName) != null){
+                        categoriesByName.get(parentName).setSubcategory(bundleCategory);
+                        bundleCategory.setParentCategory(categoriesByName.get(parentName));
+                        continue;
+                    }
+                }
+                this.categories.add(bundleCategory);
+            }
+            
+            return new ArrayList<BundleCategory>(categories);
+        }
+        
+        public List<BundleCategory> getCategories(Form form) {
+            if (this.categoriesByName == null){
+                this.getCategories(form.getKapp());
+            }
+            
+            Set<BundleCategory> formCategories = new TreeSet<BundleCategory>();
+            for (Category category : form.getCategories()){
+                formCategories.add(this.getCategory(category.getName()));
+            }
+            
+            return new ArrayList<BundleCategory>(formCategories);
+        }
+        
+        public BundleCategory getCategory(String name){
+            return this.categoriesByName.get(name);
+        }
+        
+        public static class BundleCategory implements Comparable<BundleCategory> {
+            Category category;
+            BundleCategory parentCategory;
+            Set<BundleCategory> subcategories;
+                        
+            public BundleCategory(Category category) { 
+                this.category = category; 
+                this.parentCategory = null;
+                this.subcategories = new TreeSet<BundleCategory>();
+            }
+            
+            public Category getCategory(){ return this.category; }
+            public String getName() { return this.category.getName(); }
+            public List<Attribute> getAttributes() { return this.category.getAttributes(); }
+            public Attribute getAttribute(String name) { return this.category.getAttribute(name); }
+            public String getAttributeValue(String name) { return this.category.getAttributeValue(name); }
+            public List<String> getAttributeValues(String name) { return this.category.getAttributeValues(name); }
+            public boolean hasAttribute(String name) { return this.category.hasAttribute(name); }
+            public boolean hasAttributeValue(String name, String value) { return this.category.hasAttributeValue(name, value); }
+            public List<Categorization> getCategorizations() { return this.category.getCategorizations(); }
+            public Kapp getKapp() { return this.category.getKapp(); }
+            public List<Form> getForms() { return this.category.getForms(); }
+            public List<AttributeDefinition> getApplicableAttributeDefinitions() { return this.category.getApplicableAttributeDefinitions(); }
+            
+            public String getDisplayName() {
+                return Text.defaultIfBlank(this.getAttributeValue("Display Name"), this.getName());
+            }
+            
+            public BundleCategory getParentCategory() {
+                return parentCategory;
+            }
+            
+            public void setParentCategory(BundleCategory parentCategory) {
+                this.parentCategory = parentCategory;
+            }
+            
+            public List<BundleCategory> getTrail() {
+                List<BundleCategory> trail = new ArrayList<BundleCategory>();
+                BundleCategory currentCategory = this;
+                do {
+                    trail.add(0, currentCategory);
+                    currentCategory = currentCategory.getParentCategory();
+                }
+                while (currentCategory != null);
+                return trail;
+            }
+            
+            public List<BundleCategory> getSubcategories() {
+                return new ArrayList<BundleCategory>(this.subcategories);
+            }
+            
+            public void setSubcategory(BundleCategory bundleCategory) {
+                this.subcategories.add(bundleCategory);
+            }
+            
+            public boolean hasSubcategories() {
+                return !this.getSubcategories().isEmpty();
+            }
+            
+            public boolean hasNonEmptySubcategories() {
+                for (BundleCategory subcategory : this.subcategories){
+                    if (!subcategory.isEmpty()){
+                        return true;
+                    }
+                }
+                return false;
+            }
+            
+            public boolean hasForms() {
+                return !this.getForms().isEmpty();
+            }
+            
+            public boolean isEmpty() {
+                return this.hasNonEmptySubcategories() || this.hasForms();
+            }
+            
+            public int compareTo(BundleCategory that) {
+                // Compare by Sort Order attribute, then by Display Name attribute, then by Name
+
+                // Regex for confirming sort order is an int
+                String regex = "[0-9]+";
+
+                // Null integers to compare
+                Integer thisInt = null;
+                Integer thatInt = null;
+
+                // Check for int otherwise keep null
+                if(this.getAttributeValue("Sort Order") != null && this.getAttributeValue("Sort Order").matches(regex)){
+                    thisInt = Integer.parseInt(this.getAttributeValue("Sort Order"));
+                }
+
+                if(that.getAttributeValue("Sort Order") != null && that.getAttributeValue("Sort Order").matches(regex)){
+                    thatInt = Integer.parseInt(that.getAttributeValue("Sort Order"));
+                }
+
+                return ComparisonChain.start()
+                        .compare(thisInt, thatInt, Ordering.natural().nullsLast())
+                        .compare(this.getAttributeValue("Display Name"), that.getAttributeValue("Display Name"), Ordering.natural().nullsLast())
+                        .compare(this.getName(), that.getName(), Ordering.natural().nullsLast())
+                        .result();
+            }
+        }
+    }
+%>

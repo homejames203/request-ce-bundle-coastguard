@@ -10,6 +10,7 @@ It includes:
 * SubmissionHelper.jspf
 
 ## CategoryHelper.jspf
+Examples can be viewed at : <https://github.com/KineticCommunity/request-ce-bundle-scaffold/tree/master/bundle>
 
 **${CategoryHelper.getCategories(Kapp kapp)}**  
 Gathers, maps and sorts all Kapp categories / subcategories and returns an arraylist of BundleCategories.  
@@ -96,3 +97,4 @@ Returns true if the current category has active forms
 
 **${category.isEmpty()}**  
 Returns true if the category and all subcategories do not have forms  
+

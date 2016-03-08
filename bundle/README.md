@@ -10,7 +10,7 @@ It includes:
 * SubmissionHelper.jspf
 
 ## CategoryHelper.jspf
-Examples can be viewed at : <https://github.com/KineticCommunity/request-ce-bundle-scaffold/tree/master/bundle>
+Examples can be viewed at : <http://community.kineticdata.com/10_Kinetic_Request/Kinetic_Request_Core_Edition/Resources/Bundle_Category_Helper>
 
 **${CategoryHelper.getCategories(Kapp kapp)}**  
 Gathers, maps and sorts all Kapp categories / subcategories and returns an arraylist of BundleCategories.  

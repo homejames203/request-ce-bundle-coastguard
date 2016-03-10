@@ -1,100 +1,88 @@
-## Overview
-The bundle directory includes files that are needed for initialization and helper files for commonly used functionality. 
-
-It includes:
-
-* initialization.jspf
-* router.jspf
-* CategoryHelper.jspf
-* SetupHelper.jspf
-* SubmissionHelper.jspf
-
 ## CategoryHelper.jspf
-Examples can be viewed at : <http://community.kineticdata.com/10_Kinetic_Request/Kinetic_Request_Core_Edition/Resources/Bundle_Category_Helper>
 
-**${CategoryHelper.getCategories(Kapp kapp)}**  
-Gathers, maps and sorts all Kapp categories / subcategories and returns an arraylist of BundleCategories.  
-This list can be itterated over to retrieve the root category objects.  
-Requires - Kapp object  
-Returns - ArrayList<BundleCategory>  
-  
-**${CategoryHelper.getCategories(Form form)}**  
-Gets categories that are set to a form.   
-Requires - Form object  
-Returns - ArrayList<BundleCategory>  
-  
-**${CategoryHelper.getCategory(Form form)}**  
-Gets a single category object based on the name (not Display Name)   
-Requires - Name string  
-Returns - BundleCategory object  
-  
-**${category.getCategory()}**  
-Returns the current category object  
-  
-**${category.getName()}**  
-Returns the name string of the current category object  
-  
-**${category.getAttributes()}**  
-Returns a list of attributes for the current category object  
-  
-**${category.getAttribute(String name)}**  
-Returns the attribute object of the current category based on the name passed  
-Requires - Name string  
-Returns - Attribute Object  
-  
-**${category.getAttributeValue(String name)}**  
-Returns a string value of the current category's attribute based on the attribute name passed  
-Requires - Name string  
-Returns - Value string  
-  
-**${category.getAttributeValues(String name)}**  
-Returns list of string values for an attribute based on the attribute name passed  
-Requires - Name string  
-Returns - List<String>  
-  
-**${category.hasAttribute(String name)}**  
-Returns true if the current category has the attribute (can be null) based on the attribute name passed  
-Requires - Name string  
-Returns - True / False  
-  
-**${category.hasAttribute(String name)}**  
-Returns true if the current category has the passed name attribute with the value passed  
-Requires - Attribute name string, attribute value string  
-Returns - True / False  
-  
-**${category.getKapp()}**  
-Returns the current category Kapp object  
-  
-**${category.getForms()}**   
-Returns a list of form objects for the current category  
-  
-**${category.getDisplayName()}**  
-Returns the "Display Name" attribute value if not null, otherwise returns name  
-  
-**${category.getParentCategory()}**  
-Returns the parent category object  
-  
-**${category.setParentCategory(BundleCategory parentCategory)}**  
-Sets the current category's parent category to the passed object  
-  
-**${category.getTrail()}**  
-Returns an array of parent category objects sorted from the root category to current category  
-  
-**${category.getSubcategories()}**       
-Returns the subcategory objects for the current category  
-  
-**${category.setSubcategory(BundleCategory bundleCategory)}**  
-Adds the passed object as a subcategory of the current category  
-  
-**${category.hasSubcategories()}**  
-Returns true if the current category has subcategories  
+The Category Helper contains helper methods for fetching categories from a Kapp or Form, and returns them in a nested structure, using the BundleCategory wrapper class. The BundleCategory class is a decorative class which extends the functionality of the core Category model.
 
-**${category.hasNonEmptySubcategories()}**  
-Returns true if the current category has subcategories that have active forms  
+A category may specify its parent category by adding a _Parent_ Attribute with the name of the parent category.
 
-**${category.hasForms()}**  
-Returns true if the current category has active forms  
+Categories are returned sorted, first by their _Sort Order_ attribute, then by their _Display Name_ attribute, and finally by their _name_ field.
 
-**${category.isEmpty()}**  
-Returns true if the category and all subcategories do not have forms  
+### Examples
 
+**Instantiate the CategoryHelper in `initialization.jspf`:**
+```java
+request.setAttribute("CategoryHelper", new CategoryHelper());
+```
+
+**Use the CategoryHelper in pages or partials:**
+```jsp
+<c:forEach items="${CategoryHelper.getCategories(kapp)}" var="bundleCategory">
+    <h3>${text.escape(bundleCategory.getDisplayName())}</h3>
+    <c:forEach items="${bundleCategory.getForms()}" var="categoryForm">
+        <span class="label label-default">${text.escape(categoryForm.name)}</span>
+    </c:forEach>
+</c:forEach>
+```
+
+**More Examples:** <http://community.kineticdata.com/10_Kinetic_Request/Kinetic_Request_Core_Edition/Resources/Bundle_Category_Helper>  
+
+---
+
+#### CategoryHelper Constructor Summary
+| Signature                                              | Description                                                                                                                                       |
+| :----------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `CategoryHelper()`                                     | Constructs a newly allocated CategoryHelper object which can retrieve and decorate categories from Kapps and Forms.                               |
+
+---
+
+#### CategoryHelper Method Summary
+| Signature                                              | Description                                                                                                                                       |
+| :----------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `List<BundleCategory> getCategories(Kapp kapp)`        | Gathers, maps, and sorts all of `kapp`'s categories/subcategories, and returns a list of the root categories.                                     |
+| `List<BundleCategory> getCategories(Form form)`        | Returns categories that are set to `form`.                                                                                                        |
+| `BundleCategory getCategory(String name, Kapp kapp)`   | Returns a single category object from `kapp` based on the `name` (not Display Name).                                                              |
+| `BundleCategory getCategory(String name, Form form)`   | Returns a single category object from the parent Kapp of the `form` based on the `name` (not Display Name).                                       |
+
+---
+
+#### BundleCategory Constructor Summary
+| Signature                                              | Description                                                                                                                                       |
+| :----------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `BundleCategory(Category category)`                    | Constructs a newly allocated BundleCategory object based on the `category` parameter, which extends the functionality of the core Category model. |
+
+---
+
+#### BundleCategory Decorative Method Summary
+Decorative methods are additional methods created to extend the Category model.  
+
+| Signature                                              | Description                                                                                                                                       |
+| :----------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `Category getCategory()`                               | Returns the original Category object.                                                                                                             |
+| `String getDisplayName()`                              | Returns the "Display Name" attribute value if not null, otherwise returns _name_.                                                                 |
+| `String getParentCategory()`                           | Returns the parent BundleCategory object.                                                                                                         |
+| `List<BundleCategory> getSubcategories()`              | Returns a list of all the subcategory objects.                                                                                                    |
+| `List<BundleCategory> getTrail()`                      | Returns a list of parent category objects sorted from the root category to current category.                                                      |
+| `Boolean hasForms()`                                   | Returns true if the current category has active forms.                                                                                            |
+| `Boolean hasNonEmptySubcategories()`                   | Returns true if the current category has subcategories that have active forms.                                                                    |
+| `Boolean hasSubcategories()`                           | Returns true if the current category has subcategories.                                                                                           |
+| `Boolean isEmpty()`                                    | Returns true if the category and all subcategories do not have any active forms.                                                                  |
+
+---
+
+#### BundleCategory Delegate Method Summary
+Delegate methods are methods that call the core Category model methods.  
+
+| Signature                                              | Description                                                                                                                                       |
+| :----------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `Attribute getAttribute(String name)`                  | Returns the attribute object identified by the `name` parameter.                                                                                  |
+| `List<Attribute> getAttributes()`                      | Returns a list of attributes for the category.                                                                                                    |
+| `String getAttributeValue(String name)`                | Returns the attribute value identified by the `name` parameter if it exists and if the attribute only supports a single value.                    |
+| `List<String> getAttributeValues(String name)`         | Returns a list of attribute values identified by the `name` parameter if it exists and if the attribute only supports multiple values.            |
+| `List<Form> getForms()`                                | Returns a list of Form objects associated to the category.                                                                                        |
+| `Kapp getKapp()`                                       | Returns the Kapp the category belongs to.                                                                                                         |
+| `String getName()`                                     | Returns the name of the category.                                                                                                                 |
+| `Boolean hasAttribute(String name)`                    | Returns true if an attribute identified by the `name` parameter exists.                                                                           |
+| `Boolean hasAttributeValue(String name, String value)` | Returns true if an attribute identified by the `name` parameter exists and has the value identified by the `value` parameter.                     |
+
+---
+
+**Last Updated:** 2016-03-10 16:00 CST

@@ -1,7 +1,6 @@
 <%@page import="com.google.common.collect.ComparisonChain" %>
 <%@page import="com.google.common.collect.Ordering" %>
 <%@page import="com.google.common.primitives.Ints" %>
-<%@page import="com.kineticdata.bundles.Text" %>
 
 <%!
     public static class CategoryHelper {
@@ -117,9 +116,9 @@
          * Inner class for combining all category methods to the BundleCategory object
          * */
         public static class BundleCategory implements Comparable<BundleCategory> {
-            Category category;
-            BundleCategory parentCategory;
-            Set<BundleCategory> subcategories;
+            private Category category;
+            private BundleCategory parentCategory;
+            private Set<BundleCategory> subcategories;
                         
             public BundleCategory(Category category) { 
                 this.category = category; 
@@ -181,8 +180,8 @@
             public BundleCategory getParentCategory() {
                 return parentCategory;
             }
-            // Sets the current category's parent category to the passed object
-            public void setParentCategory(BundleCategory parentCategory) {
+            // Sets the current category's parent category to the passed object. Private method, used for initialization only.
+            private void setParentCategory(BundleCategory parentCategory) {
                 this.parentCategory = parentCategory;
             }
             // Returns an array of parent category objects sorted from the root category to current category
@@ -200,8 +199,8 @@
             public List<BundleCategory> getSubcategories() {
                 return new ArrayList<BundleCategory>(this.subcategories);
             }
-            // Adds the passed object as a subcategoryof the current category
-            public void setSubcategory(BundleCategory bundleCategory) {
+            // Adds the passed object as a subcategoryof the current category. Private method, used for initialization only.
+            private void setSubcategory(BundleCategory bundleCategory) {
                 this.subcategories.add(bundleCategory);
             }
             // Returns true if the current category has subcategories

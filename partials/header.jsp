@@ -1,6 +1,6 @@
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="../bundle/initialization.jspf" %>
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default" id="bundle-header">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle dropdown" data-toggle="collapse"

@@ -5,41 +5,56 @@
     <bundle:variable name="head">
         <title>${text.escape(space.name)} Search</title>
     </bundle:variable>
-
-
-    <div class="search">
-        <div class="visible-xs search-container">
-            <form action="${bundle.kappLocation}" method="GET" role="form">
-                <div class="form-group has-feedback">
-                    <input type="hidden" value="search" name="page">
-                    <input type="text" class="states form-control x" name="q" value="${param['q']}"/>
-                </div>
-            </form>
-        </div>
-        <div class="search-results">
-            <h3>Search Results for '${param['q']}'</h3>
-            <c:if test="${text.isNotBlank(param['q'])}">
-                <ul>
-                    <c:set scope="request" var="formsMatchSearch" value="${SearchHelper.filter(kapp.forms,param['q'])}"/>
-                    <c:forEach var="form" items="${formsMatchSearch}">
-                        <c:if test="${text.equals(form.type.name, 'Service') || text.equals(form.type.name, 'Template')}">
-                            <li>
-                                <h4>
-                                    <a href="${bundle.kappLocation}/${form.slug}">
-                                       ${form.name}
-                                    </a>
-                                </h4>
-                                <c:if test="${not empty form.description}">
-                                    <p>${form.description}</p>
-                                </c:if>
-                            </li>
-                         </c:if>
-                    </c:forEach>
-                    <c:if test="${formsMatchSearch == null}">
-                        <h5>No results found for ${param['q']}.</h5>
-                    </c:if>
-                </ul>
-            </c:if>
+    
+    <div class="search-results">
+        <h3>${kappIter.name} Search Results <c:if test="${text.isNotBlank(param['q'])}">for '${param['q']}'</c:if></h3>
+        <div class="card-container">
+            <c:choose>
+                <c:when test="${text.isNotBlank(param['q'])}">
+                    <c:catch var ="searchException">
+                       <c:set var="searchResults" scope="request" value="${SearchHelper.search(kapp.forms, param['q'])}" />
+                    </c:catch>
+                    <c:choose>
+                        <c:when test="${searchException ne null}">
+                            <div class="card">
+                                <div class="card-content alert alert-danger">
+                                    <h5>
+                                        <span class="fa fa-exclamation-triangle"></span>
+                                        <span>Error: ${searchException.cause}</span>
+                                    </h5>
+                                </div>
+                            </div>
+                        </c:when>
+                        <c:otherwise>
+                            <c:forEach var="result" items="${searchResults}">
+                                <div class="card" data-weight="${result.weight}">
+                                    <div class="card-title small">
+                                        <c:if test="${result.form.hasAttribute("Icon")}">
+                                            <span class="fa ${result.form.getAttribute("Icon")}"></span>
+                                        </c:if>
+                                        <a href="${bundle.kappLocation}/${result.form.slug}">${result.form.name}</a>
+                                    </div>
+                                    <c:if test="${text.isNotBlank(result.form.description)}">
+                                        <div class="card-content">
+                                            <p>${result.form.description}</p>
+                                        </div>
+                                    </c:if>
+                                </div>
+                            </c:forEach>                
+                        </c:otherwise>
+                    </c:choose>
+                </c:when>
+                <c:otherwise>
+                    <div class="card">
+                        <div class="card-content alert alert-danger">
+                            <h5>
+                                <span class="fa fa-exclamation-triangle"></span>
+                                <span>Search term not found.</span>
+                            </h5>
+                        </div>
+                    </div>
+                </c:otherwise>
+            </c:choose>
         </div>
     </div>
 </bundle:layout>

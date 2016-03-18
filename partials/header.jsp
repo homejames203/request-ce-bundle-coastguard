@@ -12,12 +12,17 @@
             </button>
             <c:if test="${kapp != null}">
                 <a class="navbar-brand" href="${bundle.kappLocation}">
-                    <c:if test="${not empty kapp.getAttribute('Logo Url')}">
-                        <img src="${kapp.getAttributeValue('Logo Url')}" alt="logo">
-                    </c:if>
-                    <c:if test="${empty kapp.getAttribute('Logo Url')}">
-                        <i class="fa fa-home"></i> ${text.escape(kapp.name)}
-                    </c:if>
+                    <c:choose>
+                        <c:when test="${not empty kapp.getAttribute('Logo Url')}">
+                            <img src="${space.getAttributeValue('Logo Url')}" alt="logo">
+                        </c:when>
+                        <c:when test="${not empty space.getAttribute('Logo Url')}">
+                            <img src="${kapp.getAttributeValue('Logo Url')}" alt="logo">
+                        </c:when>
+                        <c:otherwise>
+                            <i class="fa fa-home"></i> ${text.escape(kapp.name)}
+                        </c:otherwise>
+                    </c:choose>
                 </a>
             </c:if>
         </div>

@@ -2,16 +2,13 @@
 <%@include file="../bundle/initialization.jspf" %>
 <c:set var="submission" value="${Submissions.retrieve(param.id)}" scope="page"/>
 
+
 <bundle:layout page="${bundle.path}/layouts/layout.jsp">
-    <section class="menu">
-        <div class="row">
-            <div class="col-xs-12">
-                <h3>
-                <a href='${bundle.kappLocation}/#tab-requests'>Return to catalog</a>
-                </h3>
-            </div>
-        </div>
-    </section>
+    <bundle:variable name="head">
+        <title>${text.escape(${submission.form.name})}</title>
+    </bundle:variable>
+
+    <h3>Submission Details</h3>
     <section class="timeline">
         <div class="row">
             <div class="col-md-4 col-xs-12 ">

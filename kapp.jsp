@@ -7,20 +7,6 @@
     <bundle:variable name="head">
         <title>Kinetic Data ${text.escape(kapp.name)}</title>
     </bundle:variable>
-    <section class="menu">
-        <ul class="nav nav-pills">
-            <c:set var="pageHome" value="${kapp.getForm('home')}" scope="page"/>
-            <li role="presentation" class="active">
-                <a href="#tab-home" aria-controls="tab-home" role="tab" data-toggle="tab">Home</a>
-            </li>
-            <li role="presentation">
-                <a href="#tab-requests" aria-controls="tab-requests" role="tab" data-toggle="tab">My Requests</a>
-            </li>
-            <li role="presentation">
-                <a href="#tab-approvals" aria-controls="tab-approvals" role="tab" data-toggle="tab">My Approvals</a>
-            </li>
-        </ul>
-    </section>
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="tab-home">
             <div class="row">

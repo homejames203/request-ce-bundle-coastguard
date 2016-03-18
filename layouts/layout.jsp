@@ -37,10 +37,9 @@
     </head>
     <body>
         <div class="view-port">
-            <c:if test="${not empty identity}">
-                <c:import url="${bundle.path}/partials/header.jsp" charEncoding="UTF-8"/>
-            </c:if>
+            <c:import url="${bundle.path}/partials/header.jsp" charEncoding="UTF-8"/>
             <div class="container">
+                <c:import url="${bundle.path}/partials/sub-header.jsp" charEncoding="UTF-8"/>
                 <bundle:yield/>
             </div>
             <c:import url="${bundle.path}/partials/footer.jsp" charEncoding="UTF-8"/>

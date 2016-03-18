@@ -71,17 +71,28 @@
                     </ul>
                 </li>
             </ul>
-        <c:if test="${kapp != null}">
-            <div class="navbar-form " id="" role="search" style='margin-right:1em;'>
-                <form action="${bundle.kappLocation}" method="GET" role="form">
-                    <div class="form-group">
-                            <input type="hidden" value="search" name="page">
-                            <input  type="text" class="states form-control predictiveText x" name="q" placeholder="Search Forms…" autocomplete="off" autofocus="autofocus">
-                        </div>
-                    </div>
-                </form>
+            <div class="navbar-form" role="search" style='margin-right:1em;'>
+                <c:choose>
+                    <c:when test="${not empty space.getKapp("search") && (empty kapp || kapp.hasAttribute("Include in Global Search") || text.equals(kapp.slug, "search"))}">
+                        <form action="${bundle.spaceLocation}/search" method="GET" role="form">
+                            <div class="form-group">
+                                <c:if test="${not empty kapp}">
+                                    <input type="hidden" value="${text.equals(kapp.slug, "search") ? param["source"] : kapp.slug}" name="source">
+                                </c:if>
+                                <input type="text" class="form-control" name="q" placeholder="Global Search" value="${param["q"]}">
+                            </div>
+                        </form>
+                    </c:when>
+                    <c:when test="${not empty kapp}">
+                        <form action="${bundle.kappLocation}" method="GET" role="form">
+                            <div class="form-group">
+                                <input type="hidden" value="search" name="page">
+                                <input type="text" class="form-control" name="q" placeholder="Local Search" value="${param["q"]}">
+                            </div>
+                        </form>
+                    </c:when>
+                </c:choose>
             </div>
-        </c:if>
         </div>
     </div>
 </nav>

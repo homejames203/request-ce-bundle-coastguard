@@ -455,10 +455,15 @@ footer dl {
  *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 /* Media Queries
  *-------------------------------------- */
+nav#bundle-header {
+  margin-bottom: 0;
+}
+
+nav#kapp-sub-nav {
+  border-top: none;
+}
+
 @media (max-width: 768px) {
-  nav#bundle-header {
-    margin-bottom: 0;
-  }
   nav#bundle-header div#navbar-collapse-1 {
     position: absolute;
     z-index: 2000;
@@ -507,9 +512,6 @@ footer dl {
   }
 
   /* kapp sub-header */
-  nav#kapp-sub-nav {
-    border-top: none;
-  }
   nav#kapp-sub-nav li a {
     background: transparent;
   }

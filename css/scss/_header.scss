@@ -5,11 +5,14 @@
 /* Media Queries
  *-------------------------------------- */
 
+nav#bundle-header {
+    margin-bottom: 0;
+}
+nav#kapp-sub-nav{
+  border-top: none;
+}
 @media (max-width : 768px) { 
   nav#bundle-header {
-
-    margin-bottom: 0;
-    
     div#navbar-collapse-1 {
         position: absolute;
         z-index: 2000;
@@ -61,8 +64,6 @@
   /* kapp sub-header */
 
   nav#kapp-sub-nav{
-    border-top: none;
-
     li a {
       background: transparent;
     }

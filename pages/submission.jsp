@@ -8,7 +8,7 @@
 </c:catch>
 <bundle:layout page="${bundle.path}/layouts/layout.jsp">
     <bundle:variable name="head">
-        <title>${text.escape(${submission.form.name})}</title>
+        <title>${text.escape(submission.form.name)}</title>
     </bundle:variable>
     <c:choose>
         <c:when test="${submissionException != null}">

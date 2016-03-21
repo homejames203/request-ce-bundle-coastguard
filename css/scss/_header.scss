@@ -7,6 +7,9 @@
 
 @media (max-width : 768px) { 
   nav#bundle-header {
+
+    margin-bottom: 0;
+    
     div#navbar-collapse-1 {
         position: absolute;
         z-index: 2000;
@@ -52,6 +55,34 @@
         display: block;
         font-size: 3rem;
         width: 100%;
+    }
+  }
+
+  /* kapp sub-header */
+
+  nav#kapp-sub-nav{
+    border-top: none;
+
+    li a {
+      background: transparent;
+    }
+
+    div#sub-header {
+      position: absolute;
+      z-index: 2000;
+      width: 100%;
+      background-color: rgba($black, 0.85);
+    }
+    div#sub-header ul li{
+      display: inline-block;
+      float: left;
+
+    }
+    div#sub-header ul li.active a{
+      background: transparent;
+    }
+    div#sub-header ul li a{
+      color: $white;
     }
   }
 }

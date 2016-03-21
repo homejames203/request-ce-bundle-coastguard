@@ -1,8 +1,5 @@
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="../bundle/initialization.jspf" %>
-<c:set var="submission" value="${Submissions.retrieve(param.id)}" scope="page"/>
-
-
 <c:catch var="submissionException">
     <c:set var="submission" value="${Submissions.retrieve(param.id)}" scope="page"/>
 </c:catch>

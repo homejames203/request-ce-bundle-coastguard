@@ -60,6 +60,64 @@
     request.setAttribute("CategoryHelper", new CategoryHelper());
 %>
 
+<%-- FilehubHelper --%>
+<%@include file="FilehubHelper.jspf"%>
+<%
+    // Add the "Filehub Url" setup attribute
+    setupHelper
+        .addSetupAttribute(
+            "Filehub Url", 
+            "The URL to the Kinetic Filehub application (https://acme.com/kinetic-filehub)", 
+            request.getParameter("filestore") != null);
+    // Declare the filehubHelper, which is referenced in the router.jspf file
+    FilehubHelper filehubHelper = null;
+    // If the request is scoped to a specific Kapp (space display pages are not)
+    if (kapp != null && kapp.hasAttribute("Filehub Url")) {
+        // Initialize the filehub helper
+        filehubHelper = new FilehubHelper(kapp.getAttributeValue("Filehub Url"));
+
+        // Add the "Example" filestore setup attributes
+        setupHelper
+            .addSetupAttribute(
+                "Example Filestore Slug", 
+                "The slug of the desired filestore configured in Kinetic Filehub.", 
+                false)
+            .addSetupAttribute(
+                "Example Filestore Key", 
+                "The key for an access key associated to the specified filestore.", 
+                false)
+            .addSetupAttribute(
+                "Example Filestore Secret", 
+                "The secret associated to the specified key.", 
+                false);
+        // Initialize the "Example" filestore
+        if (kapp.hasAttribute("Example Filestore Slug")) {
+            filehubHelper.addFilestore(
+                kapp.getAttributeValue("Example Filestore Slug"),
+                kapp.getAttributeValue("Example Filestore Key"),
+                kapp.getAttributeValue("Example Filestore Secret"),
+                new FilehubHelper.Authorizer() {
+                    @Override public boolean canAccess(HttpServletRequest request) {
+                        return true;
+                    }
+                },
+                new FilehubHelper.PathBuilder() {
+                    @Override public String buildPath(HttpServletRequest request) {
+                        //return request.getParameter("path");
+                        String path = request.getParameter("form")+
+                            "/"+request.getParameter("entry")+
+                            "/"+request.getParameter("field");
+                        if (request.getParameter("filename") != null) {
+                            path += "/"+request.getParameter("filename");
+                        }
+                        return path;
+                    }
+                }
+            );
+        }
+    }
+%>
+
 <%-- LockableSubmissionHelper --%>
 <%@include file="LockableSubmissionHelper.jspf"%>
 <%

@@ -25,25 +25,14 @@
     Bundle bundle = (Bundle)request.getAttribute("bundle"); 
     Space space = (Space)request.getAttribute("space");
     Kapp kapp = (Kapp)request.getAttribute("kapp");
+    Identity identity = (Identity)request.getAttribute("identity");
 %>
 
 <%-- Load helper(s) --%>
 <%
-  request.setAttribute("json", new com.kineticdata.bundles.JsonHelper());
-  request.setAttribute("text", new com.kineticdata.bundles.TextHelper());
-  request.setAttribute("time", new com.kineticdata.bundles.TimeHelper());
-%>
-
-<%-- CategoryHelper --%>
-<%@include file="CategoryHelper.jspf"%>
-<%
-    request.setAttribute("CategoryHelper", new CategoryHelper());
-%>
-
-<%-- SearchHelper --%>
-<%@include file="SearchHelper.jspf"%>
-<%
-    request.setAttribute("SearchHelper", new SearchHelper());
+    request.setAttribute("json", new com.kineticdata.bundles.JsonHelper());
+    request.setAttribute("text", new com.kineticdata.bundles.TextHelper());
+    request.setAttribute("time", new com.kineticdata.bundles.TimeHelper());
 %>
 
 <%-- SetupHelper --%>
@@ -63,6 +52,49 @@
             "Set if the Kapp should use and participate in global search.", 
             false); 
     request.setAttribute("SetupHelper", setupHelper);
+%>
+
+<%-- CategoryHelper --%>
+<%@include file="CategoryHelper.jspf"%>
+<%
+    request.setAttribute("CategoryHelper", new CategoryHelper());
+%>
+
+<%-- LockableSubmissionHelper --%>
+<%@include file="LockableSubmissionHelper.jspf"%>
+<%
+    // Add setup attributes
+    setupHelper
+        .addSetupAttribute(
+            "Lockable Submission Delegation Attribute", 
+            "This should be set to the name of the User attribute definition that corresponds to "+
+                "assignment delegation, or left blank if delegation is not being used.", 
+            false)
+        .addSetupAttribute(
+            "Lockable Submission Group Attribute", 
+            "This should be set to the name of the User attribute definition that corresponds to "+
+                "groups, or left blank if groups are not being managed by User attributes.", 
+            false);
+    // If the request is scoped to a specific Kapp (space display pages are not)
+    if (kapp != null && kapp.hasAttribute("Filehub Url")) {
+        // Initialize the LockableSubmissionHelper
+        LockableSubmissionHelper lockableSubmissionHelper = new LockableSubmissionHelper(request);
+        if (kapp.hasAttribute("Lockable Submission Delegation Attribute")) {
+            lockableSubmissionHelper.setDelegationAttribute(
+                kapp.getAttributeValue("Lockable Submission Delegation Attribute"));
+        }
+        if (kapp.hasAttribute("Lockable Submission Group Attribute")) {
+            lockableSubmissionHelper.setDelegationAttribute(
+                kapp.getAttributeValue("Lockable Submission Group Attribute"));
+        }
+        request.setAttribute("LockableSubmissionHelper", lockableSubmissionHelper);
+    }
+%>
+
+<%-- SearchHelper --%>
+<%@include file="SearchHelper.jspf"%>
+<%
+    request.setAttribute("SearchHelper", new SearchHelper());
 %>
 
 <%-- SubmissionHelper --%>

@@ -26,6 +26,7 @@
             <bundle:script src="${bundle.location}/libraries/jquery-datatables/jquery.dataTables.js"/>
             <bundle:script src="${bundle.location}/libraries/typeahead/typeahead.min.js"/>
             <bundle:script src="${bundle.location}/js/catalog.js"/>
+            <bundle:script src="${bundle.location}/js/locking.js" />
             <bundle:script src="${bundle.location}/js/review.js"/>
         </bundle:scriptpack>
         <bundle:yield name="head"/>

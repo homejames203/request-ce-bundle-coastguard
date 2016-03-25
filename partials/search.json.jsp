@@ -1,7 +1,7 @@
 <%@page pageEncoding="UTF-8" contentType="application/json" trimDirectiveWhitespaces="true"%>
 <%@include file="../bundle/initialization.jspf" %>
 <json:array>
-  <c:forEach var="match" items="${SearchHelper.search(kapp.forms, param['q'], param['pageSize'], param['offset'])}">
+  <c:forEach var="match" items="${CatalogSearchHelper.search(kapp.forms, param['q'], param['pageSize'], param['offset'])}">
     <json:object>
       <json:property name="title" value="${match.form.name}"/>
       <json:property name="description" value="${match.form.description}"/>

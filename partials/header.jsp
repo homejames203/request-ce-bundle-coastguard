@@ -36,7 +36,7 @@
                             </c:when>
                             <c:otherwise>
                             <a id="drop1" href="#" class="dropdown-toggle hidden-xs" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                <i class="fa fa-user fa-fw"></i> ${text.escape(identity.username)} <span class="fa fa-caret-down fa-fw"></span>
+                                <i class="fa fa-user fa-fw"></i> ${text.escape(text.trim(identity.displayName, identity.username))} <span class="fa fa-caret-down fa-fw"></span>
                             </c:otherwise>
                         </c:choose>
                     </a>
@@ -48,7 +48,7 @@
                             <c:otherwise>
                                 <c:if test="${kapp == null}">
                                     <li  class="hidden-xs"><a href="${bundle.spaceLocation}/?page=profile"><i class="fa fa-pencil fa-fw"></i> Edit Profile</a></li>
-                                    <li  class="priority hidden-lg hidden-md hidden-sm"><a href="${bundle.spaceLocation}/?page=profile"><i class="fa fa-user fa-fw"></i> ${text.escape(identity.username)}</a></li>
+                                    <li  class="priority hidden-lg hidden-md hidden-sm"><a href="${bundle.spaceLocation}/?page=profile"><i class="fa fa-user fa-fw"></i> Account</a></li>
                                 </c:if>
                                 <c:if test="${kapp != null}">
                                     <li class="hidden-xs"><a href="${bundle.spaceLocation}/${kapp.slug}?page=profile"><i class="fa fa-pencil fa-fw"></i> Edit Profile</a></li>

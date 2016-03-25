@@ -4,9 +4,9 @@
 <%@page import="com.google.common.base.Function" %>
 <%-- Helper for searching through the forms of a given kapp. --%>
 <%!
-    public static class SearchHelper {
+    public static class CatalogSearchHelper {
     
-        public SearchHelper() {}
+        public CatalogSearchHelper() {}
         
         /**
          * Returns full list of WeightedForms that match all words in the query.
@@ -139,10 +139,10 @@
         public static class WeightHelper {
             
             // Base weights assigned to matched terms in order of importance by where they're found first
-            public static final int[] WEIGHT_LEVEL = {13, 8, 5, 3, 2, 1};
+            public static final int[] LEVEL_WEIGHT = {13, 8, 5, 3, 2, 1};
             // Modifiers for increasing the weight of a matched term if it is matched mutliple times
             public static final double MULTI_MATCH_MODIFIER = 1.03;
-            public static final double MULTI_MATCH_LOWER_MODIFIER = 1.003;
+            public static final double MINOR_MATCH_MODIFIER = 0.003;
                     
             /**
              * Returns the calculated weight, or 0 if not all search terms are matched
@@ -161,14 +161,15 @@
             public static double weigh(List<String> terms, List<String>... searchable){
                 // Create a double array for keeping track of which terms are found where, and how many times
                 // matchCount[termIter][0] = level where term is first found
-                // matchCount[termIter][1] = matches found in above level
-                // matchCount[termIter][2] = matches found in all remaining levels
+                // matchCount[termIter][1] = number of matches found in above level
+                // matchCount[termIter][2] = number of matches found in all remaining levels * each respective level
                 int[][] matchCount = new int[terms.size()][3];
                 
                 // Iterate through all terms
                 for (int termIter = 0; termIter < terms.size(); termIter++){
                     // Initialize matches for this term to zero
                     int matches = 0;
+                    int minorMatches = 0;
                     // Iterate through all 'searchable' levels in order of importance
                     for (int level = 0; level < searchable.length; level++){
                         if (searchable[level] == null){ continue; }
@@ -181,17 +182,21 @@
                         if (matchCount[termIter][1] <= 0 && matches > 0){
                             matchCount[termIter][0] = level;
                             matchCount[termIter][1] = matches;
-                            // Reset matches to keep track of lower level matches
-                            matches = 0;
                         }
+                        // Otherwsie, multiple the number of matches by the weight of the current level and store in minorMatches
+                        else {
+                            minorMatches += matches * getWeightByLevel(level);
+                        }
+                        // Reset matches to keep track of lower level matches
+                        matches = 0;
                     }
                     // If no matches were found for any single term, return a weight of 0 since this record doesn't match the search query
                     if (matchCount[termIter][1] <= 0){
                         return 0;
                     }
-                    // Set number of matches at lower levels
+                    // Set number of matches found in all remaining levels * each respective level
                     else {
-                        matchCount[termIter][2] = matches;
+                        matchCount[termIter][2] = minorMatches;
                     }
                 }
                 
@@ -200,13 +205,14 @@
                 
                 // Iterate through double array of match counts
                 for (int i = 0; i < matchCount.length; i++){
-                    // Get the base weight for the term from the WEIGHT_LEVEL array based on which level the term was first found in
-                    int baseWeight = matchCount[i][0] < WEIGHT_LEVEL.length ? WEIGHT_LEVEL[matchCount[i][0]] : WEIGHT_LEVEL[WEIGHT_LEVEL.length-1];
-                    // Calculate the modifiers for the base weight based on the number of times the term was matched
+                    // Get the base weight for the term from the LEVEL_WEIGHT array based on which level the term was first found in
+                    int baseWeight = getWeightByLevel(matchCount[i][0]);
+                    // Calculate the modifier for the base weight based on the number of times the term was matched
                     double modifier = Math.pow(MULTI_MATCH_MODIFIER, (double)(matchCount[i][1] - 1));
-                    double lowerModifier = Math.pow(MULTI_MATCH_LOWER_MODIFIER, (double)(matchCount[i][2]));
-                    // Multiple base weight by the modifiers, and add the result to the weight
-                    weight += baseWeight * modifier * lowerModifier;
+                    // Calculate the overall modifier for all matches at levels below the level of the first match
+                    double minorModifier = matchCount[i][2] * MINOR_MATCH_MODIFIER;
+                    // Multiple base weight by the modifier, add minorModifier and add the result to the weight
+                    weight += (baseWeight * modifier) + minorModifier;
                 }
                 
                 // Return the weight
@@ -226,6 +232,13 @@
                     index = str.indexOf(sub, index + 1);
                 }
                 return count;
+            }
+            
+            /**
+             * Helper function for getting the weight of a level
+             */
+            private static int getWeightByLevel(int level){
+                return level < LEVEL_WEIGHT.length ? LEVEL_WEIGHT[level] : LEVEL_WEIGHT[LEVEL_WEIGHT.length-1];
             }
         }
     }

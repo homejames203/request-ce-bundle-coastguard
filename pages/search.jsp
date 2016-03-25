@@ -12,7 +12,7 @@
             <c:choose>
                 <c:when test="${text.isNotBlank(param['q'])}">
                     <c:catch var ="searchException">
-                       <c:set var="searchResults" scope="request" value="${SearchHelper.search(kapp.forms, param['q'])}" />
+                       <c:set var="searchResults" scope="request" value="${CatalogSearchHelper.search(kapp.forms, param['q'])}" />
                     </c:catch>
                     <c:choose>
                         <c:when test="${searchException ne null}">

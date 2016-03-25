@@ -94,14 +94,14 @@
             List<LockableSubmission> results = new ArrayList<>();
             
             // Raise intelligent errors
-            if (groupAttribute != null && space.getUserAttributeDefinition(groupAttribute) == null) {
+            if (groupAttribute != null && kapp.getSpace().getUserAttributeDefinition(groupAttribute) == null) {
                 throw new IllegalStateException("The bundle is configured to use the \""+
                     groupAttribute+"\" attribute for determining \""+type+"\" groups but "+
                     "there is not a corresponding user attribute definition in the \""+
                     kapp.getSpace().getName()+"\" space.");
             }
             // Raise intelligent errors
-            if (delegationAttribute != null && space.getUserAttributeDefinition(delegationAttribute) == null) {
+            if (delegationAttribute != null && kapp.getSpace().getUserAttributeDefinition(delegationAttribute) == null) {
                 throw new IllegalStateException("The bundle is configured to use the \""+
                     delegationAttribute+"\" attribute for determining \""+type+"\" delegation but "+
                     "there is not a corresponding user attribute definition in the \""+

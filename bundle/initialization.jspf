@@ -169,10 +169,10 @@
     }
 %>
 
-<%-- SearchHelper --%>
-<%@include file="SearchHelper.jspf"%>
+<%-- CatalogSearchHelper --%>
+<%@include file="CatalogSearchHelper.jspf"%>
 <%
-    request.setAttribute("SearchHelper", new SearchHelper());
+    request.setAttribute("CatalogSearchHelper", new CatalogSearchHelper());
 %>
 
 <%-- SubmissionHelper --%>

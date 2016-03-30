@@ -7,6 +7,10 @@
 
 nav#bundle-header {
     margin-bottom: 0;
+    ul.dropdown-menu>li.sublink>a {
+        padding-left: 3.5rem;
+        color: $darkgray;
+    }
 }
 nav#kapp-sub-nav{
   border-top: none;
@@ -49,10 +53,13 @@ nav#kapp-sub-nav{
         color: $lightestgray;
         background-color: transparent;
     }
+    ul.dropdown-menu.show-xs>li.sublink>a, ul.dropdown-menu.show-xs>li.sublink>a:hover {
+        color: $lightgray;
+    }
     ul.priority li {
         text-align: center;
         display: inline-block;
-        width: 30%;
+        width: 45%;
     }
     ul.priority li i.fa {
         display: block;

@@ -84,6 +84,11 @@
             }
         }
         
+        /**
+         * Function used to transform a Form object into a List of attribute values (Strings)
+         *  which correspond to any predefined Search Attributes
+         * Example use: SearchAttributes.INSTANCE.apply(form),
+         */
         private enum SearchAttributes implements Function<Form, List<String>> {
             INSTANCE;
             

@@ -39,7 +39,6 @@
     <body>
         <div class="view-port">
             <c:import url="${bundle.path}/partials/header.jsp" charEncoding="UTF-8"/>
-            <c:import url="${bundle.path}/partials/sub-header.jsp" charEncoding="UTF-8"/>
             <div class="container">
                 <bundle:yield/>
             </div>

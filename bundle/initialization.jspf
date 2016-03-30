@@ -39,18 +39,9 @@
 <%@include file="SetupHelper.jspf"%>
 <%
     SetupHelper setupHelper = new SetupHelper()
-        .addSetupAttribute("Task Server Url", 
-            "Your Kinetic Task Server Url", 
-            false)
-        .addSetupAttribute("Task Source Name", 
-            "The Kinetic Task Source Name", 
-            false)
-        .addSetupAttribute("Search Attribute", 
-            "Specify which form attributes should be searchable. Keyword Attribute is always searchable and does not need to be spcified as a Search Attribute.", 
-            false)
-        .addSetupAttribute("Include in Global Search", 
-            "Set if the Kapp should use and participate in global search.", 
-            false); 
+        .addSetupAttribute("Page Link", 
+            "Display name and file name (separated by a semicolon) of any pages that should show up as links. Ex: \"My Requests;requests\" [Allows Multiple]", 
+            false);
     request.setAttribute("SetupHelper", setupHelper);
 %>
 
@@ -72,6 +63,20 @@
                 bundle.getKappLocation(), 
                 kapp.getAttributeValue("Shared Bridged Resource Form Slug")));
     }
+%>
+
+<%-- CatalogSearchHelper --%>
+<%@include file="CatalogSearchHelper.jspf"%>
+<%
+    request.setAttribute("CatalogSearchHelper", new CatalogSearchHelper());
+    //Add setup attributes
+    setupHelper
+        .addSetupAttribute("Search Attribute", 
+            "Specify which form attributes should be searchable. Keyword Attribute is always searchable and does not need to be specified as a Search Attribute. [Allows Multiple]", 
+            false)
+        .addSetupAttribute("Include in Global Search", 
+            "Set if the Kapp should use and participate in global search.", 
+            false); 
 %>
 
 <%-- CategoryHelper --%>
@@ -167,12 +172,6 @@
         }
         request.setAttribute("LockableSubmissionHelper", lockableSubmissionHelper);
     }
-%>
-
-<%-- CatalogSearchHelper --%>
-<%@include file="CatalogSearchHelper.jspf"%>
-<%
-    request.setAttribute("CatalogSearchHelper", new CatalogSearchHelper());
 %>
 
 <%-- SubmissionHelper --%>

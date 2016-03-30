@@ -22,7 +22,7 @@ Page that accepts the parameters 'q', 'pageSize', and 'offset', and displays the
 ## Configuration
 
 * Copy the files listed above into your bundle
-* Initialize the BridgedResourceHelper in your bundle/initialization.jspf file
+* Initialize the CatalogSearchHelper in your bundle/initialization.jspf file
 * You may need to modify the search function to search the components that your KAPP requires, as different KAPPs may have different requirements. 
 * You may also need to modify the WeightedForm class if your KAPP does not search forms. 
 * DO NOT modify the WeightHelper if you are aggregating multiple searches on a page. The WeightHelper needs to use the same algorithm in order to offer a consistent sort/merge order when aggregating results from multiple search helpers.

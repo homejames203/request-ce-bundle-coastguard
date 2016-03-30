@@ -38,8 +38,8 @@ Page that accepts the parameters 'q', 'pageSize', and 'offset', and displays the
     //Add setup attributes
     setupHelper
         .addSetupAttribute("Search Attribute", 
-            "Specify which form attributes should be searchable. " + 
-                "Keyword attribute is always searchable and does not need to be specified as a Search Attribute. [Allows Multiple]", 
+            "Specify which form attributes should be searchable. " 
+                + "Keyword attribute is always searchable and does not need to be specified as a Search Attribute. [Allows Multiple]", 
             false)
         .addSetupAttribute("Include in Global Search", 
             "Set if the Kapp should use and participate in global search.", 

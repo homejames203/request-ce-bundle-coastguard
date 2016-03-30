@@ -38,11 +38,11 @@
 <%-- SetupHelper --%>
 <%@include file="SetupHelper.jspf"%>
 <%
-    SetupHelper setupHelper = new SetupHelper()
-        .addSetupAttribute("Page Link", 
+    SetupHelper setupHelper = new SetupHelper();
+    request.setAttribute("SetupHelper", setupHelper);
+    setupHelper.addSetupAttribute("Page Link", 
             "Display name and file name (separated by a semicolon) of any pages that should show up as links. Ex: \"My Requests;requests\" [Allows Multiple]", 
             false);
-    request.setAttribute("SetupHelper", setupHelper);
 %>
 
 <%-- BridgedResourceHelper --%>

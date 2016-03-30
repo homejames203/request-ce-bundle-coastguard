@@ -4,6 +4,21 @@
 <bundle:layout page="layouts/form.jsp">
     <bundle:variable name="head">
         <title>${text.escape(form.name)}</title>
+        
+        <%-- If the form has a "Locked By" field and is not being displayed in review mode. --%>
+        <c:if test="${form.getField('Locked By') != null && param.review == null}">
+            <script>
+                // Set the bundle ready callback function (this is called automatically by the 
+                // application after the kinetic form has been initialized/activated)
+                bundle.config.ready = function(kineticForm) {
+                    // Prepare locking
+                    bundle.ext.locking.observe(kineticForm, {
+                        lockDuration: 15,
+                        lockInterval: 10
+                    });
+                };
+            </script>
+        </c:if>
     </bundle:variable>
     <section class="page" data-page="${page.name}">
         <div class="page-header">

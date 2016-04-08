@@ -28,10 +28,9 @@ the [BridgedResourceHelper Summary](#bridgedresourcehelper-summary) section.
 **bundle/initialization.jspf**
 ```jsp
 <%@include file="BridgedResourceHelper.jspf" %>
-<%!
+<%
     // Add setup attributes
-    setupHelper
-        .addSetupAttribute(
+    setupHelper.addSetupAttribute(
             "Shared Bridged Resource Form Slug", 
             "The slug of the form that is used to define shared bridged resources.", 
             false);

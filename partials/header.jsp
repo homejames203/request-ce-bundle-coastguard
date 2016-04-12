@@ -61,21 +61,14 @@
                 <li class="dropdown">
                     <a id="drop2" href="#" class="dropdown-toggle  hidden-xs" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="hidden-xs fa fa-th fa-fw"></span></a>
                     <ul class="dropdown-menu show-xs" aria-labelledby="drop2">
-                        <c:forEach items="${space.kapps}" var="kapp" varStatus="status">
+                        <li>
+                            <a href="${bundle.spaceLocation}">Home</a>
+                        </li>
+                        <c:set var="pageLinks" value="${AttributeHelper.getAttributeObjectValues(not empty kapp ? kapp : space, 'Page Link', AttributeHelper.kvp('Name'))}" />
+                        <c:forEach items="${SortHelper.sortMaps(pageLinks, SortHelper.sortBy('Sort'))}" var="page">
                             <li>
-                                <a href="/kinetic/${space.slug}/${kapp.slug}/">${kapp.name}</a>
+                                <a href="${bundle.spaceLocation}/${not empty page.Kapp ? page.Kapp : kapp.slug}${not empty page.Page ? '?page='.concat(page.Page) : ''}">${page.Name}</a>
                             </li>
-                            <c:forEach items="${kapp.getAttributeValues('Page Link')}" var="page">
-                                <c:set var="link" value="${text.split(page, ';')}"/>
-                                <c:if test="${fn:length(link) > 1}">
-                                    <li class="sublink">
-                                        <a href="/kinetic/${space.slug}/${kapp.slug}?page=${link[1]}">${link[0]}</a>
-                                    </li>
-                                </c:if>
-                            </c:forEach>
-                            <c:if test="${not status.last}">
-                                <li class="divider hidden-xs"></li>
-                            </c:if>
                         </c:forEach>
                     </ul>
                 </li>

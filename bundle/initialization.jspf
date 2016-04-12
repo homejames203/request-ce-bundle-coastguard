@@ -41,8 +41,20 @@
     SetupHelper setupHelper = new SetupHelper();
     request.setAttribute("SetupHelper", setupHelper);
     setupHelper.addSetupAttribute("Page Link", 
-            "Display name and file name (separated by a semicolon) of any pages that should show up as links. Ex: \"My Requests;requests\" [Allows Multiple]", 
+            "JSON Object which defines a link to display in the header navigation. "
+                + "Example: {"
+                + "\"Name\":\"(Required) Display name of link\", "
+                + "\"Page\":\"(Optional) Page to link to, defaults to kapp home page\", "
+                + "\"Kapp\":\"(Optional) Kapp slug to go to, defaults to current kapp\", "
+                + "\"Sort\":\"(Optional) Numeric: Order in which links should appear\""
+                + "}", 
             false);
+%>
+
+<%-- AttributeHelper --%>
+<%@include file="AttributeHelper.jspf"%>
+<%
+    request.setAttribute("AttributeHelper", new AttributeHelper());
 %>
 
 <%-- BridgedResourceHelper --%>
@@ -172,6 +184,12 @@
         }
         request.setAttribute("LockableSubmissionHelper", lockableSubmissionHelper);
     }
+%>
+
+<%-- SortHelper --%>
+<%@include file="SortHelper.jspf"%>
+<%
+    request.setAttribute("SortHelper", new SortHelper());
 %>
 
 <%-- SubmissionHelper --%>

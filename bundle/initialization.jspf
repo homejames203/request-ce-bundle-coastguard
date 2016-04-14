@@ -40,21 +40,6 @@
 <%
     SetupHelper setupHelper = new SetupHelper();
     request.setAttribute("SetupHelper", setupHelper);
-    setupHelper.addSetupAttribute("Page Link", 
-            "JSON Object which defines a link to display in the header navigation. "
-                + "Example: {"
-                + "\"Name\":\"(Required) Display name of link\", "
-                + "\"Page\":\"(Optional) Page to link to, defaults to kapp home page\", "
-                + "\"Kapp\":\"(Optional) Kapp slug to go to, defaults to current kapp\", "
-                + "\"Sort\":\"(Optional) Numeric: Order in which links should appear\""
-                + "}", 
-            false);
-%>
-
-<%-- AttributeHelper --%>
-<%@include file="AttributeHelper.jspf"%>
-<%
-    request.setAttribute("AttributeHelper", new AttributeHelper());
 %>
 
 <%-- BridgedResourceHelper --%>
@@ -75,6 +60,19 @@
                 bundle.getKappLocation(), 
                 kapp.getAttributeValue("Shared Bridged Resource Form Slug")));
     }
+%>
+
+<%-- BundleHelper --%>
+<%@include file="BundleHelper.jspf"%>
+<%
+    request.setAttribute("BundleHelper", new BundleHelper(bundle, kapp, space));
+    setupHelper.addSetupAttribute("Header Navigation List", 
+        "JSON Attribute which defines the navigation links that should appear in the header. "
+            + "Structure must be a JSON Array of JSON Objects, with the properties Name (required), Kapp (optional), and Page (optional). "
+            + "Name defines the display text of the link. "
+            + "Kapp defines the slug of the destination Kapp (defaults to current Kapp). "
+            + "Page defines the filename of the destination page (defaults to Kapp's home page).", 
+        false);
 %>
 
 <%-- CatalogSearchHelper --%>
@@ -184,12 +182,6 @@
         }
         request.setAttribute("LockableSubmissionHelper", lockableSubmissionHelper);
     }
-%>
-
-<%-- SortHelper --%>
-<%@include file="SortHelper.jspf"%>
-<%
-    request.setAttribute("SortHelper", new SortHelper());
 %>
 
 <%-- SubmissionHelper --%>

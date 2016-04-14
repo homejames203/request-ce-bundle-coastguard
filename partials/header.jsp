@@ -64,12 +64,16 @@
                         <li>
                             <a href="${bundle.spaceLocation}">Home</a>
                         </li>
-                        <c:set var="pageLinks" value="${AttributeHelper.getAttributeObjectValues(not empty kapp ? kapp : space, 'Page Link', AttributeHelper.kvp('Name'))}" />
-                        <c:forEach items="${SortHelper.sortMaps(pageLinks, SortHelper.sortBy('Sort'))}" var="page">
-                            <li>
-                                <a href="${bundle.spaceLocation}/${not empty page.Kapp ? page.Kapp : kapp.slug}${not empty page.Page ? '?page='.concat(page.Page) : ''}">${page.Name}</a>
-                            </li>
-                        </c:forEach>
+                        <c:catch var="headerNavigationError">
+                            <c:forEach items="${BundleHelper.headerNavigation}" var="link">
+                                <li>
+                                    <a href="${link.path}">${link.name}</a>
+                                </li>
+                            </c:forEach>
+                        </c:catch>
+                        <c:if test="${headerNavigationError ne null}">
+                            <li class="alert alert-danger">Error building header navigation. The value of the "Header Navigation List" attribute contains invalid JSON.</li>
+                        </c:if>
                     </ul>
                 </li>
             </ul>

@@ -15,7 +15,7 @@
             <section class="content-header">
                 <h1>
                     ${submission.label}
-                    <small>Submitted On: <fmt:formatDate type="both" value="${submission.submittedAt}" dateStyle="medium"/></small>
+                    <small>Submitted On: <span data-moment> ${submission.submittedAt}</span></small>
                 </h1>
                 <ol class="breadcrumb">
                     <li><a href="#">
@@ -34,7 +34,7 @@
                                 <dt>Label:</dt>
                                 <dd>${submission.label}</dd>
                                 <dt>Request Date:</dt>
-                                <dd><fmt:formatDate type="both" value="${submission.submittedAt}" dateStyle="medium"/></dd>
+                                <dd data-moment>${submission.submittedAt}</dd>
                                 <dt>Status:</dt>
                                 <dd>${submission.coreState}</dd>
                             </dl>

@@ -9,9 +9,7 @@
     <ul class="timeline">
         <!-- timeline time label -->
         <li class="time-label">
-            <span class="bg-red">
-                <fmt:formatDate type="both" value="${submission.submittedAt}" dateStyle="medium"/>
-            </span>
+            <span data-moment class="bg-red">${submission.submittedAt}/></span>
         </li>
         <!-- /.timeline-label -->
         <!-- timeline item -->
@@ -28,11 +26,9 @@
                     <div class="timeline-body">
                         <dl>
                             <dt>Started at: </dt>
-                            <dd><fmt:parseDate value="${task.createdAt}" var="taskCreatedAt" 
-                              pattern="MM/dd/yyyy HH:mm:ss" /><fmt:formatDate type="both" value="${taskCreatedAt}" dateStyle="medium"/></dd>
+                            <dd data-moment-short>${task.createdAt}</dd>
                             <dt>Last Updated at: </dt>
-                            <dd><fmt:parseDate value="${task.updatedAt}" var="taskUpdatedAt" 
-                              pattern="MM/dd/yyyy HH:mm:ss" /><fmt:formatDate type="both" value="${taskUpdatedAt}" dateStyle="medium"/></dd>
+                            <dd data-moment-short>${task.updatedAt}</dd>
                         </dl>
                         <c:if test="${not empty task.messages}">
                             <a class="btn btn-primary btn-xs" data-toggle="collapse" href="#messages-${task.id}">Read more</a>
@@ -40,8 +36,7 @@
                                 <ul class="list-unstyled">
                                     <li></li>
                                     <c:forEach var="entry" items="${task.messages}">
-                                        <li><fmt:parseDate value="${entry.date}" var="entryDate" 
-                              pattern="MM/dd/yyyy HH:mm:ss" /><fmt:formatDate type="both" value="${entryDate}" dateStyle="medium"/> -- ${text.escape(entry.message)}</li>
+                                        <li><span data-moment-short>${entry.date}</span> -- ${text.escape(entry.message)}</li>
                                     </c:forEach>
                                 </ul>
                             </div>

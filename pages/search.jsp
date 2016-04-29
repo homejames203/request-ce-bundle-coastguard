@@ -1,60 +1,71 @@
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="../bundle/initialization.jspf" %>
 <bundle:layout page="${bundle.path}/layouts/layout.jsp">
+    <bundle:scriptpack>
+        <bundle:script src="${bundle.location}/js/formCard.js" />
+        <bundle:script src="${bundle.location}/libraries/starrr/starrr.js" />
+        <bundle:script src="${bundle.location}/js/search.js" />
+    </bundle:scriptpack>
 
     <bundle:variable name="head">
         <title>${text.escape(space.name)} Search</title>
     </bundle:variable>
-    
-    <div class="search-results">
-        <h3>${kappIter.name} Search Results <c:if test="${text.isNotBlank(param['q'])}">for '${param['q']}'</c:if></h3>
-        <div class="card-container">
-            <c:choose>
-                <c:when test="${text.isNotBlank(param['q'])}">
-                    <c:catch var ="searchException">
-                       <c:set var="searchResults" scope="request" value="${CatalogSearchHelper.search(kapp.forms, param['q'])}" />
-                    </c:catch>
-                    <c:choose>
-                        <c:when test="${searchException ne null}">
-                            <div class="card">
-                                <div class="card-content alert alert-danger">
-                                    <h5>
-                                        <span class="fa fa-exclamation-triangle"></span>
-                                        <span>Error: ${searchException.cause}</span>
-                                    </h5>
-                                </div>
-                            </div>
-                        </c:when>
-                        <c:otherwise>
-                            <c:forEach var="result" items="${searchResults}">
-                                <div class="card" data-weight="${result.weight}">
-                                    <div class="card-title small">
-                                        <c:if test="${result.form.hasAttribute("Icon")}">
-                                            <span class="fa ${result.form.getAttribute("Icon")}"></span>
-                                        </c:if>
-                                        <a href="${bundle.kappLocation}/${result.form.slug}">${result.form.name}</a>
+
+    <section class="content-header">
+        <h1>
+            ${kappIter.name} Search Results <c:if test="${text.isNotBlank(param['q'])}">for '${param['q']}'</c:if>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="${bundle.kappLocation}">
+                <i class="fa fa-search"></i> 
+                Home</a>
+            </li>
+            <li class="active">Search</li>
+        </ol>
+    </section>
+
+    <section class="content">
+        <div class="row">
+            <div class="col-md-8">
+                <c:choose>
+                    <c:when test="${text.isNotBlank(param['q'])}">
+                        <c:catch var ="searchException">
+                           <c:set var="searchResults" scope="request" value="${CatalogSearchHelper.search(kapp.forms, param['q'])}" />
+                        </c:catch>
+                        <c:choose>
+                            <c:when test="${searchException ne null}">
+                                <div class="card">
+                                    <div class="card-content alert alert-danger">
+                                        <h5>
+                                            <span class="fa fa-exclamation-triangle"></span>
+                                            <span>Error: ${searchException.cause}</span>
+                                        </h5>
                                     </div>
-                                    <c:if test="${text.isNotBlank(result.form.description)}">
-                                        <div class="card-content">
-                                            <p>${result.form.description}</p>
-                                        </div>
-                                    </c:if>
                                 </div>
-                            </c:forEach>                
-                        </c:otherwise>
-                    </c:choose>
-                </c:when>
-                <c:otherwise>
-                    <div class="card">
-                        <div class="card-content alert alert-danger">
-                            <h5>
-                                <span class="fa fa-exclamation-triangle"></span>
-                                <span>Search term not found.</span>
-                            </h5>
+                            </c:when>
+                            <c:otherwise>
+                                <c:forEach var="result" items="${searchResults}">
+                                    <c:set var="form" scope="request" value="${result.form}"/>
+                                    <c:import url="${bundle.path}/partials/formCard.jsp" charEncoding="UTF-8"/>
+                                </c:forEach>                
+                            </c:otherwise>
+                        </c:choose>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="card">
+                            <div class="card-content alert alert-danger">
+                                <h5>
+                                    <span class="fa fa-exclamation-triangle"></span>
+                                    <span>Search term not found.</span>
+                                </h5>
+                            </div>
                         </div>
-                    </div>
-                </c:otherwise>
-            </c:choose>
+                    </c:otherwise>
+                </c:choose>
+            </div>
+            <div class="col-md-4">
+                <c:import url="${bundle.path}/partials/popularRequests.jsp" charEncoding="UTF-8"/>
+            </div>
         </div>
-    </div>
+    </section>
 </bundle:layout>

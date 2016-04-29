@@ -5,11 +5,13 @@
         private HttpServletRequest request;
         private BundleSubmissionComponent submissionComponent;
         private Kapp kapp;
+        private Space space;
 
         public SubmissionHelper(HttpServletRequest request) {
             this.request = request;
             this.submissionComponent = (BundleSubmissionComponent)request.getAttribute("Submissions");
             this.kapp = (Kapp)request.getAttribute("kapp");
+            this.space = (Space)request.getAttribute("space");
         }
 
         public List<Submission> retrieveRecentSubmissions(String type) {
@@ -50,6 +52,35 @@
             }
 
             return submissionComponent.searchByKapp(kapp, searchOptions);
+        }
+
+        public List<Submission> approvalAlertsSubmissions() {
+            com.kineticdata.core.authentication.Identity identity =
+                (com.kineticdata.core.authentication.Identity) request.getAttribute("identity");
+
+            java.util.Map<String,String[]> searchOptions = new java.util.HashMap<>();
+            searchOptions.put("values[Assigned Individual]", new String[] {identity.getUsername()});
+            searchOptions.put("limit", new String[] {"999"});
+            searchOptions.put("type", new String[] {"Approval"});
+            searchOptions.put("coreState", new String[] {"Draft"});   
+
+            return submissionComponent.searchByKapp(kapp, searchOptions);
+        }
+
+        public List<Submission> broadcastAlertsSubmissions () {
+            java.util.Map<String,String[]> searchOptions = new java.util.HashMap<>();
+            searchOptions.put("limit", new String[] {"999"});
+            searchOptions.put("values[Status]", new String[] {"Active"}); 
+
+            return submissionComponent.searchByForm(space.getKapp( new String("admin") ).getForm( new String("broadcast-alerts")), searchOptions);
+        }
+
+        public List<Submission> serviceReviewSubmissions(String formSlug) {
+            java.util.Map<String,String[]> searchOptions = new java.util.HashMap<>();
+            searchOptions.put("limit", new String[] {"999"});
+            searchOptions.put("values[Form Slug]", new String[] {formSlug});
+
+            return submissionComponent.searchByForm(kapp.getForm( new String("service-reviews") ), searchOptions);
         }
     }
 %>

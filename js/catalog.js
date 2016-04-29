@@ -38,6 +38,20 @@ $(function(){
   });
 });
 
+// Build Datatables if datatable class exists on a table. If empty, Display Empty Text 
+$(function(){
+  $('table.datatable').DataTable({
+    "paging": true,
+    "lengthChange": false,
+    "searching": true,
+    "ordering": true,
+    "info": true,
+    "autoWidth": false
+  });
+  $('td.dataTables_empty').html('None found. Check back soon!');
+});
+
+
 /**
  * Applies the Jquery DataTables plugin to a rendered HTML table to provide
  * column sorting and Moment.js functionality to date/time values.

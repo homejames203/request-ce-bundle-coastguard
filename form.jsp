@@ -60,6 +60,12 @@ bundle.config.fields = {
         $(field.element()).addClass('form-control');
         $(field.element()).on('change', triggerFn);
     },
+    // datetime: function(field, triggerFn) {
+    //     $(field.wrapper()).addClass('form-group');
+    //     $(field.wrapper()).find('label').addClass('control-label');
+    //     $(field.element()).addClass('form-control');
+    //     $(field.element()).on('change', triggerFn);
+    // },
     dropdown: function(field, triggerFn) {
         $(field.wrapper()).addClass('form-group');
         $(field.wrapper()).find('label').addClass('control-label');
@@ -83,7 +89,7 @@ bundle.config.fields = {
         $(field.element()).on('change', triggerFn);
     }
 };
-bundle.config.ready = function() {
+bundle.config.ready = function(form) {
     $('[data-element-type="button"]').addClass('btn btn-default');
     $('[data-element-name="Submit Button"]').addClass('pull-right');
 
@@ -96,15 +102,15 @@ bundle.config.ready = function() {
                 $(this).children().not('h1').wrapAll('<div class="box-footer"></div>');
             }
             // Wrap all other Sections with Box-Body. If the sections have a visible header, wrap it with box-header
-        } else{
+        } else if ( !$(this).is('[class^="col-"]') && $(this).children('h1').length > 0) {
             $(this).children().not('h1').wrapAll('<div class="box-body"></div>');
             $(this).children('h1').replaceWith('<div class="box-header with-border"><h3 class="box-title">' + $(this).children('h1').text() + '</h3></div>');
         }
     });
 
     // Loop over each Form and see if no sections exist. If none do, then wrap with box-body
-    $('div.box form').each(function(){
-        $(this).children().wrapAll('<div class="box-body"></div>');
-    });
+    // $('div.box form').each(function(){
+    //     $(this).children().not('section[class^="col-"]').wrapAll('<div class="box-body"></div>');
+    // });
 };
 </script>

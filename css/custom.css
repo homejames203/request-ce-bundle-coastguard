@@ -35,3 +35,44 @@ img.formlogo{
 .messages-menu a p {
    white-space: normal;
 }
+
+
+  section.page form .form-group.required label:after {
+    content: '*';
+    color: red; }
+
+    /* Missing Attributes
+ *-------------------------------------- */
+.no-data {
+  border: 1px solid #999;
+  border-radius: 3px;
+  line-height: 140%;
+  margin-bottom: 20px;
+  padding: 1em;
+  background-color: #fff;
+  position: relative;
+  border: 1px solid transparent; }
+  .no-data h3 {
+    text-transform: none; }
+  .no-data ul {
+    text-align: left; }
+
+.success {
+  color: #00B900; }
+  .success .required,
+  .success .fa-check {
+    color: #46a546; }
+  .success .required {
+    font-weight: bold; }
+
+.danger,
+.warning {
+  color: #000000; }
+  .danger .required,
+  .danger .fa-exclamation-triangle,
+  .warning .required,
+  .warning .fa-exclamation-triangle {
+    color: #8a6d3b; }
+  .danger .required,
+  .warning .required {
+    font-weight: bold; 

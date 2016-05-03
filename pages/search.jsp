@@ -45,8 +45,10 @@
                             </c:when>
                             <c:otherwise>
                                 <c:forEach var="result" items="${searchResults}">
-                                    <c:set var="form" scope="request" value="${result.form}"/>
-                                    <c:import url="${bundle.path}/partials/formCard.jsp" charEncoding="UTF-8"/>
+                                    <c:if test="${result.form.typeName eq 'Service'}">
+                                        <c:set var="form" scope="request" value="${result.form}"/>
+                                        <c:import url="${bundle.path}/partials/formCard.jsp" charEncoding="UTF-8"/>
+                                    </c:if>
                                 </c:forEach>                
                             </c:otherwise>
                         </c:choose>

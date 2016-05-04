@@ -56,8 +56,8 @@
 bundle.config.fields = {
     text: function(field, triggerFn) {
         $(field.wrapper()).addClass('form-group');
-        $(field.wrapper()).find('label').addClass('control-label');
-        $(field.element()).addClass('form-control');
+        $(field.wrapper()).find('label').addClass('control-label').removeClass('col-sm-12 col-sm-6 col-sm-4');
+        $(field.element()).addClass('form-control').removeClass('col-sm-12 col-sm-6 col-sm-4');
         $(field.element()).on('change', triggerFn);
     },
     // datetime: function(field, triggerFn) {
@@ -68,13 +68,13 @@ bundle.config.fields = {
     // },
     dropdown: function(field, triggerFn) {
         $(field.wrapper()).addClass('form-group');
-        $(field.wrapper()).find('label').addClass('control-label');
-        $(field.element()).addClass('form-control');
+        $(field.wrapper()).find('label').addClass('control-label').removeClass('col-sm-12 col-sm-6 col-sm-4');
+        $(field.element()).addClass('form-control').removeClass('col-sm-12 col-sm-6 col-sm-4');
         $(field.element()).on('change', triggerFn);
     },
     checkbox: function(field, triggerFn) {
         $(field.wrapper()).removeClass('checkbox');
-        $(field.wrapper()).find('label').first().addClass('control-label');
+        $(field.wrapper()).find('label').first().addClass('control-label').removeClass('col-sm-12 col-sm-6 col-sm-4');
         $(field.wrapper()).find('label').first().removeClass('field-label');
         $(field.wrapper()).children().not(':first-child').addClass('checkbox');
         $(field.wrapper()).children().not(':first-child').attr('style', 'margin-left:20px;');
@@ -82,7 +82,7 @@ bundle.config.fields = {
     },
     radio: function(field, triggerFn) {
         $(field.wrapper()).removeClass('radio');
-        $(field.wrapper()).find('label').first().addClass('control-label');
+        $(field.wrapper()).find('label').first().addClass('control-label').removeClass('col-sm-12 col-sm-6 col-sm-4');
         $(field.wrapper()).find('label').first().removeClass('field-label');
         $(field.wrapper()).children().not(':first-child').addClass('radio');
         $(field.wrapper()).children().not(':first-child').attr('style', 'margin-left:20px;');
@@ -90,6 +90,7 @@ bundle.config.fields = {
     }
 };
 bundle.config.ready = function(form) {
+    // Manipulate Default Buttons on Forms
     $('[data-element-type="button"]').addClass('btn btn-default');
     $('[data-element-name="Submit Button"]').addClass('pull-right');
 
@@ -108,9 +109,14 @@ bundle.config.ready = function(form) {
         }
     });
 
-    // Loop over each Form and see if no sections exist. If none do, then wrap with box-body
-    // $('div.box form').each(function(){
-    //     $(this).children().not('section[class^="col-"]').wrapAll('<div class="box-body"></div>');
-    // });
+    // Add box-body to forms with no sections
+    if( $('div.box form section').length === 0 ){
+        $('div.box form').children().wrapAll('<div class="box-body"></div>');
+    }
+
+    // Work around for Date-Time fields that can't be manipulated in bundle.config.fields without overriding
+    // default datepicker behavior
+    $('form div[data-element-type="wrapper"]:has( >label )').children('label').removeClass('col-sm-12 col-sm-6 col-sm-4');
+    $('form div[data-element-type="wrapper"]:has( >label )').children('input').addClass('form-control');
 };
 </script>

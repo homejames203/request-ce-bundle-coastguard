@@ -5,9 +5,9 @@
     <div class="box-header with-border">
         <h3 class="box-title">My Requests</h3>
     </div><!-- /.box-header -->
-    <div class="box-body table-responsive no-padding">
-        <table class="table table-hover">
-            <tbody>
+    <div class="box-body">
+        <table class="table table-hover datatable nosearch">
+            <thead>
                 <tr>
                     <th>Item Requested</th>
                     <th>Details</th>
@@ -15,6 +15,8 @@
                     <th>Date Submitted</th>
                     <th>Status</th>
                 </tr>
+            </thead>
+            <tbody>
                 <c:forEach items="${submissionsList}" begin="0" end="4" var="submission">
                     <c:set var="statusColor" value="label-success"/>
                     <c:choose> 
@@ -41,7 +43,7 @@
                             </c:choose>
                         </td>
                         <td>${space.getUser(submission.createdBy).displayName}</td>
-                        <td><fmt:formatDate type="date" value="${submission.createdAt}" dateStyle="medium"/></td>
+                        <td data-moment>${submission.createdAt}</td>
                         <td><span class="label ${statusColor}">${submission.coreState}</span></td>
                     </tr>
                 </c:forEach>

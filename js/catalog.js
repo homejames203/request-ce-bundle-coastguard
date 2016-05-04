@@ -112,15 +112,20 @@
 
     // Build Datatables if datatable class exists on a table. If empty, Display Empty Text 
     $(function(){
-      $('table.datatable').DataTable({
-        "paging": true,
-        "lengthChange": false,
-        "searching": true,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false
-      });
-      $('td.dataTables_empty').html('None found. Check back soon!');
+        $('table.datatable').each(function(){
+            var usesearch = $(this).hasClass("nosearch") ? false:true ;
+            $(this).css("width:100%");
+            $(this).DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": usesearch,
+                "order": [[ 3, "desc" ]],
+                "info": true,
+                "autoWidth": true,
+                "scrollX": true
+            });
+        })
+        $('td.dataTables_empty').html('None found. Check back soon!');
     });
 
     function renderTable(options){

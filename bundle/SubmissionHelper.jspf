@@ -74,6 +74,17 @@
 
             return submissionComponent.searchByForm(space.getKapp( new String("admin") ).getForm( new String("broadcast-alerts")), searchOptions);
         }
+        public List<Submission> myAssetSubmissions () {
+            com.kineticdata.core.authentication.Identity identity =
+                (com.kineticdata.core.authentication.Identity) request.getAttribute("identity");
+
+            java.util.Map<String,String[]> searchOptions = new java.util.HashMap<>();
+            searchOptions.put("values[Assigned Individual]", new String[] {identity.getUsername()});
+            searchOptions.put("limit", new String[] {"999"});
+            searchOptions.put("values[Status]", new String[] {"Active"}); 
+
+            return submissionComponent.searchByForm(space.getKapp( new String("admin") ).getForm( new String("assets")), searchOptions);
+        }
 
         public List<Submission> serviceReviewSubmissions(String formSlug) {
             java.util.Map<String,String[]> searchOptions = new java.util.HashMap<>();

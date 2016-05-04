@@ -11,19 +11,26 @@
         </span>
         <!-- logo for regular state and mobile devices -->
         <span class="logo-lg">
-            <c:if test="${not empty kapp.getAttribute('Company Logo')}">
-              <c:choose>
-                <c:when test ="${fn:containsIgnoreCase(kapp.getAttribute('Company Logo').value, 'http')}">
-                  <img class="pull-left" src="${kapp.getAttribute('Company Logo').value}" alt="logo">
+            <c:choose>
+                <%-- Check to See if Company Logo / Name Attributes Exists --%>
+                <c:when test="${not empty kapp.getAttribute('Company Logo') && not empty kapp.getAttribute('Company Name') && 1 eq 2}">
+                    <%-- Check to see if the company logo is external to the bundle --%>
+                    <c:choose>
+                        <c:when test ="${fn:containsIgnoreCase(kapp.getAttribute('Company Logo').value, 'http')}">
+                            <img class="pull-left" src="${kapp.getAttribute('Company Logo').value}" alt="logo" style="display:block; max-height:40px; margin:5px;">
+                            <span class="pull-right">${kapp.name}</span>
+                        </c:when>
+                        <c:otherwise>
+                            <img class="pull-left" src="${bundle.location}/${kapp.getAttribute('Company Logo').value}" alt="logo" style="display:block; max-height:40px; margin:5px;">
+                            <strong class="pull-right">${kapp.name}</strong>
+                        </c:otherwise>
+                    </c:choose>
                 </c:when>
+                <%-- If no logo attribute exists, display the KAPP Name --%>
                 <c:otherwise>
-                  <img class="pull-left" src="${bundle.location}/${kapp.getAttribute('Company Logo').value}" alt="logo">
+                    <i class="fa fa-home"></i> ${text.escape(kapp.name)}
                 </c:otherwise>
-              </c:choose>
-            </c:if>
-            <c:if test="${empty kapp.getAttribute('Company Logo')}">
-                <i class="fa fa-home"></i> ${text.escape(kapp.name)}
-            </c:if>
+            </c:choose>
         </span>
     </a>
 

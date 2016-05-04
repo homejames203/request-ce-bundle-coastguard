@@ -14,6 +14,18 @@
 
             <!-- Set variable used to count and display submissions -->
             <c:set scope="request" var="submissionsList" value="${SubmissionHelper.retrieveRecentSubmissions('Service', 999)}"/>
+            
+            <c:choose>
+                <c:when test="${not empty space.getKapp('admin') && not empty space.getKapp('admin').getForm('assets') && not empty space.getKapp('admin').getForm('knowledge')}">
+                    <c:set scope="request" var="tileClass" value="col-lg-3 col-xs-6"/>
+                </c:when>
+                <c:when test="${not empty space.getKapp('admin') && (not empty space.getKapp('admin').getForm('assets') && empty space.getKapp('admin').getForm('knowledge')) || (empty space.getKapp('admin').getForm('assets') &&not empty space.getKapp('admin').getForm('knowledge'))}">
+                    <c:set scope="request" var="tileClass" value="col-lg-4 col-xs-4"/>
+                </c:when>
+                <c:otherwise>
+                    <c:set scope="request" var="tileClass" value="col-xs-6"/>
+                </c:otherwise>
+            </c:choose>
 
             <section class="content-header">
                 <h1>
@@ -31,7 +43,7 @@
             <section class="content">
                 <!-- Small boxes (Stat box) -->
                 <div class="row">
-                    <div class="col-lg-3 col-xs-6">
+                    <div class="${tileClass}">
                         <!-- small box -->
                         <div class="small-box bg-aqua">
                             <div class="inner">
@@ -45,7 +57,7 @@
                         </div>
                     </div><!-- ./col -->
 
-                    <div class="col-lg-3 col-xs-6">
+                    <div class="${tileClass}">
                         <!-- small box -->
                         <div class="small-box bg-green">
                             <div class="inner">
@@ -59,33 +71,37 @@
                         </div>
                     </div><!-- ./col -->
 
-                    <div class="col-lg-3 col-xs-6">
-                        <!-- small box -->
-                        <div class="small-box bg-yellow">
-                            <div class="inner">
-                                <h3>11</h3>
-                                <p>My Assets</p>
+                    <c:if test="${not empty space.getKapp('admin').getForm('assets')}">
+                        <c:set scope="request" var="assetList" value="${SubmissionHelper.myAssetSubmissions()}"/>
+                        <div class="${tileClass}">
+                            <!-- small box -->
+                            <div class="small-box bg-yellow">
+                                <div class="inner">
+                                    <h3>${fn:length(assetList)}</h3>
+                                    <p>My Assets</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-mobile"></i>
+                                </div>
+                                <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                             </div>
-                            <div class="icon">
-                                <i class="fa fa-mobile"></i>
+                        </div><!-- ./col -->
+                    </c:if>
+                    <c:if test="${not empty space.getKapp('admin').getForm('knowldege')}">
+                        <div class="${tileClass}">
+                            <!-- small box -->
+                            <div class="small-box bg-red">
+                                <div class="inner">
+                                    <h3>728</h3>
+                                    <p>Knowledge Base</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-lightbulb-o"></i>
+                                </div>
+                                <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                             </div>
-                            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div><!-- ./col -->
-
-                    <div class="col-lg-3 col-xs-6">
-                        <!-- small box -->
-                        <div class="small-box bg-red">
-                            <div class="inner">
-                                <h3>728</h3>
-                                <p>Knowledge Base</p>
-                            </div>
-                            <div class="icon">
-                                <i class="fa fa-lightbulb-o"></i>
-                            </div>
-                            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div><!-- ./col -->
+                        </div><!-- ./col -->
+                    </c:if>
                 </div><!-- /.row -->
 
                 <div class="row">

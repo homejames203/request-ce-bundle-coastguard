@@ -1,11 +1,11 @@
 .main-header .logo {
-    padding:0px;
-    /*background-color: rgb(0,51,102) !important;*/
-    border-right:0px !important;
+
 }
 .main-header .logo img {
-    /*max-width:186px;*/
-    max-height:58px;
+
+}
+.main-header .logo-lg, .main-header .logo-mini{
+    
 }
  div.formDescription div.icon img {
     max-width: 100px;
@@ -37,9 +37,9 @@ img.formlogo{
 }
 
 
-  section.page form .form-group.required label:after {
-    content: '*';
-    color: red; }
+section.page form .form-group.required label:after {
+  content: '*';
+  color: red; }
 
     /* Missing Attributes
  *-------------------------------------- */
@@ -68,11 +68,12 @@ img.formlogo{
 .danger,
 .warning {
   color: #000000; }
-  .danger .required,
-  .danger .fa-exclamation-triangle,
-  .warning .required,
-  .warning .fa-exclamation-triangle {
-    color: #8a6d3b; }
-  .danger .required,
-  .warning .required {
-    font-weight: bold; 
+.danger .required,
+.danger .fa-exclamation-triangle,
+.warning .required,
+.warning .fa-exclamation-triangle {
+  color: #8a6d3b; }
+.danger .required,
+.warning .required {
+  font-weight: bold; 
+}

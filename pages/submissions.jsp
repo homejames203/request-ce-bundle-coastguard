@@ -69,29 +69,37 @@
                                         <c:when test="${submission.coreState eq 'Draft'}">
                                             <a href="${bundle.spaceLocation}/submissions/${submission.id}">${text.escape(submission.label)}</a>
                                         </c:when>
-                                        <c:otherwise>
+                                        <c:when test="${submission.coreState ne 'Draft' && type eq 'Requests'}">
                                             <a href="${bundle.kappLocation}?page=submission&id=${submission.id}">${text.escape(submission.label)}</a>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <a href="${bundle.spaceLocation}/submissions/${submission.id}?review">${text.escape(submission.label)}</a>
                                         </c:otherwise>
                                     </c:choose>
                                 </td>
                                 <td>${space.getUser(submission.createdBy).displayName}</td>
-                                <td><fmt:formatDate type="date" value="${submission.createdAt}" dateStyle="medium"/></td>
-                                <c:if test="${type eq 'Approvals'}">
-                                    <c:if test="${submission.getValue('Decision') eq 'Approved'}">
-                                        <c:set var="statusColor" value="label-success"/>
-                                    </c:if>
-                                    <c:if test="${submission.getValue('Decision') eq 'Denied'}">
-                                        <c:set var="statusColor" value="label-danger"/>
-                                    </c:if>
-                                    <c:set var="approvalStatus" value="${submission.getValue('Decision')}"/>
-                                    <c:if test="${submission.coreState eq 'Draft'}">
-                                        <c:set var="approvalStatus" value="Pending Approval"/>
-                                    </c:if>
-                                    <td><span class="label ${statusColor}">${approvalStatus}</span></td>
-                                </c:if>
-                                <c:if test="${type eq 'Requests'}">
-                                    <td><span class="label ${statusColor}">${submission.coreState}</span></td>
-                                </c:if>
+                                <td data-moment>${submission.createdAt}</td>
+                                <c:choose>
+                                    <c:when test="${type eq 'Approvals' && submission.form.getField('Decision') ne null}">
+                                        <c:if test="${submission.getValue('Decision') eq 'Approved'}">
+                                            <c:set var="statusColor" value="label-success"/>
+                                        </c:if>
+                                        <c:if test="${submission.getValue('Decision') eq 'Denied'}">
+                                            <c:set var="statusColor" value="label-danger"/>
+                                        </c:if>
+                                        <c:set var="approvalStatus" value="${submission.getValue('Decision')}"/>
+                                        <c:if test="${submission.coreState eq 'Draft'}">
+                                            <c:set var="approvalStatus" value="Pending Approval"/>
+                                        </c:if>
+                                        <td><span class="label ${statusColor}">${approvalStatus}</span></td>
+                                    </c:when>
+                                    <c:when test="${type eq 'Requests'}">
+                                        <td><span class="label ${statusColor}">${submission.coreState}</span></td>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <td><span class="label">${submission.coreState}</span></td>
+                                    </c:otherwise>
+                                </c:choose>
                             </tr>
                         </c:forEach>
                     </tbody>

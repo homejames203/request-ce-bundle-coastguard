@@ -34,22 +34,24 @@
                             <c:when test="${task.name eq 'Create AWS Stack Template'}">
                                 <c:forEach var="message" items="${task.messages}" varStatus="loop">
                                     <c:if test="${loop.last}">
-                                        <x:parse xml="${message.message}" var="message"/>
-                                        <table class="table">
-                                            <tr>
-                                                <th>Resource</th>
-                                                <th>Status</th>
-                                                <th>Last Updated</th>
-                                            </tr>
-                                            <x:forEach select="$message/resources/resource" var="resource">
+                                        <c:catch var="messageException">
+                                            <x:parse xml="${message.message}" var="message"/>
+                                            <table class="table">
                                                 <tr>
-                                                    <td><x:out select="name" /></td>
-                                                    <x:set var="statusNew" select="status"/>
-                                                    <td class="status"><x:out select="status"/></td>
-                                                    <td data-moment><x:out select="timestamp" /></td>
+                                                    <th>Resource</th>
+                                                    <th>Status</th>
+                                                    <th>Last Updated</th>
                                                 </tr>
-                                            </x:forEach>
-                                        </table>
+                                                <x:forEach select="$message/resources/resource" var="resource">
+                                                    <tr>
+                                                        <td><x:out select="name" /></td>
+                                                        <x:set var="statusNew" select="status"/>
+                                                        <td class="status"><x:out select="status"/></td>
+                                                        <td data-moment><x:out select="timestamp" /></td>
+                                                    </tr>
+                                                </x:forEach>
+                                            </table>
+                                        </c:catch>   
                                     </c:if>
                                 </c:forEach>
                             </c:when>

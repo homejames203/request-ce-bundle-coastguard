@@ -62,14 +62,25 @@
             </c:otherwise>
         </c:choose>
     </head>
-    <body class="hold-transition skin-purple-light sidebar-mini">
-        <div class="wrapper">
-            <c:import url="${bundle.path}/partials/header2.jsp" charEncoding="UTF-8"/>
-            <c:import url="${bundle.path}/partials/sidebar.jsp" charEncoding="UTF-8"/>
-            <div class="content-wrapper">
-                <bundle:yield/>
-            </div>
-            <c:import url="${bundle.path}/partials/footer.jsp" charEncoding="UTF-8"/>
-        </div>
-    </body>
+    <c:choose>
+        <c:when test="${identity.anonymous}">
+            <body class="hold-transition login-page">
+                <div class="login-box">
+                    <bundle:yield/>
+                </div>
+            </body>
+        </c:when>
+        <c:otherwise>
+            <body class="hold-transition skin-purple-light sidebar-mini">
+                <div class="wrapper">
+                    <c:import url="${bundle.path}/partials/header2.jsp" charEncoding="UTF-8"/>
+                    <c:import url="${bundle.path}/partials/sidebar.jsp" charEncoding="UTF-8"/>
+                    <div class="content-wrapper">
+                        <bundle:yield/>
+                    </div>
+                    <c:import url="${bundle.path}/partials/footer.jsp" charEncoding="UTF-8"/>
+                </div>
+            </body>
+        </c:otherwise>
+    </c:choose>
 </html>

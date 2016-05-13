@@ -25,21 +25,23 @@
         </c:if>
     </bundle:variable>
     <section class="page" data-page="${page.name}">
-        <div class="content-header">
-            <img class="formlogo pull-left" src="${bundle.location}/images/forms/${form.getAttributeValue('Image')}"/>
-            <h1>${text.escape(form.name)}</h1>
-            <c:if test="${param.review eq null}">
-                <ol class="breadcrumb">
-                    <li>
-                        <a href="${bundle.kappLocation}">
-                            <i class="fa fa-home"></i> 
-                            Home
-                        </a>
-                    </li>
-                    <li class="active">${text.escape(form.name)}</li>
-                </ol>
-            </c:if>
-        </div>
+        <c:if test="${param.embedded eq null}">
+            <div class="content-header">
+                <img class="formlogo pull-left" src="${bundle.location}/images/forms/${form.getAttributeValue('Image')}"/>
+                <h1>${text.escape(form.name)}</h1>
+                <c:if test="${param.review eq null}">
+                    <ol class="breadcrumb">
+                        <li>
+                            <a href="${bundle.kappLocation}">
+                                <i class="fa fa-home"></i> 
+                                Home
+                            </a>
+                        </li>
+                        <li class="active">${text.escape(form.name)}</li>
+                    </ol>
+                </c:if>
+            </div>
+        </c:if>
         <section class="content">
             <c:if test="${param.review != null && pages.size() > 1}">
                 <c:import url="partials/review.jsp" charEncoding="UTF-8"></c:import>
@@ -56,8 +58,12 @@
 bundle.config.fields = {
     text: function(field, triggerFn) {
         $(field.wrapper()).addClass('form-group');
-        $(field.wrapper()).find('label').addClass('control-label').removeClass('col-sm-12 col-sm-6 col-sm-4');
-        $(field.element()).addClass('form-control').removeClass('col-sm-12 col-sm-6 col-sm-4');
+        $(field.wrapper()).find('label').addClass('control-label').removeClass(function (index, css) {
+            return (css.match (/(^|\s)col-\S+/g) || []).join(' ');
+        });
+        $(field.element()).addClass('form-control').removeClass(function (index, css) {
+            return (css.match (/(^|\s)col-\S+/g) || []).join(' ');
+        });
         $(field.element()).on('change', triggerFn);
     },
     // datetime: function(field, triggerFn) {
@@ -68,13 +74,19 @@ bundle.config.fields = {
     // },
     dropdown: function(field, triggerFn) {
         $(field.wrapper()).addClass('form-group');
-        $(field.wrapper()).find('label').addClass('control-label').removeClass('col-sm-12 col-sm-6 col-sm-4');
-        $(field.element()).addClass('form-control').removeClass('col-sm-12 col-sm-6 col-sm-4');
+        $(field.wrapper()).find('label').addClass('control-label').removeClass(function (index, css) {
+            return (css.match (/(^|\s)col-\S+/g) || []).join(' ');
+        });
+        $(field.element()).addClass('form-control').removeClass(function (index, css) {
+            return (css.match (/(^|\s)col-\S+/g) || []).join(' ');
+        });
         $(field.element()).on('change', triggerFn);
     },
     checkbox: function(field, triggerFn) {
         $(field.wrapper()).removeClass('checkbox');
-        $(field.wrapper()).find('label').first().addClass('control-label').removeClass('col-sm-12 col-sm-6 col-sm-4');
+        $(field.wrapper()).find('label').first().addClass('control-label').removeClass(function (index, css) {
+            return (css.match (/(^|\s)col-\S+/g) || []).join(' ');
+        });
         $(field.wrapper()).find('label').first().removeClass('field-label');
         $(field.wrapper()).children().not(':first-child').addClass('checkbox');
         $(field.wrapper()).children().not(':first-child').attr('style', 'margin-left:20px;');
@@ -82,7 +94,9 @@ bundle.config.fields = {
     },
     radio: function(field, triggerFn) {
         $(field.wrapper()).removeClass('radio');
-        $(field.wrapper()).find('label').first().addClass('control-label').removeClass('col-sm-12 col-sm-6 col-sm-4');
+        $(field.wrapper()).find('label').first().addClass('control-label').removeClass(function (index, css) {
+            return (css.match (/(^|\s)col-\S+/g) || []).join(' ');
+        });
         $(field.wrapper()).find('label').first().removeClass('field-label');
         $(field.wrapper()).children().not(':first-child').addClass('radio');
         $(field.wrapper()).children().not(':first-child').attr('style', 'margin-left:20px;');
@@ -92,7 +106,8 @@ bundle.config.fields = {
 bundle.config.ready = function(form) {
     // Manipulate Default Buttons on Forms
     $('[data-element-type="button"]').addClass('btn btn-default');
-    $('[data-element-name="Submit Button"]').addClass('pull-right');
+    $('[data-button-type="submit-page"]').addClass('pull-right');
+    $('[data-button-type="save"], [data-button-type="previous-page"]').css('margin-right','15px');
 
     // Loop over each Form Section and Add Appropriate Classes
     $('div.box form section').each(function(){
@@ -113,6 +128,9 @@ bundle.config.ready = function(form) {
     if( $('div.box form section').length === 0 ){
         $('div.box form').children().wrapAll('<div class="box-body"></div>');
     }
+
+    // Wrap all additional questions that aren't in a section with box body div
+    $('div.box form').children('.form-group').not('section').wrapAll('<div class="box-body"></div>');
 
     // Work around for Date-Time fields that can't be manipulated in bundle.config.fields without overriding
     // default datepicker behavior

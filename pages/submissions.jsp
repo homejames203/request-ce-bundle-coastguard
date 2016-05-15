@@ -5,6 +5,10 @@
         <c:set scope="request" var="submissionsList" value="${SubmissionHelper.retrieveRecentSubmissions('Approval', 999)}"/>
         <c:set scope="request" var="type" value="Approvals"/>
     </c:when>
+    <c:when test="${param['type'] eq 'work-order'}">
+        <c:set scope="request" var="submissionsList" value="${SubmissionHelper.retrieveRecentSubmissions('Work Order', 999)}"/>
+        <c:set scope="request" var="type" value="Tasks"/>
+    </c:when>
     <c:otherwise>
         <c:set scope="request" var="submissionsList" value="${SubmissionHelper.retrieveRecentSubmissions('Service', 999)}"/>
         <c:set scope="request" var="type" value="Requests"/>
@@ -43,7 +47,7 @@
                             <c:if test="${type eq 'Approvals'}">
                                 <th>Decision</th>
                             </c:if>
-                            <c:if test="${type eq 'Requests'}">
+                            <c:if test="${type eq 'Requests' || type eq 'Tasks'}">
                                 <th>Status</th>
                             </c:if>
                         </tr>
@@ -93,7 +97,7 @@
                                         </c:if>
                                         <td><span class="label ${statusColor}">${approvalStatus}</span></td>
                                     </c:when>
-                                    <c:when test="${type eq 'Requests'}">
+                                    <c:when test="${type eq 'Requests' || type eq 'Tasks'}">
                                         <td><span class="label ${statusColor}">${submission.coreState}</span></td>
                                     </c:when>
                                     <c:otherwise>

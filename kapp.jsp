@@ -17,13 +17,13 @@
             
             <c:choose>
                 <c:when test="${not empty space.getKapp('admin') && not empty space.getKapp('admin').getForm('assets') && not empty space.getKapp('admin').getForm('knowledge')}">
-                    <c:set scope="request" var="tileClass" value="col-lg-3 col-xs-6"/>
+                    <c:set scope="request" var="tileClass" value="col-lg-2 col-xs-3"/>
                 </c:when>
                 <c:when test="${not empty space.getKapp('admin') && (not empty space.getKapp('admin').getForm('assets') && empty space.getKapp('admin').getForm('knowledge')) || (empty space.getKapp('admin').getForm('assets') &&not empty space.getKapp('admin').getForm('knowledge'))}">
-                    <c:set scope="request" var="tileClass" value="col-lg-4 col-xs-4"/>
+                    <c:set scope="request" var="tileClass" value="col-lg-3 col-xs-3"/>
                 </c:when>
                 <c:otherwise>
-                    <c:set scope="request" var="tileClass" value="col-xs-6"/>
+                    <c:set scope="request" var="tileClass" value="col-xs-4"/>
                 </c:otherwise>
             </c:choose>
 
@@ -68,6 +68,20 @@
                                 <i class="fa fa-thumbs-o-up"></i>
                             </div>
                             <a href="${bundle.kappLocation}?page=submissions&type=approval" class="small-box-footer">View Your Approvals <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div><!-- ./col -->
+
+                    <div class="${tileClass}">
+                        <!-- small box -->
+                        <div class="small-box bg-maroon">
+                            <div class="inner">
+                                <h3>${fn:length(SubmissionHelper.retrieveRecentSubmissions('Work Order', 999))}</h3>
+                                <p>My Tasks</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-thumbs-o-up"></i>
+                            </div>
+                            <a href="${bundle.kappLocation}?page=submissions&type=work-order" class="small-box-footer">View Your Tasks <i class="fa fa-arrow-circle-right"></i></a>
                         </div>
                     </div><!-- ./col -->
 

@@ -45,7 +45,7 @@
             if (number != null) {
                 searchOptions.put("limit", new String[] {String.valueOf(number)});
             }
-            if("Approval".equals(type)){
+            if("Approval".equals(type) || "Work Order".equals(type)) {
                 searchOptions.put("values[Assigned Individual]", new String[] {identity.getUsername()});
             } else {
                 searchOptions.put("createdBy", new String[] {identity.getUsername()});

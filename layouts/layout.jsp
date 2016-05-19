@@ -22,6 +22,9 @@
             <bundle:style src="${bundle.location}/css/custom.css"/>
         </bundle:stylepack>
         <bundle:scriptpack>
+            <bundle:script src="${bundle.location}/libraries/jquery/jquery.min.js" />
+            <bundle:script src="${bundle.location}/libraries/moment/moment.js" />
+            <bundle:script src="${bundle.location}/libraries/moment/moment-timezone.js" />
             <bundle:script src="${bundle.location}/libraries/kd-search/search.js"/>
             <bundle:script src="${bundle.location}/libraries/bootstrap/js/bootstrap.min.js"/>
             <bundle:script src="${bundle.location}/libraries/notifie/jquery.notifie.js"/>

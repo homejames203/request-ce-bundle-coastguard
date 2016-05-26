@@ -54,13 +54,30 @@
             return submissionComponent.searchByKapp(kapp, searchOptions);
         }
 
+        public List<Submission> getKappFormSubmissions(String kapp, String form, String corestate, String type, String[] fields, String[] fieldValues) {
+
+            java.util.Map<String,String[]> searchOptions = new java.util.HashMap<>();
+            for(int i=0; i < fields.length(); i++){
+                searchOptions.put("values["+ fields[i] +"]", new String[] {fieldValues[i]});
+            }
+            if(type != null){
+                searchOptions.put("type", new String[] {type});
+            }
+            if(corestate != null){
+                searchOptions.put("corestate", new String[] {corestate});
+            }
+            searchOptions.put("limit", new String[] {"1000"});
+
+            return submissionComponent.searchByForm(space.getKapp( new String(kapp) ).getForm( new String(form)), searchOptions);
+        }
+
         public List<Submission> approvalAlertsSubmissions() {
             com.kineticdata.core.authentication.Identity identity =
                 (com.kineticdata.core.authentication.Identity) request.getAttribute("identity");
 
             java.util.Map<String,String[]> searchOptions = new java.util.HashMap<>();
             searchOptions.put("values[Assigned Individual]", new String[] {identity.getUsername()});
-            searchOptions.put("limit", new String[] {"999"});
+            searchOptions.put("limit", new String[] {"1000"});
             searchOptions.put("type", new String[] {"Approval"});
             searchOptions.put("coreState", new String[] {"Draft"});   
 
@@ -69,18 +86,18 @@
 
         public List<Submission> broadcastAlertsSubmissions () {
             java.util.Map<String,String[]> searchOptions = new java.util.HashMap<>();
-            searchOptions.put("limit", new String[] {"999"});
+            searchOptions.put("limit", new String[] {"1000"});
             searchOptions.put("values[Status]", new String[] {"Active"}); 
 
             return submissionComponent.searchByForm(space.getKapp( new String("admin") ).getForm( new String("broadcast-alerts")), searchOptions);
         }
-        public List<Submission> myAssetSubmissions () {
+        public List<Submission> myAssetSubmissions (String fieldName) {
             com.kineticdata.core.authentication.Identity identity =
                 (com.kineticdata.core.authentication.Identity) request.getAttribute("identity");
 
             java.util.Map<String,String[]> searchOptions = new java.util.HashMap<>();
-            searchOptions.put("values[Assigned Individual]", new String[] {identity.getUsername()});
-            searchOptions.put("limit", new String[] {"999"});
+            searchOptions.put("values["+fieldName+"]", new String[] {identity.getUsername()});
+            searchOptions.put("limit", new String[] {"1000"});
             searchOptions.put("values[Status]", new String[] {"Active"}); 
 
             return submissionComponent.searchByForm(space.getKapp( new String("admin") ).getForm( new String("assets")), searchOptions);
@@ -88,7 +105,7 @@
 
         public List<Submission> serviceReviewSubmissions(String formSlug) {
             java.util.Map<String,String[]> searchOptions = new java.util.HashMap<>();
-            searchOptions.put("limit", new String[] {"999"});
+            searchOptions.put("limit", new String[] {"1000"});
             searchOptions.put("values[Form Slug]", new String[] {formSlug});
 
             return submissionComponent.searchByForm(kapp.getForm( new String("service-reviews") ), searchOptions);

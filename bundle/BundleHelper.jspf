@@ -82,6 +82,60 @@
                 return this.path;
             }
         }
+
+        /**
+         * Helper for setting active page
+         */
+        public String getActivePage(String pageParam, String category, String type) {
+            // Check for page patrameter
+            String activePage = "home";
+            if (pageParam.length() > 0){
+                if(pageParam.equals("submissions")){
+                    activePage = type.equals("approval") ? "approval" : "request";
+                }
+                else if (pageParam.equals("category") && category.length() > 0){
+                    activePage = category;
+                } else if(pageParam.equals("dashboard")){
+                    activePage = "dashboard";
+                }
+                return activePage;
+            }
+            return activePage;
+        }
+
+        /**
+         * Helper for logo and company name
+         */
+        public String getLogo(Kapp kapp){
+            if(kapp.getAttributeValue("Company Logo").toLowerCase().contains("http")){
+                return kapp.getAttributeValue("Company Logo");
+            }
+            else {
+                return bundle.getPath() + "/" + kapp.getAttributeValue("Company Logo");
+            }
+        }
+
+        /**
+         * Helper for Kapp with Form checks
+         */
+        public boolean checkKappAndForm(String kapp, String form){
+
+            boolean check = false;
+            if(kapp.equals("admin")){
+                if(this.space.getAttributeValue("Admin Kapp Slug") != null){
+                    kapp = this.space.getAttributeValue("Admin Kapp Slug");
+                }
+            }
+            if(this.space.getKapp(kapp) != null){
+                if(this.space.getKapp(kapp).getForm(form) != null && this.space.getKapp(kapp).getForm(form).getStatus().equals("Active")){
+                    check =  true;
+                }
+            }
+
+            return check;
+            
+        }
+
         
     }
 %>

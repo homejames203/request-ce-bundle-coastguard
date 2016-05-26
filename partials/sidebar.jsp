@@ -5,16 +5,6 @@
 <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
-        <!-- Sidebar user panel -->
-        <div class="user-panel">
-            <div class="pull-left image">
-                <i class="img-circle fa fa-user fa-3x " alt="User Image"></i>
-            </div>
-            <div class="pull-left info">
-                <p>${text.escape(identity.user.displayName)}</p>
-                <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-            </div>
-        </div>
         <!-- search form -->
         <c:choose>
             <c:when test="${not empty space.getKapp('search') && (empty kapp || kapp.hasAttribute('Include in Global Search') || text.equals(kapp.slug, 'search'))}">

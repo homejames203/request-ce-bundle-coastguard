@@ -14,18 +14,14 @@
 
             <!-- Set variable used to count and display submissions -->
             <c:set scope="request" var="submissionsList" value="${SubmissionHelper.retrieveRecentSubmissions('Service', 999)}"/>
-            
-            <c:choose>
-                <c:when test="${not empty space.getKapp('admin') && not empty space.getKapp('admin').getForm('assets') && not empty space.getKapp('admin').getForm('knowledge')}">
-                    <c:set scope="request" var="tileClass" value="col-lg-2 col-xs-3"/>
-                </c:when>
-                <c:when test="${not empty space.getKapp('admin') && (not empty space.getKapp('admin').getForm('assets') && empty space.getKapp('admin').getForm('knowledge')) || (empty space.getKapp('admin').getForm('assets') &&not empty space.getKapp('admin').getForm('knowledge'))}">
-                    <c:set scope="request" var="tileClass" value="col-lg-3 col-xs-3"/>
-                </c:when>
-                <c:otherwise>
-                    <c:set scope="request" var="tileClass" value="col-xs-4"/>
-                </c:otherwise>
-            </c:choose>
+            <c:set var="tileCount" value="4" />
+            <c:if test="${BundleHelper.checkKappAndForm('admin','assets')}">
+                <c:set var="tileCount" value="${tileCount - 1}" />
+            </c:if>
+            <c:if test="${BundleHelper.checkKappAndForm('rkm','rkm')}">
+                <c:set var="tileCount" value="${tileCount - 1}" />
+            </c:if>
+            <c:set scope="request" var="tileClass" value="col-sm-${tileCount}"/>
 
             <section class="content-header">
                 <h1>
@@ -85,8 +81,8 @@
                         </div>
                     </div><!-- ./col -->
 
-                    <c:if test="${not empty space.getKapp('admin').getForm('assets')}">
-                        <c:set scope="request" var="assetList" value="${SubmissionHelper.myAssetSubmissions()}"/>
+                    <c:if test="${BundleHelper.checkKappAndForm('admin','assets')}">
+                        <c:set scope="request" var="assetList" value="${SubmissionHelper.myAssetSubmissions('User')}"/>
                         <div class="${tileClass}">
                             <!-- small box -->
                             <div class="small-box bg-yellow">
@@ -101,12 +97,13 @@
                             </div>
                         </div><!-- ./col -->
                     </c:if>
-                    <c:if test="${not empty space.getKapp('admin').getForm('knowldege')}">
+                    <c:if test="${BundleHelper.checkKappAndForm('rkm','rkm')}">
+                        <c:set scope="request" var="rkmList" value="0"/>
                         <div class="${tileClass}">
                             <!-- small box -->
                             <div class="small-box bg-red">
                                 <div class="inner">
-                                    <h3>728</h3>
+                                    <h3>${rkmList}</h3>
                                     <p>Knowledge Base</p>
                                 </div>
                                 <div class="icon">

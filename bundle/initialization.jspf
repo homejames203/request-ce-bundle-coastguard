@@ -190,3 +190,16 @@
 <%
     request.setAttribute("SubmissionHelper", new SubmissionHelper(request));
 %>
+
+<%-- Setup themeBundlePathModifier if necessary --%>
+<%
+    Logger logger = LoggerFactory.getLogger("com.kineticdata.core.BundleInitialization");
+    logger.debug("QQQQQQQQQQQQQ " + (kapp != null));
+    logger.debug("QQQQQQQQQQQQQ " + (kapp.getAttributeValue("Theme Bundle Path") != null));
+    if (kapp != null && kapp.getAttributeValue("Theme Bundle Path") != null){
+        logger.debug("Theme Bundle Path: " +  kapp.getAttributeValue("Theme Bundle Path"));
+        String themeBundlePathModifier = "/../" + kapp.getAttributeValue("Theme Bundle Path");
+        request.setAttribute("themeBundlePathModifier", themeBundlePathModifier);
+    }
+%>
+

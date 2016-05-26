@@ -18,7 +18,14 @@
         <bundle:stylepack>
             <bundle:style src="${bundle.location}/libraries/bootstrap/css/bootstrap.min.css"/>
             <bundle:style src="${bundle.location}/libraries/notifie/jquery.notifie.css"/>
-            <bundle:style src="${bundle.location}/libraries/AdminLTE-Sass/build/master.css"/>
+            <c:choose>
+                <c:when test="${not empty themeBundlePathModifier}">
+                    <bundle:style src="${bundle.location}${themeBundlePathModifier}/css/master.css"/>
+                </c:when>
+                <c:otherwise>
+                    <bundle:style src="${bundle.location}/libraries/AdminLTE-Sass/build/master.css"/>
+                </c:otherwise>
+            </c:choose>
             <bundle:style src="${bundle.location}/css/custom.css"/>
         </bundle:stylepack>
         <bundle:scriptpack>
@@ -43,27 +50,7 @@
                 .navbar-brand {height:${kapp.getAttributeValue('Logo Height Px')}px;}
             </c:if>
         </style>
-        <c:choose>
-            <c:when test="${param['page'] eq 'submissions'}">
-                <c:choose>
-                    <c:when test="${param['type'] eq 'approval'}">
-                        <c:set scope="session" var="activePage" value="approval"/>
-                    </c:when>
-                    <c:otherwise>
-                        <c:set scope="session" var="activePage" value="request"/>
-                    </c:otherwise>
-                </c:choose>
-            </c:when>
-            <c:when test="${param['page'] eq 'category'}">
-                <c:set scope="session" var="activePage" value="${param['category']}"/>
-            </c:when>
-            <c:when test="${param['page'] eq 'dashboard'}">
-                <c:set scope="session" var="activePage" value="dashboard"/>
-            </c:when>
-            <c:otherwise>
-                <c:set scope="session" var="activePage" value="home"/>
-            </c:otherwise>
-        </c:choose>
+        <c:set scope="session" var="activePage" value="${BundleHelper.getActivePage(param.page, param.category, param.type)}"/>
     </head>
     <c:choose>
         <c:when test="${identity.anonymous}">
@@ -76,12 +63,12 @@
         <c:otherwise>
             <body class="hold-transition skin-purple-light sidebar-mini">
                 <div class="wrapper">
-                    <c:import url="${bundle.path}/partials/header2.jsp" charEncoding="UTF-8"/>
+                    <c:import url="${bundle.path}${themeBundlePathModifier}/partials/header.jsp" charEncoding="UTF-8"/>
                     <c:import url="${bundle.path}/partials/sidebar.jsp" charEncoding="UTF-8"/>
                     <div class="content-wrapper">
                         <bundle:yield/>
                     </div>
-                    <c:import url="${bundle.path}/partials/footer.jsp" charEncoding="UTF-8"/>
+                    <c:import url="${bundle.path}${themeBundlePathModifier}/partials/footer.jsp" charEncoding="UTF-8"/>
                 </div>
             </body>
         </c:otherwise>

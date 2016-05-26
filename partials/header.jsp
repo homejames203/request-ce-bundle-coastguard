@@ -1,104 +1,138 @@
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="../bundle/initialization.jspf" %>
-<nav class="navbar navbar-default" id="bundle-header">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle dropdown" data-toggle="collapse"
-            data-target="#navbar-collapse-1" aria-expanded="false">
-            <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="${not empty kapp ? bundle.kappLocation : bundle.spaceLocation}">
-                <c:choose>
-                    <c:when test="${not empty kapp && kapp.hasAttribute('Logo Url')}">
-                        <img src="${space.getAttributeValue('Logo Url')}" alt="logo">
-                    </c:when>
-                    <c:when test="${space.hasAttribute('Logo Url')}">
-                        <img src="${kapp.getAttributeValue('Logo Url')}" alt="logo">
-                    </c:when>
-                    <c:when test="${not empty kapp}">
-                        <i class="fa fa-home"></i> ${text.escape(kapp.name)}
-                    </c:when>
-                    <c:otherwise>
-                        <i class="fa fa-home"></i> ${text.escape(space.name)}
-                    </c:otherwise>
-                </c:choose>
-            </a>
-        </div>
+<c:set var="broadcastAlerts" value="${SubmissionHelper.broadcastAlertsSubmissions()}"/>
+<c:set var="pendingApprovals" value="${SubmissionHelper.approvalAlertsSubmissions()}"/>
+<header class="main-header">
+    <!-- Logo -->
+    <a href="${bundle.kappLocation}" class="logo">
+        <!-- mini logo for sidebar mini 50x50 pixels -->
+        <span class="logo-mini">
+            <i class="fa fa-home"></i>
+        </span>
+        <!-- logo for regular state and mobile devices -->
+        <span class="logo-lg">
+            <c:choose>
+                <%-- Check to See if Company Logo / Name Attributes Exists --%>
+                <c:when test="${not empty kapp.getAttribute('Company Logo')}">
+                    <img class="pull-left" src="${BundleHelper.getLogo(kapp)}" alt="logo" style="display:block; max-height:40px; margin:5px;">
+                    <strong class="pull-right">${kapp.name}</strong>
+                </c:when>
+                <%-- If no logo attribute exists, display the KAPP Name --%>
+                <c:otherwise>
+                    <i class="fa fa-home"></i> ${text.escape(kapp.name)}
+                </c:otherwise>
+            </c:choose>
+        </span>
+    </a>
 
-        <div class="collapse navbar-collapse" id="navbar-collapse-1">
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <c:choose>
-                        <c:when test="${identity.anonymous}">
-                            <a href="${bundle.spaceLocation}/app/login" class="hidden-xs"><i class="fa fa-sign-in fa-fw"></i> Login</a>
-                        </c:when>
-                        <c:otherwise>
-                            <a id="drop1" href="#" class="dropdown-toggle hidden-xs" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                <i class="fa fa-user fa-fw"></i> ${text.escape(text.trim(identity.displayName, identity.username))} <span class="fa fa-caret-down fa-fw"></span>
-                            </a>
-                            <ul class="dropdown-menu show-xs priority" aria-labelledby="drop1">
-                                <li class="hidden-xs"><a href="${bundle.spaceLocation}/?page=profile">
-                                    <i class="fa fa-pencil fa-fw"></i> Edit Profile</a>
-                                </li>
-                                <li class="priority hidden-lg hidden-md hidden-sm">
-                                    <a href="${bundle.spaceLocation}/?page=profile"><i class="fa fa-user fa-fw"></i> Profile</a>
-                                </li>
-                                <li class="divider hidden-xs"></li>
-                                <li class="hidden-xs"><a href="${bundle.spaceLocation}/app/">
-                                    <i class="fa fa-dashboard fa-fw"></i> Management Console</a>
-                                </li>
-                                <li class="divider hidden-xs"></li>
-                                <li><a href="${bundle.spaceLocation}/app/logout">
-                                    <i class="fa fa-sign-out fa-fw"></i> Logout</a>
-                                </li>
-                            </ul>
-                        </c:otherwise>
-                    </c:choose>
-                </li>
-                <li class="dropdown">
-                    <a id="drop2" href="#" class="dropdown-toggle  hidden-xs" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="hidden-xs fa fa-th fa-fw"></span></a>
-                    <ul class="dropdown-menu show-xs" aria-labelledby="drop2">
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top" role="navigation">
+        <!-- Sidebar toggle button-->
+        <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+            <span class="sr-only">Toggle navigation</span>
+        </a>
+        <!-- Navbar Right Menu -->
+        <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+                <!-- Notifications: style can be found in dropdown.less -->
+                <li class="dropdown messages-menu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="fa fa-bell-o"></i>
+                        <span class="label label-warning">${fn:length(broadcastAlerts)}</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="header">You have ${fn:length(broadcastAlerts)} notifications</li>
                         <li>
-                            <a href="${bundle.spaceLocation}">Home</a>
+                        <!-- inner menu: contains the actual data -->
+                            <ul class="menu">
+                                <c:forEach var="broadcastAlert" items="${broadcastAlerts}">
+                                    <li><!-- start message -->
+                                        <a href="#">
+                                            <div class="pull-left">
+                                              <i class="fa fa-warning text-yellow" alt="Alert"></i>
+                                            </div>
+                                            <h4>
+                                                ${broadcastAlert.getValue('Subject')}
+                                                <small>
+                                                    <i class="fa fa-clock-o"></i>
+                                                    <fmt:formatDate value="${broadcastAlert.createdAt}" timeStyle="short"/>
+                                                </small>
+                                            </h4>
+                                            <p>${broadcastAlert.getValue('Message')}</p>
+                                        </a>
+                                    </li><!-- end message -->
+                                </c:forEach>
+                            </ul>
                         </li>
-                        <c:catch var="headerNavigationError">
-                            <c:forEach items="${BundleHelper.headerNavigation}" var="link">
-                                <li>
-                                    <a href="${link.path}">${link.name}</a>
-                                </li>
-                            </c:forEach>
-                        </c:catch>
-                        <c:if test="${headerNavigationError ne null}">
-                            <li class="alert alert-danger">Error building header navigation. The value of the "Header Navigation List" attribute contains invalid JSON.</li>
-                        </c:if>
+                        <li class="footer"><a href="#"></a></li>
                     </ul>
                 </li>
-            </ul>
-            <div class="navbar-form" role="search" style='margin-right:1em;'>
+                <!-- Tasks: style can be found in dropdown.less -->
+                <c:if test="${not empty pendingApprovals}">
+                    <li class="dropdown tasks-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-thumbs-o-up"></i>
+                            <span class="label label-danger">${fn:length(pendingApprovals)}</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header">You have ${fn:length(pendingApprovals)} Approvals Pending</li>
+                            <li>
+                                <!-- inner menu: contains the actual data -->
+                                <ul class="menu">
+                                    <c:forEach var="approval" items="${pendingApprovals}">
+                                        <li><!-- Task item -->
+                                            <a href="${bundle.spaceLocation}/submissions/${approval.id}">
+                                                <h3>
+                                                    ${Submissions.retrieve(approval.getValue('Parent Instance ID')).form.name}
+                                                </h3>
+                                                <p>
+                                                    <span>${approval.label}</span>
+                                                <p>
+                                            </a>
+                                        </li><!-- end task item -->
+                                    </c:forEach>
+                                </ul>
+                            </li>
+                            <li class="footer">
+                                <a href="${bundle.kappLocation}?page=submissions&type=approval">View all Approvals</a>
+                            </li>
+                        </ul>
+                    </li>
+                </c:if>
                 <c:choose>
-                    <c:when test="${not empty space.getKapp('search') && (empty kapp || kapp.hasAttribute('Include in Global Search') || text.equals(kapp.slug, 'search'))}">
-                        <form action="${bundle.spaceLocation}/search" method="GET" role="form">
-                            <div class="form-group">
-                                <c:if test="${not empty kapp}">
-                                    <input type="hidden" value="${text.equals(kapp.slug, "search") ? param["source"] : kapp.slug}" name="source">
-                                </c:if>
-                                <input type="text" class="form-control" name="q" placeholder="Global Search" value="${param["q"]}">
-                            </div>
-                        </form>
+                    <c:when test="${identity.anonymous}">
+                        <a href="${bundle.spaceLocation}/app/login" class="hidden-xs"><i class="fa fa-sign-in fa-fw"></i> Login</a>
                     </c:when>
-                    <c:when test="${not empty kapp}">
-                        <form action="${bundle.kappLocation}" method="GET" role="form">
-                            <div class="form-group">
-                                <input type="hidden" value="search" name="page">
-                                <input type="text" class="form-control" name="q" placeholder="Local Search" value="${param["q"]}">
-                            </div>
-                        </form>
-                    </c:when>
+                    <c:otherwise>
+                        <!-- User Account: style can be found in dropdown.less -->
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="user-image fa fa-user fa-2x" alt="User Image"></i>
+                                <span class="hidden-xs"> ${text.escape(text.trim(identity.displayName, identity.username))} </span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- User image -->
+                                <li class="user-header">
+                                    <i class="fa fa-user fa-5x fa-inverse img-circle" alt="User Image"></i>
+                                    <p>
+                                        ${text.escape(text.trim(identity.displayName, identity.username))} 
+                                        <small>Member since ${identity.user.createdAt}</small>
+                                    </p>
+                                </li>
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        <a href="${bundle.spaceLocation}/${kapp.slug}?page=profile" class="btn btn-default btn-flat">Profile</a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a href="${bundle.spaceLocation}/app/logout" class="btn btn-default btn-flat">Sign out</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </c:otherwise>
                 </c:choose>
-            </div>
+            </ul>
         </div>
-    </div>
-</nav>
+    </nav>
+</header>

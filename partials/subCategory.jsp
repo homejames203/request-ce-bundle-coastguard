@@ -9,7 +9,7 @@
             <div class="col-md-3 col-sm-6 col-xs-12">
         </c:otherwise>
     </c:choose>
-        <a href="${bundle.spaceLocation}/${kapp.slug}?page=category&category=${category.slug}">
+        <a href="${bundle.spaceLocation}/${kapp.slug}?page=category&category=${subcategory.slug}">
             <div class="info-box">
                 <span class="info-box-icon bg-yellow">
                     <c:if test="${form.getAttributeValue('Icon')}">

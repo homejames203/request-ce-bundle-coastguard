@@ -27,8 +27,15 @@
     <section class="page" data-page="${page.name}">
         <c:if test="${param.embedded eq null}">
             <div class="content-header">
-                <img class="formlogo pull-left" src="${bundle.location}/images/forms/${form.getAttributeValue('Image')}"/>
-                <h1>${text.escape(form.name)}</h1>
+                <c:if test="${not empty form.getAttributeValue('Image')}">
+                    <img class="formlogo pull-left" src="${bundle.location}/images/forms/${form.getAttributeValue('Image')}"/>
+                </c:if>
+                <h1>
+                    <c:if test="${form.getAttributeValue('Icon')}">
+                        <i class="fa ${form.getAttributeValue('Icon')}"/>
+                    </c:if>
+                    ${text.escape(form.name)}
+                </h1>
                 <c:if test="${param.review eq null}">
                     <ol class="breadcrumb">
                         <li>

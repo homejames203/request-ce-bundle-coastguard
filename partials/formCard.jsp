@@ -28,11 +28,11 @@
                         <img class="img-responsive" src="${bundle.location}/images/forms/${form.getAttributeValue('Image')}"/>
                     </div>
                 </c:when>
-                <c:otherwise>
+                <c:when test="${not empty form.getAttributeValue('Icon')}">
                     <div class="icon">
-                        <img class="img-responsive" src="${bundle.location}/images/placeholder.png"/>
+                        <i class="fa ${form.getAttributeValue('Icon')}"/>
                     </div>
-                </c:otherwise>
+                </c:when>
             </c:choose>
         </div>
         <div class="col-sm-10">

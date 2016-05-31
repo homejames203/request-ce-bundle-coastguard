@@ -1,5 +1,6 @@
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="../bundle/initialization.jspf" %>
+
 <c:set var="broadcastAlerts" value="${SubmissionHelper.broadcastAlertsSubmissions()}"/>
 <c:set var="pendingApprovals" value="${SubmissionHelper.approvalAlertsSubmissions()}"/>
 <header class="main-header">
@@ -15,11 +16,30 @@
                 <%-- Check to See if Company Logo / Name Attributes Exists --%>
                 <c:when test="${not empty kapp.getAttribute('Company Logo')}">
                     <img class="pull-left" src="${BundleHelper.getLogo(kapp)}" alt="logo" style="display:block; max-height:40px; margin:5px;">
-                    <strong class="pull-right">${kapp.name}</strong>
+                    <strong class="pull-right">
+                        <c:choose>
+                            <c:when test="${not empty kapp.getAttribute('Company Name')}">
+                                ${kapp.getAttributeValue('Company Name')}
+                                <div class="small">${kapp.name}</div>
+                            </c:when>
+                            <c:otherwise>
+                                ${kapp.name}
+                            </c:otherwise>
+                        </c:choose>
+                    </strong>
                 </c:when>
-                <%-- If no logo attribute exists, display the KAPP Name --%>
+                <%-- If no logo attribute exists, display the Company or KAPP Name --%>
                 <c:otherwise>
-                    <i class="fa fa-home"></i> ${text.escape(kapp.name)}
+                    <i class="fa fa-home"></i> 
+                    <c:choose>
+                        <c:when test="${not empty kapp.getAttribute('Company Name')}">
+                           ${kapp.getAttributeValue('Company Name')}
+                           <div class="small">${kapp.name}</div>
+                        </c:when>
+                        <c:otherwise>
+                            ${kapp.name}
+                        </c:otherwise>
+                    </c:choose>
                 </c:otherwise>
             </c:choose>
         </span>
@@ -28,7 +48,7 @@
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top" role="navigation">
         <!-- Sidebar toggle button-->
-        <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+        <a href="#" class="sidebar-toggle hidden-lg hidden-md hidden-sm" data-toggle="offcanvas" role="button">
             <span class="sr-only">Toggle navigation</span>
         </a>
         <!-- Navbar Right Menu -->

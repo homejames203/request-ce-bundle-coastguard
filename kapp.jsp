@@ -11,9 +11,10 @@
             <bundle:variable name="head">
                 <title>Kinetic Data ${text.escape(kapp.name)}</title>
             </bundle:variable>
-
             <!-- Set variable used to count and display submissions -->
             <c:set scope="request" var="submissionsList" value="${SubmissionHelper.retrieveRecentSubmissions('Service', 999)}"/>
+
+            <%-- Set class for number of tiles displayed --%>
             <c:set var="tileCount" value="4" />
             <c:if test="${BundleHelper.checkKappAndForm('admin','assets')}">
                 <c:set var="tileCount" value="${tileCount - 1}" />
@@ -22,11 +23,10 @@
                 <c:set var="tileCount" value="${tileCount - 1}" />
             </c:if>
             <c:set scope="request" var="tileClass" value="col-sm-${tileCount}"/>
-
+            <%-- Header --%>
             <section class="content-header">
                 <h1>
                     Enterprise Request Management System
-                    <small>Version ${kapp.getAttributeValue('KAPP Version')}</small>
                 </h1>
                 <ol class="breadcrumb">
                     <li><a href="#">
@@ -35,7 +35,7 @@
                     </li>
                 </ol>
             </section>
-
+            <%-- Action Tiles --%>
             <section class="content">
                 <!-- Small boxes (Stat box) -->
                 <div class="row">
@@ -82,7 +82,17 @@
                     </div><!-- ./col -->
 
                     <c:if test="${BundleHelper.checkKappAndForm('admin','assets')}">
-                        <c:set scope="request" var="assetList" value="${SubmissionHelper.myAssetSubmissions('User')}"/>
+                        <%-- Below fields map for adding fields to the asset list --%>
+                        <c:set var="fieldsMap">
+                            <json:object>
+                                <json:object name="fields">
+                                    <json:property name="User" value="${identity.username}"></json:property>
+                                </json:object>
+                                <json:object name="coreFields">
+                                </json:object>
+                            </json:object>
+                        </c:set>
+                        <c:set scope="request" var="assetList" value="${SubmissionHelper.retrieveRecentSubmissions('console',null,1000,10,'admin','assets',Json.parse(fieldsMap))}"/>
                         <div class="${tileClass}">
                             <!-- small box -->
                             <div class="small-box bg-yellow">
@@ -98,7 +108,7 @@
                         </div><!-- ./col -->
                     </c:if>
                     <c:if test="${BundleHelper.checkKappAndForm('rkm','rkm')}">
-                        <c:set scope="request" var="rkmList" value="0"/>
+                        <c:set scope="request" var="rkmList" value="${SubmissionHelper.retrieveRecentSubmissions(null,null,1000,10,'admin','assets',['User'],[identity.username])}"/>
                         <div class="${tileClass}">
                             <!-- small box -->
                             <div class="small-box bg-red">
@@ -120,7 +130,7 @@
                         <c:import url="${bundle.path}/partials/submissions.jsp" charEncoding="UTF-8"/>
                     </div>
                     <div class="col-md-4">
-                        <c:import url="${bundle.path}/partials/popularRequests.jsp" charEncoding="UTF-8"/>
+                        <c:import url="${bundle.path}/partials/promotedRequests.jsp" charEncoding="UTF-8"/>
                     </div>
                 </div>
             </section>

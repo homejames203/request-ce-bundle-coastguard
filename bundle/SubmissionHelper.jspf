@@ -1,3 +1,4 @@
+<%@page import="com.kineticdata.bundles.Text" %>
 <%!
 
     public static class SubmissionHelper {
@@ -54,19 +55,66 @@
             return submissionComponent.searchByKapp(kapp, searchOptions);
         }
 
-        public List<Submission> getKappFormSubmissions(String kapp, String form, String corestate, String type, String[] fields, String[] fieldValues) {
+        /**
+         * Grabs submissions from the passed kapp + for with passed fields and values
+         *
+         * type = Form type
+         * corestate = Kinetic Request form state (Draft, Submitted, etc.)
+         * number = Number of submissions to return
+         * days = How many days back to retrieve
+         * kapp = The kapp slug (if admin kapp a check is done for Admin Kapp Slug)
+         * form = The form slug
+         * fields = Array of field names to search against (not core fields)
+         * fieldValues = The values to search against in the fields above
+         * coreFields = The core fields included with every form (not user generated form fields)
+         * coreFieldValues = The values to search against in the core fields above
+         */
+        public List<Submission> retrieveRecentSubmissions(String type, 
+                String coreState, 
+                Integer number, 
+                Integer days, 
+                String kapp, 
+                String form, 
+                LinkedHashMap fieldsMap) {
 
-            java.util.Map<String,String[]> searchOptions = new java.util.HashMap<>();
-            for(int i=0; i < fields.length(); i++){
-                searchOptions.put("values["+ fields[i] +"]", new String[] {fieldValues[i]});
+            // Check if kapp is admin kapp & try to use attribute otherwise use 'admin' as default
+            if(kapp.equals("admin")){
+                if(this.space.getAttributeValue("Admin Kapp Slug") != null){
+                    kapp = this.space.getAttributeValue("Admin Kapp Slug");
+                }
             }
-            if(type != null){
+            // Check for date range
+            java.time.Instant end = Time.now();
+            if(days == null){
+                days = 30;
+            }
+            java.time.Instant start = Time
+                .subtract(end, days, "days", java.time.ZoneId.systemDefault());
+            // Start options map
+            java.util.Map<String,String[]> searchOptions = new java.util.HashMap<>();
+            searchOptions.put("end", new String[] {Time.format(end)} );
+            searchOptions.put("start", new String[] {Time.format(start)} );
+            if (Text.isNotBlank(coreState)) {
+                searchOptions.put("coreState", new String[] {coreState});
+            }
+            if (number != null) {
+                searchOptions.put("limit", new String[] {String.valueOf(number)});
+            }
+            if (fieldsMap != null && fieldsMap.get("fields") != null){
+                for (Map.Entry<String,String> field : ((LinkedHashMap<String,String>)fieldsMap.get("fields")).entrySet()){
+                    searchOptions.put("values["+ field.getKey() +"]", new String[] {field.getValue()});
+                }
+            }
+            if(Text.isNotBlank(type)){
                 searchOptions.put("type", new String[] {type});
             }
-            if(corestate != null){
-                searchOptions.put("corestate", new String[] {corestate});
+            // Check if we are using a specific form, then check it exists
+            if(form != null){
+                BundleHelper checkForm = new BundleHelper((Bundle)request.getAttribute("bundle"), this.kapp, this.space);
+                if(!checkForm.checkKappAndForm(kapp, form)){
+                    throw new IllegalArgumentException("retrieveRecentSubmissions: Form does not exist.");
+                }
             }
-            searchOptions.put("limit", new String[] {"1000"});
 
             return submissionComponent.searchByForm(space.getKapp( new String(kapp) ).getForm( new String(form)), searchOptions);
         }
@@ -89,9 +137,9 @@
             searchOptions.put("limit", new String[] {"1000"});
             searchOptions.put("values[Status]", new String[] {"Active"}); 
 
-            return submissionComponent.searchByForm(space.getKapp( new String("admin") ).getForm( new String("broadcast-alerts")), searchOptions);
+            return submissionComponent.searchByForm(space.getKapp( new String("adminkapp") ).getForm( new String("broadcast-alerts")), searchOptions);
         }
-        public List<Submission> myAssetSubmissions (String fieldName) {
+        /*public List<Submission> myAssetSubmissions (String fieldName) {
             com.kineticdata.core.authentication.Identity identity =
                 (com.kineticdata.core.authentication.Identity) request.getAttribute("identity");
 
@@ -100,8 +148,8 @@
             searchOptions.put("limit", new String[] {"1000"});
             searchOptions.put("values[Status]", new String[] {"Active"}); 
 
-            return submissionComponent.searchByForm(space.getKapp( new String("admin") ).getForm( new String("assets")), searchOptions);
-        }
+            return submissionComponent.searchByForm(space.getKapp( new String("adminkapp") ).getForm( new String("assets")), searchOptions);
+        }*/
 
         public List<Submission> serviceReviewSubmissions(String formSlug) {
             java.util.Map<String,String[]> searchOptions = new java.util.HashMap<>();

@@ -66,7 +66,7 @@
                 </c:choose>
             </div>
             <div class="col-md-4">
-                <c:import url="${bundle.path}/partials/popularRequests.jsp" charEncoding="UTF-8"/>
+                <c:import url="${bundle.path}/partials/promotedRequests.jsp" charEncoding="UTF-8"/>
             </div>
         </div>
     </section>

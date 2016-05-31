@@ -5,9 +5,14 @@
         <title>${text.escape(form.name)}</title>
     </bundle:variable>
       <section class="content-header">
-    <img class="formlogo pull-left" src="${bundle.location}/images/forms/${form.getAttributeValue('Image')}"/>
+        <c:if test="${not empty form.getAttributeValue('Image')}">
+          <img class="formlogo pull-left" src="${bundle.location}/images/forms/${form.getAttributeValue('Image')}"/>
+        </c:if>
     <h1>
-       ${text.escape(form.name)}
+      <c:if test="${form.getAttributeValue('Icon')}">
+        <i class="fa ${form.getAttributeValue('Icon')}"/>
+      </c:if>
+      ${text.escape(form.name)}
     </h1>
     <c:if test="${param.review != null && pages.size() > 1}">
        <ol class="breadcrumb">

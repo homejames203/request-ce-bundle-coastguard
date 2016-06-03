@@ -3,10 +3,10 @@
 <c:forEach var="subcategory" items="${currentCat.getSubcategories()}">
     <c:choose>
         <c:when test="${subcategory.hasNonEmptySubcategories()}">
-            <div class="col-xs-12">
+            <div class="col-xs-6">
         </c:when>
         <c:otherwise>
-            <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="col-sm-4 col-xs-12">
         </c:otherwise>
     </c:choose>
         <a href="${bundle.spaceLocation}/${kapp.slug}?page=category&category=${subcategory.slug}">

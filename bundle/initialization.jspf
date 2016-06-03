@@ -51,7 +51,7 @@
         .addSetupAttribute(
             "Shared Bridged Resource Form Slug", 
             "The slug of the form that is used to define shared bridged resources.", 
-            false);
+            true);
     // If the request is scoped to a specific Kapp (space display pages are not)
     if (kapp != null && kapp.hasAttribute("Shared Bridged Resource Form Slug")) {
         // Initialize the LockableSubmissionHelper

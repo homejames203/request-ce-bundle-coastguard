@@ -1,7 +1,9 @@
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="../bundle/initialization.jspf" %>
-
-<c:set var="broadcastAlerts" value="${SubmissionHelper.broadcastAlertsSubmissions()}"/>
+<c:set var="adminKapp" value="${space.getKapp(Text.defaultIfBlank(space.getAttributeValue('Admin Kapp Slug'),'admin'))}"/>
+<c:if test="${not empty adminKapp}">
+    <c:set var="broadcastAlerts" value="${BridgedResourceHelper.search('Broadcast Alerts - All')}"/>
+</c:if>
 <c:set var="pendingApprovals" value="${SubmissionHelper.approvalAlertsSubmissions()}"/>
 <header class="main-header">
     <!-- Logo -->
@@ -55,38 +57,42 @@
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
                 <!-- Notifications: style can be found in dropdown.less -->
-                <li class="dropdown messages-menu">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="fa fa-bell-o"></i>
-                        <span class="label label-warning">${fn:length(broadcastAlerts)}</span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li class="header">You have ${fn:length(broadcastAlerts)} notifications</li>
-                        <li>
-                        <!-- inner menu: contains the actual data -->
-                            <ul class="menu">
-                                <c:forEach var="broadcastAlert" items="${broadcastAlerts}">
-                                    <li><!-- start message -->
-                                        <a href="#">
-                                            <div class="pull-left">
-                                              <i class="fa fa-warning text-yellow" alt="Alert"></i>
-                                            </div>
-                                            <h4>
-                                                ${broadcastAlert.getValue('Subject')}
-                                                <small>
-                                                    <i class="fa fa-clock-o"></i>
-                                                    <fmt:formatDate value="${broadcastAlert.createdAt}" timeStyle="short"/>
-                                                </small>
-                                            </h4>
-                                            <p>${broadcastAlert.getValue('Message')}</p>
-                                        </a>
-                                    </li><!-- end message -->
-                                </c:forEach>
-                            </ul>
-                        </li>
-                        <li class="footer"><a href="#"></a></li>
-                    </ul>
-                </li>
+                <c:if test="${not empty broadcastAlerts}">
+                    <li class="dropdown messages-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-bell-o"></i>
+                            <c:if test="${fn:length(broadcastAlerts) > 0}">
+                                <span class="label label-warning">${fn:length(broadcastAlerts)}</span>
+                            </c:if>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header">You have ${fn:length(broadcastAlerts)} notifications</li>
+                            <li>
+                            <!-- inner menu: contains the actual data -->
+                                <ul class="menu">
+                                    <c:forEach var="broadcastAlert" items="${broadcastAlerts}">
+                                        <li><!-- start message -->
+                                            <a href="#">
+                                                <div class="pull-left">
+                                                  <i class="fa fa-warning text-yellow" alt="Alert"></i>
+                                                </div>
+                                                <h4>
+                                                    ${broadcastAlert.get('Subject')}
+                                                    <small>
+                                                        <i class="fa fa-clock-o"></i>
+                                                        <span  data-moment>${broadcastAlert.get('createdAt')}</span>
+                                                    </small>
+                                                </h4>
+                                                <p>${broadcastAlert.get('Message')}</p>
+                                            </a>
+                                        </li><!-- end message -->
+                                    </c:forEach>
+                                </ul>
+                            </li>
+                            <li class="footer"><a href="#"></a></li>
+                        </ul>
+                    </li>
+                </c:if>
                 <!-- Tasks: style can be found in dropdown.less -->
                 <c:if test="${not empty pendingApprovals}">
                     <li class="dropdown tasks-menu">

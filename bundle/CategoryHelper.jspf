@@ -6,11 +6,11 @@
     public static class CategoryHelper {
     
         private Map<String, Set<BundleCategory>> categories;
-        private Map<String, Map<String, BundleCategory>> categoriesByName;
+        private Map<String, Map<String, BundleCategory>> categoriesBySlug;
         
         public CategoryHelper() {
             this.categories = new HashMap<String, Set<BundleCategory>>();
-            this.categoriesByName = new HashMap<String, Map<String, BundleCategory>>();
+            this.categoriesBySlug = new HashMap<String, Map<String, BundleCategory>>();
         }
         
         /* *
@@ -28,7 +28,7 @@
             }
             // Create both categories list and categories by name map for current Kapp
             this.categories.put(kapp.getSlug(), new TreeSet<BundleCategory>());
-            this.categoriesByName.put(kapp.getSlug(), new HashMap<String, BundleCategory>());
+            this.categoriesBySlug.put(kapp.getSlug(), new HashMap<String, BundleCategory>());
             
             // Create temp list for manipulation
             List<BundleCategory> allCategories = new ArrayList<BundleCategory>();
@@ -40,7 +40,7 @@
                 // Add object to category tree
                 allCategories.add(bundleCategory);
                 // Grab the category name and add object to map based on name
-                this.categoriesByName.get(kapp.getSlug()).put(category.getSlug(), bundleCategory);
+                this.categoriesBySlug.get(kapp.getSlug()).put(category.getSlug(), bundleCategory);
             }
             // Pick each object off of the list and put map in order 
             // by attribute "parent"
@@ -49,11 +49,11 @@
                 BundleCategory bundleCategory = allCategories.remove(0);
                 // Check if it's a subcategory - no parent means it's a root category
                 if (bundleCategory.hasAttribute("Parent")){
-                    String parentName = bundleCategory.getAttributeValue("Parent");
+                    String parentSlug = bundleCategory.getAttributeValue("Parent");
                     // Put category object as subcategory to parent
-                    if (categoriesByName.get(kapp.getSlug()).get(parentName) != null){
-                        categoriesByName.get(kapp.getSlug()).get(parentName).setSubcategory(bundleCategory);
-                        bundleCategory.setParentCategory(categoriesByName.get(kapp.getSlug()).get(parentName));
+                    if (categoriesBySlug.get(kapp.getSlug()).get(parentSlug) != null){
+                        categoriesBySlug.get(kapp.getSlug()).get(parentSlug).setSubcategory(bundleCategory);
+                        bundleCategory.setParentCategory(categoriesBySlug.get(kapp.getSlug()).get(parentSlug));
                         continue;
                     }
                 }
@@ -77,39 +77,39 @@
             
             Set<BundleCategory> formCategories = new TreeSet<BundleCategory>();
             for (Category category : form.getCategories()){
-                formCategories.add(this.getCategory(category.getSlug(), formKapp));
+                formCategories.add(this.getCategory(category.getName(), formKapp));
             }
             
             return new ArrayList<BundleCategory>(formCategories);
         }
         
         /* *
-         * Gets a single category object based on the name (not Display Name) for a specific kapp
+         * Gets a single category object based on the slug for a specific kapp
          *
-         * Requires - Name string
+         * Requires - Slug string
          * Requires - Kapp object
          * Returns - BundleCategory object
          * */
-        public BundleCategory getCategory(String name, Kapp kapp){
+        public BundleCategory getCategory(String slug, Kapp kapp){
             if (this.categories.get(kapp.getSlug()) == null){
                 this.getCategories(kapp);
             }
-            return this.categoriesByName.get(kapp.getSlug()).get(name);
+            return this.categoriesBySlug.get(kapp.getSlug()).get(slug);
         }
         
         /* *
-         * Gets a single category object based on the name (not Display Name) for a specific kapp
+         * Gets a single category object based on the slug for a specific kapp
          *
          * Requires - Name string
          * Requires - Form object
          * Returns - BundleCategory object
          * */
-        public BundleCategory getCategory(String name, Form form){
+        public BundleCategory getCategory(String slug, Form form){
             Kapp formKapp = form.getKapp();
             if (this.categories.get(formKapp.getSlug()) == null){
                 this.getCategories(formKapp);
             }
-            return this.categoriesByName.get(formKapp.getSlug()).get(name);
+            return this.categoriesBySlug.get(formKapp.getSlug()).get(slug);
         }
         
         /* *
@@ -127,6 +127,8 @@
             }
             // Returns the current category object
             public Category getCategory(){ return this.category; }
+            // Returns the name string of the current category object
+            public String getName() { return this.category.getName(); }
             // Returns the slug string of the current category object
             public String getSlug() { return this.category.getSlug(); }
             // Returns a list of attributes for the current category object
@@ -172,8 +174,6 @@
             public Kapp getKapp() { return this.category.getKapp(); }
             // Returns a list of form objects for the current category
             public List<Form> getForms() { return this.category.getForms(); }
-            // Returns the Name value
-            public String getName() { return this.category.getName(); }
             // Returns the parent category object
             public BundleCategory getParentCategory() {
                 return parentCategory;
@@ -224,7 +224,7 @@
             }
             
             public int compareTo(BundleCategory that) {
-                // Compare by Sort Order attribute, then by Display Name attribute, then by Name
+                // Compare by Sort Order attribute, then by Name, then by Slug
                 Integer thisSortOrder = null;
                 Integer thatSortOrder = null;
 
@@ -235,11 +235,11 @@
                     thatSortOrder = Ints.tryParse(that.getAttributeValue("Sort Order"));
                 }
 
-                // Order: Sort Order -> Display Name -> Name
+                // Order: Sort Order -> Name -> Slug
                 return ComparisonChain.start()
                         .compare(thisSortOrder, thatSortOrder, Ordering.natural().nullsLast())
-                        .compare(this.getAttributeValue("Display Name"), that.getAttributeValue("Display Name"), Ordering.natural().nullsLast())
                         .compare(this.getName(), that.getName(), Ordering.natural().nullsLast())
+                        .compare(this.getSlug(), that.getSlug(), Ordering.natural().nullsLast())
                         .result();
             }
         }

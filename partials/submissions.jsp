@@ -11,7 +11,6 @@
                 <tr>
                     <th>Item Requested</th>
                     <th>Details</th>
-                    <th>Requested By</th>
                     <th>Date Submitted</th>
                     <th>Status</th>
                 </tr>
@@ -42,7 +41,6 @@
                                 </c:otherwise>
                             </c:choose>
                         </td>
-                        <td>${space.getUser(submission.createdBy).displayName}</td>
                         <td data-moment>${submission.createdAt}</td>
                         <td><span class="label ${statusColor}">${submission.coreState}</span></td>
                     </tr>

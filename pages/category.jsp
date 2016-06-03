@@ -1,12 +1,10 @@
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="../bundle/initialization.jspf" %>
-<%
-String category = request.getParameter("category");
-request.setAttribute("category", category);
-%>
+
 <bundle:layout page="${bundle.path}/layouts/layout.jsp">
+    <c:set scope="request" var="category" value="${CategoryHelper.getCategory(param.category,kapp)}" />
     <bundle:variable name="head">
-        <title>${kapp.getAttribute('Company Name').value} - ${text.escape(kapp.getCategory(category).name)}</title>
+        <title>${kapp.getAttributeValue('Company Name')} - ${text.escape(category.name)}</title>
     </bundle:variable>
     <bundle:scriptpack>
         <bundle:script src="${bundle.location}/js/formCard.js" />
@@ -16,32 +14,58 @@ request.setAttribute("category", category);
 
     <section class="content-header">
         <h1>
-            ${text.escape(kapp.getCategory(category).name)}
+            ${text.escape(category.name)}
         </h1>
         <ol class="breadcrumb">
             <li><a href="${bundle.kappLocation}">
-                <i class="fa fa-search"></i> 
+                <i class="fa fa-home"></i> 
                 Home</a>
             </li>
-        <li class="active">${text.escape(kapp.getCategory(category).name)}</li>
+        <c:forEach var="parent" items="${category.getTrail()}">
+            <li><a href="${bundle.spaceLocation}/${kapp.slug}?page=category&category=${parent.slug}">${text.escape(parent.name)}</a></li>
+        </c:forEach>
         </ol>
     </section>
 
 
     <section class="content">
         <div class="row">
-            <div class="col-md-12">
-            <c:forEach var="form" items="${kapp.getCategory(category).forms}">
+            <div class="col-xs-12 col-sm-8">
+            <c:forEach var="form" items="${category.forms}">
                 <c:set var="form" scope="request" value="${form}"/>
                 <c:import url="${bundle.path}/partials/formCard.jsp" charEncoding="UTF-8"/>
             </c:forEach>
             </div>
-            <div class="hidden">
+            <div class="col-xs-12 col-sm-4">
                 <div class="box box-solid">
                     <div class="box-header with-border">
-                        <h3 class="box-title">My ${text.escape(kapp.getCategory(category).name)} Tickets</h3>
+                        <h3 class="box-title">My ${text.escape(category.name)} Tickets</h3>
                     </div>
                     <div class="box-body">
+                       <ul class="products-list product-list-in-box">
+                        <c:set var="categorySubmissions" value="${SubmissionHelper.categorySubmissions(category.slug)}" />
+                        <c:choose>
+                            <c:when test="${not empty categorySubmissions}">
+                                <c:forEach var="submission" begin="0" end="5" items="${categorySubmissions}">
+                                    <li class="item">
+                                        <c:choose>
+                                            <c:when test="${submission.coreState eq 'Draft'}">
+                                                <h4><a href="${bundle.spaceLocation}/submissions/${submission.id}">${text.escape(submission.form.name)}</a></h4>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <h4><a href="${bundle.kappLocation}?page=submission&id=${submission.id}">${text.escape(submission.form.name)}</a></h4>
+                                            </c:otherwise>
+                                        </c:choose>
+                                        <div><label>Request Date:</label> <span data-moment>${submission.submittedAt}</span></div>
+                                        <div><label>Status:</label> ${submission.coreState}</div>
+                                    </li><!-- /.item -->
+                                </c:forEach>
+                            </c:when>
+                            <c:otherwise>
+                               <h4>No Open Tickets</h4>
+                            </c:otherwise>
+                         </c:choose>
+                      </ul>
                     </div>
                 </div>
             </div>

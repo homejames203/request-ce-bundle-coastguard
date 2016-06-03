@@ -81,7 +81,7 @@
                         <li class="<c:if test="${fn:contains(activePage,category.name)}">active </c:if>" >
                             <a href="${bundle.kappLocation}?page=category&category=${text.escape(category.slug)}">
                                 <i class="fa ${category.getAttributeValue('Icon')}"></i> 
-                                <span>${text.escape(category.name)}</span> <span class="label label-primary">${fn:length(category.forms)}</span>
+                                <span>${text.escape(category.name)}</span>
                                 <%-- If Subs exist, angle-left, otherwise show form count --%>
                                 <c:if test="${category.hasNonEmptySubcategories()}">
                                     <i class="fa fa-angle-left pull-right <c:if test="${category.hasNonEmptySubcategories()}">treeview</c:if>"></i>
@@ -89,16 +89,8 @@
 
                             </a>
                             <c:if test="${category.hasNonEmptySubcategories()}">
-                                <ul class="treeview-menu">
-                                    <c:forEach items="${category.getSubcategories()}" var="subCategory">
-                                        <li <c:if test="${activePage eq subCategory.name}">class="active"</c:if> >
-                                            <a href="${bundle.kappLocation}?page=category&category=${text.escape(subCategory.slug)}">
-                                                <i class="fa fa-angle-right"></i><span>${text.escape(subCategory.name)}</span>
-                                                <span class="label label-primary pull-right">${fn:length(subCategory.getForms())}</span>
-                                            </a>
-                                        </li>
-                                    </c:forEach>                                    
-                                </ul>
+                                <c:set var="sidebarSubCat" value="${category}" scope="request"/>
+                                <jsp:include page="sidebarSubCategory.jsp"/>
                             </c:if>
                         </li>
                 </c:if>

@@ -36,6 +36,7 @@
             </c:when>
             <c:otherwise>
                <h4>No Suggested Services</h4>
+               <a href="#">Suggest a Service</a>
             </c:otherwise>
          </c:choose>
       </ul>

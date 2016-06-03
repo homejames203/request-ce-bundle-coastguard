@@ -5,7 +5,9 @@
 (function($, moment){
     var locale = window.navigator.userLanguage || window.navigator.language;
     moment.locale(locale);
+
     $(function(){
+
       if (!$('.navbar-form .typeahead').length){
         return;
       }
@@ -39,6 +41,7 @@
         }).bind('typeahead:select', function(ev, suggestion) {
           window.location.replace(window.bundle.kappLocation() + "/" + forms[suggestion].slug)
       });
+
     });
 
     /**
@@ -270,5 +273,13 @@
             var element = $(item);
             element.html(moment(element.text()).fromNow());
         });
+    });
+    // Format Broadcast dates
+    $(function() {
+        $('span.broadcast-date').each(function(){
+            var date = $(this).text();
+            console.log(date);
+            $(this).text('blah: ' + moment(date,'mm/dd/yyyy'));
+        })
     });
 })(jQuery, moment);

@@ -1,6 +1,7 @@
 <%@page pageEncoding="UTF-8" contentType="text/html" trimDirectiveWhitespaces="true"%>
 <%@include file="bundle/initialization.jspf" %>
 <%@include file="bundle/router.jspf" %>
+<c:set var="adminKapp" value="${space.getKapp(Text.defaultIfBlank(space.getAttributeValue('Admin Kapp Slug'),'admin'))}"/>
 <c:choose>
     <c:when test="${identity.anonymous}">
         <c:set var="kapp" scope="request" value="${kapp}"/>
@@ -16,7 +17,7 @@
 
             <%-- Set class for number of tiles displayed --%>
             <c:set var="tileCount" value="4" />
-            <c:if test="${BundleHelper.checkKappAndForm('admin','assets')}">
+            <c:if test="${not empty adminKapp}">
                 <c:set var="tileCount" value="${tileCount - 1}" />
             </c:if>
             <c:if test="${BundleHelper.checkKappAndForm('rkm','rkm')}">
@@ -81,18 +82,10 @@
                         </div>
                     </div><!-- ./col -->
 
-                    <c:if test="${BundleHelper.checkKappAndForm('admin','assets')}">
-                        <%-- Below fields map for adding fields to the asset list --%>
-                        <c:set var="fieldsMap">
-                            <json:object>
-                                <json:object name="fields">
-                                    <json:property name="User" value="${identity.username}"></json:property>
-                                </json:object>
-                                <json:object name="coreFields">
-                                </json:object>
-                            </json:object>
-                        </c:set>
-                        <c:set scope="request" var="assetList" value="${SubmissionHelper.retrieveRecentSubmissions('console',null,1000,10,'admin','assets',Json.parse(fieldsMap))}"/>
+                    <c:if test="${not empty adminKapp}">
+                        <c:set var="params" value="${BridgedResourceHelper.map()}"/>
+                        <c:set target="${params}" property="User" value="${identity.username}"/>
+                        <c:set scope="request" var="assetList" value="${BridgedResourceHelper.search('User Assets',params)}"/>
                         <div class="${tileClass}">
                             <!-- small box -->
                             <div class="small-box bg-yellow">

@@ -146,7 +146,7 @@
                 url.append(":").append(request.getServerPort());
             }
             url.append(kappLocation).append("/").append(formSlug).append("/bridgedResources/")
-                .append(Text.escapeUrlParameter(name));
+                .append(Text.escapeUrlSegment(name));
             // Append parameters
             if (parameters.size() > 0) {
                 List<NameValuePair> urlParameters = new ArrayList<>();       

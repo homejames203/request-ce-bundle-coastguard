@@ -57,7 +57,7 @@
                     <i class="fa fa-thumbs-o-up"></i> <span>My Tasks</span>
                 </a>
             </li>
-            <c:if test="${BundleHelper.checkKappAndForm('admin','assets')}">
+            <c:if test="${BundleHelper.checkKappAndForm('admin','user-assets')}">
                 <li <c:if test="${activePage eq 'approval'}">class="active"</c:if> >
                     <a href="${bundle.kappLocation}?page=submissions&type=assets">
                         <i class="fa fa-thumbs-o-up"></i> <span>My Assets</span>

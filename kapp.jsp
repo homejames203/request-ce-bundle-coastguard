@@ -82,7 +82,7 @@
                         </div>
                     </div><!-- ./col -->
 
-                    <c:if test="${not empty adminKapp}">
+                    <c:if test="${BundleHelper.checkKappAndForm('admin','user-assets')}">
                         <c:set var="params" value="${BridgedResourceHelper.map()}"/>
                         <c:set target="${params}" property="User" value="${identity.username}"/>
                         <c:set scope="request" var="assetList" value="${BridgedResourceHelper.search('User Assets',params)}"/>

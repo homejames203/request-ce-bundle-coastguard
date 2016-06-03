@@ -21,26 +21,24 @@
     <section class="content">
         <div class="row">
             <c:forEach var="category" items="${CategoryHelper.getCategories(kapp)}">
-                <div class="col-sm-12">
-                    <a href="${bundle.spaceLocation}/${kapp.slug}?page=category&category=${category.slug}">
-                        <div class="info-box">
-                            <span class="info-box-icon bg-aqua">
-                                <c:if test="${form.getAttributeValue('Icon')}">
-                                    <i class="fa ${form.getAttributeValue('Icon')}"/></i>
-                                </c:if>
-                            </span>
-
-                            <div class="info-box-content">
-                                <span class="info-box-text">${category.name}</span>
-                                <span class="info-box-number">${fn:length(category.forms)}</span>
-                            </div>
-                            <!-- /.info-box-content -->
+                <div class="col-sm-6">
+                    <div class="box box-solid">
+                        <div class="box-header with-border">
+                            <a href="${bundle.spaceLocation}/${kapp.slug}?page=category&category=${category.slug}">
+                                <h3 class="box-title">
+                                    <c:if test="${form.getAttributeValue('Icon')}">
+                                        <i class="fa ${form.getAttributeValue('Icon')}"/></i>
+                                    </c:if>
+                                    ${category.name}
+                                </h3>
+                            </a>
                         </div>
-                    </a>
-                    <c:set var="currentCat" value="${category}" scope="request"/>
-                    <jsp:include page="../partials/subCategory.jsp"/>
+                        <div class="box-body clearfix">
+                            <c:set var="currentCat" value="${category}" scope="request"/>
+                            <jsp:include page="../partials/subCategory.jsp"/>
+                        </div>
+                    </div>
                 </div>
-                
             </c:forEach>
         </div>
     </section>

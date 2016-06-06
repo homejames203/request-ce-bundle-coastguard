@@ -58,8 +58,8 @@
                 </a>
             </li>
             <c:if test="${BundleHelper.checkKappAndForm('admin','user-assets')}">
-                <li <c:if test="${activePage eq 'approval'}">class="active"</c:if> >
-                    <a href="${bundle.kappLocation}?page=submissions&type=assets">
+                <li <c:if test="${param['type'] eq 'assets'}">class="active"</c:if> >
+                    <a href="${bundle.kappLocation}?page=bridgedsubmissions&type=assets">
                         <i class="fa fa-thumbs-o-up"></i> <span>My Assets</span>
                     </a>
                 </li>

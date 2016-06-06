@@ -26,7 +26,7 @@
 </c:choose>
 <bundle:layout page="${bundle.path}/layouts/layout.jsp">
     <bundle:variable name="head">
-        <title>${text.escape(space.name)} Profile</title>
+        <title>${text.escape(space.name)} Submissions</title>
     </bundle:variable>
     <section class="content-header">
         <h1>

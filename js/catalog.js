@@ -45,6 +45,22 @@
     });
 
     /**
+     * Sidebar category active states (opening parents for subparents)
+     * Open parent category page when it contains forms
+     **/
+    $(function(){
+        $('ul.treeview-menu li.active').parents('li').addClass('active');
+
+        $('section.sidebar ul li').on('click', function(e){
+            if($(this).attr('data-forms') > 0){
+                e.stopImmediatePropagation();
+            }
+        })
+    });
+
+
+
+    /**
      * Applies the Jquery DataTables plugin to a rendered HTML table to provide
      * column sorting and Moment.js functionality to date/time values.
      *
@@ -115,10 +131,15 @@
 
     // Build Datatables if datatable class exists on a table. If empty, Display Empty Text 
     $(function(){
+        // Make sure namespace exists
+        bundle.submissions = bundle.submissions || {};
+        bundle.submissions.tableObjects = bundle.submissions.tableObjects || {};
+
         $('table.datatable').each(function(){
             var usesearch = $(this).hasClass("nosearch") ? false:true ;
             $(this).css("width:100%");
-            $(this).DataTable({
+            var tabId = $(this).closest('div.tab-pane').attr('id');
+            bundle.submissions.tableObjects[tabId] = $(this).DataTable({
                 "paging": true,
                 "lengthChange": false,
                 "searching": usesearch,
@@ -130,6 +151,15 @@
         })
         $('td.dataTables_empty').html('None found. Check back soon!');
     });
+
+    // Redraw datatable on tab select to redraw columns
+    $(function(){
+        //$('ul.nav-tabs li').on('click',function(){
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            var tabId = $(e.target).attr("href").substring(1);
+            bundle.submissions.tableObjects[tabId].columns.adjust().draw();
+        });
+    })
 
     function renderTable(options){
         $.ajax({
@@ -273,13 +303,5 @@
             var element = $(item);
             element.html(moment(element.text()).fromNow());
         });
-    });
-    // Format Broadcast dates
-    $(function() {
-        $('span.broadcast-date').each(function(){
-            var date = $(this).text();
-            console.log(date);
-            $(this).text('blah: ' + moment(date,'mm/dd/yyyy'));
-        })
     });
 })(jQuery, moment);

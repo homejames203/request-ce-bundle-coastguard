@@ -2,14 +2,24 @@
 <%@include file="../bundle/initialization.jspf" %>
 <ul class="treeview-menu">
     <c:forEach items="${sidebarSubCat.getSubcategories()}" var="sidebarSubCategory">
-        <li <c:if test="${activePage eq sidebarSubCategory.name}">class="active"</c:if> >
-            <a href="${bundle.kappLocation}?page=category&category=${text.escape(sidebarSubCategory.slug)}">
-                <i class="fa fa-angle-right"></i><span>${text.escape(sidebarSubCategory.name)}</span>
-            </a>
-            <c:if test="${sidebarSubCategory.hasNonEmptySubcategories()}">
-                <c:set var="sidebarSubCat" value="${sidebarSubCategory}" scope="request"/>
-                <jsp:include page="sidebarSubCategory.jsp"/>
-            </c:if>
-        </li>
+        <c:if test="${not sidebarSubCategory.isEmpty()}">
+            <li class="<c:if test="${param['category'] eq sidebarSubCategory.slug}">active</c:if>" >
+                <a href="${bundle.kappLocation}?page=category&category=${text.escape(sidebarSubCategory.slug)}">
+                    <i class="fa ${category.getAttributeValue('Icon')}"></i><span>${text.escape(sidebarSubCategory.name)}</span>
+                    <c:choose>
+                        <c:when  test="${sidebarSubCategory.hasNonEmptySubcategories()}">
+                            <i class="fa fa-angle-left pull-right <c:if test="${category.hasNonEmptySubcategories()}">treeview</c:if>"></i>
+                        </c:when>
+                        <c:otherwise>
+                            <i class="fa fa-angle-right pull-right"></i>
+                        </c:otherwise>
+                    </c:choose>
+                </a>
+                <c:if test="${sidebarSubCategory.hasNonEmptySubcategories()}">
+                    <c:set var="sidebarSubCat" value="${sidebarSubCategory}" scope="request"/>
+                    <jsp:include page="sidebarSubCategory.jsp"/>
+                </c:if>
+            </li>
+        </c:if>
     </c:forEach>                                    
 </ul>

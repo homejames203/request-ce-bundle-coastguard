@@ -80,7 +80,7 @@
                                                     ${broadcastAlert.get('Subject')}
                                                     <small>
                                                         <i class="fa fa-clock-o"></i>
-                                                        <span  data-moment>${broadcastAlert.get('createdAt')}</span>
+                                                        <span  data-moment-short>${broadcastAlert.get('createdAt')}</span>
                                                     </small>
                                                 </h4>
                                                 <p>${broadcastAlert.get('Message')}</p>

@@ -33,6 +33,19 @@
                             <dl>
                                 <dt>Label:</dt>
                                 <dd>${submission.label}</dd>
+                                <%--If the currently logged in user is not the one who made the submittion then display 
+                                    the username or displayname of the submitter.--%> 
+                                <c:if test="${submission.submittedBy != identity.username}">
+                                    <dt>Submitted By:</dt>
+                                    <c:choose>
+                                        <c:when test="${not empty space.getUser(submission.submittedBy).displayName}">
+                                            <dd>${space.getUser(submission.submittedBy).displayName}</dd>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <dd>${submission.createdBy}</dd>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </c:if>
                                 <dt>Request Date:</dt>
                                 <dd data-moment>${submission.submittedAt}</dd>
                                 <dt>Status:</dt>

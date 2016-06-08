@@ -6,9 +6,8 @@
     <ul class="nav nav-tabs">
         <c:set var="activePage" value="${param.review.isEmpty() ? pages.get(0) : param.review}"/>
         <c:forEach var="page" items="${pages}">
-            <li class="${page == activePage ? "active" : ""}">
-                <a href="${bundle.spaceLocation}/submissions/${submission.id}?review=${page}"
-                   data-review="${page}">${page}</a>
+            <li class="${page == activePage ? 'active' : ''}">
+                <a href="${bundle.spaceLocation}/submissions/${submission.id}?review=${page}">${page}</a>
             </li>
         </c:forEach>
     </ul>

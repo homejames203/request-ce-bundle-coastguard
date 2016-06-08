@@ -76,7 +76,7 @@
                                 <p>My Tasks</p>
                             </div>
                             <div class="icon">
-                                <i class="fa fa-thumbs-o-up"></i>
+                                <i class="fa fa-tasks"></i>
                             </div>
                             <a href="${bundle.kappLocation}?page=submissions&type=work-order" class="small-box-footer">View Your Tasks <i class="fa fa-arrow-circle-right"></i></a>
                         </div>

@@ -53,7 +53,16 @@
                     </li>
                 </c:if>
                 <li <c:if test="${status eq 'Submitted'}">class="active"</c:if>>
-                    <a href="#tab_1" data-toggle="tab" aria-expanded="false">Open</a>
+                    <a href="#tab_1" data-toggle="tab" aria-expanded="false">
+                        <c:choose>
+                            <c:when test="${type eq 'Approvals'}">
+                                Pending
+                            </c:when>
+                            <c:otherwise>
+                                Open
+                            </c:otherwise>
+                        </c:choose>
+                    </a>
                 </li>
                 <li <c:if test="${status eq 'Closed'}">class="active"</c:if>>
                     <a href="#tab_2" data-toggle="tab" aria-expanded="false">Closed</a>
@@ -132,7 +141,7 @@
                                     <tr>
                                         <td>${text.escape(submission.form.name)}</td>
                                         <td>
-                                            <a href="${bundle.spaceLocation}/submissions/${submission.id}?review">${text.escape(submission.label)}</a>
+                                            <a href="${bundle.kappLocation}?page=submission&id=${submission.id}">${text.escape(submission.label)}</a>
                                         </td>
                                         <td data-moment>${submission.createdAt}</td>
                                         <c:choose>

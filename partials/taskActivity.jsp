@@ -9,7 +9,7 @@
     <ul class="timeline">
         <!-- timeline time label -->
         <li class="time-label">
-            <span data-moment class="bg-red">${submission.submittedAt}/></span>
+            <span data-moment class="bg-red">${submission.submittedAt}</span>
         </li>
         <!-- /.timeline-label -->
         <!-- timeline item -->

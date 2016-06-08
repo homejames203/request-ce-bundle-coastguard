@@ -13,7 +13,8 @@
 
     <section class="content-header">
         <h1>
-            ${kappIter.name} Search Results <c:if test="${text.isNotBlank(param['q'])}">for '${param['q']}'</c:if>
+            <%--Use a c:out JSTL tag to sanitize the output and prevent XXS attacks--%>
+            ${kappIter.name} Search Results <c:if test="${text.isNotBlank(param['q'])}">for '<c:out value="${param['q']}"/>'</c:if>
         </h1>
         <ol class="breadcrumb">
             <li><a href="${bundle.kappLocation}">

@@ -27,7 +27,7 @@
                         <form action="${bundle.kappLocation}" method="GET" class="sidebar-form">
                             <div class="input-group">
                                 <input type="hidden" value="search" name="page">
-                                <input type="text" name="q" class="form-control" placeholder="Search...">
+                                <input type="text" name="q" class="form-control" placeholder="Search..." value="${param["q"]}">
                                 <span class="input-group-btn">
                                     <button type="submit" id="search-btn" class="btn btn-flat states"><i class="fa fa-search"></i></button>
                                 </span>

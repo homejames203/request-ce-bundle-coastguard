@@ -152,7 +152,7 @@
                                     <i class="fa fa-user fa-5x fa-inverse img-circle" alt="User Image"></i>
                                     <p>
                                         ${text.escape(text.trim(identity.displayName, identity.username))} 
-                                        <small>Member since ${identity.user.createdAt}</small>
+                                        <small>Member since <span data-moment-short>${identity.user.createdAt}</span></small>
                                     </p>
                                 </li>
                                 <!-- Menu Footer-->

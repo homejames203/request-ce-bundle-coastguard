@@ -13,7 +13,7 @@
                 <title>Kinetic Data ${text.escape(kapp.name)}</title>
             </bundle:variable>
             <!-- Set variable used to count and display submissions -->
-            <c:set scope="request" var="submissionsList" value="${SubmissionHelper.retrieveRecentSubmissions('Service', 999)}"/>
+            <c:set scope="request" var="submissionsList" value="${SubmissionHelper.retrieveRecentSubmissions('Service', 'Submitted', 999)}"/>
 
             <%-- Set class for number of tiles displayed --%>
             <c:set var="tileCount" value="4" />
@@ -58,7 +58,7 @@
                         <!-- small box -->
                         <div class="small-box bg-green">
                             <div class="inner">
-                                <h3>${fn:length(SubmissionHelper.retrieveRecentSubmissions('Approval', 999))}</h3>
+                                <h3>${fn:length(SubmissionHelper.retrieveRecentSubmissions('Approval', 'Submitted',999))}</h3>
                                 <p>My Approvals</p>
                             </div>
                             <div class="icon">
@@ -72,7 +72,7 @@
                         <!-- small box -->
                         <div class="small-box bg-maroon">
                             <div class="inner">
-                                <h3>${fn:length(SubmissionHelper.retrieveRecentSubmissions('Work Order', 999))}</h3>
+                                <h3>${fn:length(SubmissionHelper.retrieveRecentSubmissions('Work Order', 'Submitted', 999))}</h3>
                                 <p>My Tasks</p>
                             </div>
                             <div class="icon">
@@ -100,8 +100,8 @@
                             </div>
                         </div><!-- ./col -->
                     </c:if>
-                    <c:if test="${BundleHelper.checkKappAndForm('rkm','rkm')}">
-                        <c:set scope="request" var="rkmList" value="${SubmissionHelper.retrieveRecentSubmissions(null,null,1000,10,'admin','assets',['User'],[identity.username])}"/>
+                    <c:if test="${BundleHelper.checkKappAndForm('knowledge','knowledge')}">
+                        <c:set scope="request" var="rkmList" value=""/>
                         <div class="${tileClass}">
                             <!-- small box -->
                             <div class="small-box bg-red">

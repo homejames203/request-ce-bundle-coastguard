@@ -84,7 +84,8 @@ img.formlogo{
 }
 
 
-section.page form .form-group.required label:after {
+section.page form .form-group.required label:after,
+section.page form .required label.control-label:after {
   content: '*';
   color: red; }
 

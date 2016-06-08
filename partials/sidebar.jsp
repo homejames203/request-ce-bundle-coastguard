@@ -54,7 +54,7 @@
             </li>
             <li <c:if test="${activePage eq 'work-order'}">class="active"</c:if> >
                 <a href="${bundle.kappLocation}?page=submissions&type=work-order">
-                    <i class="fa fa-thumbs-o-up"></i> <span>My Tasks</span>
+                    <i class="fa fa-tasks"></i> <span>My Tasks</span>
                 </a>
             </li>
             <c:if test="${BundleHelper.checkKappAndForm('admin','user-assets')}">
@@ -64,10 +64,10 @@
                     </a>
                 </li>
             </c:if>
-            <c:if test="${BundleHelper.checkKappAndForm('rkm','rkm')}">
+            <c:if test="${BundleHelper.checkKappAndForm('knowledge','knowledge')}">
                 <li <c:if test="${activePage eq 'approval'}">class="active"</c:if> >
                     <a href="${bundle.kappLocation}?page=#">
-                        <i class="fa fa-thumbs-o-up"></i> <span>Knowledge Base</span>
+                        <i class="fa fa-questionmark"></i> <span>Knowledge Base</span>
                     </a>
                 </li>
             </c:if>

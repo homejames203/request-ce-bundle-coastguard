@@ -56,73 +56,78 @@
         <!-- Navbar Right Menu -->
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
+
                 <!-- Notifications: style can be found in dropdown.less -->
-                <li class="dropdown messages-menu">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="fa fa-bell-o"></i>
-                        <c:if test="${fn:length(broadcastAlerts) > 0}">
-                            <span class="label label-warning">${fn:length(broadcastAlerts)}</span>
-                        </c:if>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li class="header">You have ${fn:length(broadcastAlerts)} notifications</li>
-                        <li>
-                        <!-- inner menu: contains the actual data -->
-                            <ul class="menu">
-                                <c:forEach var="broadcastAlert" items="${broadcastAlerts}">
-                                    <li><!-- start message -->
-                                        <a href="#">
-                                            <div class="pull-left">
-                                              <i class="fa fa-warning text-yellow" alt="Alert"></i>
-                                            </div>
-                                            <h4>
-                                                ${broadcastAlert.get('Subject')}
-                                                <small>
-                                                    <i class="fa fa-clock-o"></i>
-                                                    <span  data-moment>${broadcastAlert.get('createdAt')}</span>
-                                                </small>
-                                            </h4>
-                                            <p>${broadcastAlert.get('Message')}</p>
-                                        </a>
-                                    </li><!-- end message -->
-                                </c:forEach>
-                            </ul>
-                        </li>
-                        <li class="footer"><a href="#"></a></li>
-                    </ul>
-                </li>
-                <!-- Tasks: style can be found in dropdown.less -->
-                <li class="dropdown tasks-menu">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="fa fa-thumbs-o-up"></i>
-                        <c:if test="${fn:length(pendingApprovals) > 0}">
-                            <span class="label label-danger">${fn:length(pendingApprovals)}</span>
-                        </c:if>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li class="header">You have ${fn:length(pendingApprovals)} Approvals Pending</li>
-                        <li>
+                <c:if test="${fn:length(broadcastAlerts) > 0}">
+                    <li class="dropdown messages-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-bell-o"></i>
+                            <c:if test="${fn:length(broadcastAlerts) > 0}">
+                                <span class="label label-warning">${fn:length(broadcastAlerts)}</span>
+                            </c:if>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header">You have ${fn:length(broadcastAlerts)} notifications</li>
+                            <li>
                             <!-- inner menu: contains the actual data -->
-                            <ul class="menu">
-                                <c:forEach var="approval" items="${pendingApprovals}">
-                                    <li><!-- Task item -->
-                                        <a href="${bundle.spaceLocation}/submissions/${approval.id}">
-                                            <h3>
-                                                ${Submissions.retrieve(approval.getValue('Parent Instance ID')).form.name}
-                                            </h3>
-                                            <p>
-                                                <span>${approval.label}</span>
-                                            <p>
-                                        </a>
-                                    </li><!-- end task item -->
-                                </c:forEach>
-                            </ul>
-                        </li>
-                        <li class="footer">
-                            <a href="${bundle.kappLocation}?page=submissions&type=approval">View all Approvals</a>
-                        </li>
-                    </ul>
-                </li>
+                                <ul class="menu">
+                                    <c:forEach var="broadcastAlert" items="${broadcastAlerts}">
+                                        <li><!-- start message -->
+                                            <a href="#">
+                                                <div class="pull-left">
+                                                  <i class="fa fa-warning text-yellow" alt="Alert"></i>
+                                                </div>
+                                                <h4>
+                                                    ${broadcastAlert.get('Subject')}
+                                                    <small>
+                                                        <i class="fa fa-clock-o"></i>
+                                                        <span  data-moment>${broadcastAlert.get('createdAt')}</span>
+                                                    </small>
+                                                </h4>
+                                                <p>${broadcastAlert.get('Message')}</p>
+                                            </a>
+                                        </li><!-- end message -->
+                                    </c:forEach>
+                                </ul>
+                            </li>
+                            <li class="footer"><a href="#"></a></li>
+                        </ul>
+                    </li>
+                </c:if>
+                <!-- Tasks: style can be found in dropdown.less -->
+                <c:if test="${fn:length(pendingApprovals) > 0}">
+                    <li class="dropdown tasks-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-thumbs-o-up"></i>
+                            <c:if test="${fn:length(pendingApprovals) > 0}">
+                                <span class="label label-danger">${fn:length(pendingApprovals)}</span>
+                            </c:if>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header">You have ${fn:length(pendingApprovals)} Approvals Pending</li>
+                            <li>
+                                <!-- inner menu: contains the actual data -->
+                                <ul class="menu">
+                                    <c:forEach var="approval" items="${pendingApprovals}">
+                                        <li><!-- Task item -->
+                                            <a href="${bundle.spaceLocation}/submissions/${approval.id}">
+                                                <h3>
+                                                    ${Submissions.retrieve(approval.getValue('Parent Instance ID')).form.name}
+                                                </h3>
+                                                <p>
+                                                    <span>${approval.label}</span>
+                                                <p>
+                                            </a>
+                                        </li><!-- end task item -->
+                                    </c:forEach>
+                                </ul>
+                            </li>
+                            <li class="footer">
+                                <a href="${bundle.kappLocation}?page=submissions&type=approval">View all Approvals</a>
+                            </li>
+                        </ul>
+                    </li>
+                </c:if>
                 <li class="dropdown kapps-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-th"></i>

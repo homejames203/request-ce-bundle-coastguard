@@ -16,11 +16,12 @@
                <c:forEach var="popForm" begin="0" end="4" items="${kapp.getCategory('promoted-requests').forms}">
                   <li class="item">
                      <div class="product-img">
+                        <c:out value="${form.getAttributeValue('Image')}" />
                         <c:choose>
                            <c:when test="${not empty form.getAttributeValue('Image')}">
                               <img src="${bundle.location}/images/forms/${form.getAttributeValue('Image')}"  alt="${text.escape(popForm.name)}"/>
                            </c:when>
-                           <c:when test="${form.getAttributeValue('Icon')}">
+                           <c:when test="${not empty form.getAttributeValue('Icon')}">
                              <i class="fa ${form.getAttributeValue('Icon')}"/>
                            </c:when>
                         </c:choose>

@@ -17,10 +17,10 @@
 
             <%-- Set class for number of tiles displayed --%>
             <c:set var="tileCount" value="4" />
-            <c:if test="${not empty adminKapp}">
+            <c:if test="${BundleHelper.checkKappAndForm('admin','user-assets')}">
                 <c:set var="tileCount" value="${tileCount - 1}" />
             </c:if>
-            <c:if test="${BundleHelper.checkKappAndForm('rkm','rkm')}">
+            <c:if test="${BundleHelper.checkKappAndForm('knowledge','knowledge')}">
                 <c:set var="tileCount" value="${tileCount - 1}" />
             </c:if>
             <c:set scope="request" var="tileClass" value="col-sm-${tileCount}"/>

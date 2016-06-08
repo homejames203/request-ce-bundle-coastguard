@@ -40,7 +40,6 @@
                                 <c:forEach var="bridgeAttribute" items="${form.getAttributeValues('Bridge Attribute')}">
                                     <th>${bridgeAttribute}</th>
                                 </c:forEach>
-                                <th>Date Submitted</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -49,7 +48,6 @@
                                     <c:forEach var="bridgeAttribute" items="${form.getAttributeValues('Bridge Attribute')}">
                                         <td>${text.escape(submission.get(bridgeAttribute))}</td>
                                     </c:forEach>
-                                    <td data-moment>${submission.get('createdAt')}</td>
                                 </tr>
                             </c:forEach>
                         </tbody>

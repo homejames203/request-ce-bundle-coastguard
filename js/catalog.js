@@ -52,7 +52,10 @@
         $('ul.treeview-menu li.active').parents('li').addClass('active');
 
         $('section.sidebar ul li').on('click', function(e){
-            if($(this).attr('data-forms') > 0){
+            console.log($(this));
+            console.log($(this).attr('data-forms'));
+            if(typeof $(this).attr('data-forms') != "undefined"){
+                console.log('defined');
                 e.stopImmediatePropagation();
             }
         })

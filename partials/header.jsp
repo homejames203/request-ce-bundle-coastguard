@@ -135,7 +135,10 @@
                     <ul class="dropdown-menu">
                         <c:forEach var="spaceKapp" items="${space.kapps}">
                             <li><!-- start message -->
-                                <a href="${bundle.spaceLocation}/${spaceKapp.slug}/">${spaceKapp.name}</a>
+                                <a href="${bundle.spaceLocation}/${spaceKapp.slug}/">   
+                                    <i class="fa ${spaceKapp.getAttributeValue("Icon")} fa-fw fa-1x"></i>
+                                    <span>${spaceKapp.name}</span>
+                                </a>
                             </li><!-- end message -->
                         </c:forEach>
                     </ul>

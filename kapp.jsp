@@ -16,11 +16,11 @@
             <c:set scope="request" var="submissionsList" value="${SubmissionHelper.retrieveRecentSubmissions('Service', 'Submitted', 999)}"/>
 
             <%-- Set class for number of tiles displayed --%>
-            <c:set var="tileCount" value="4" />
-            <c:if test="${not empty adminKapp}">
+            <c:set var="tileCount" value="3" />
+            <c:if test="${BundleHelper.checkKappAndForm('admin','user-asset')}">
                 <c:set var="tileCount" value="${tileCount - 1}" />
             </c:if>
-            <c:if test="${BundleHelper.checkKappAndForm('rkm','rkm')}">
+            <c:if test="${BundleHelper.checkKappAndForm('knowledge','knowledge')}">
                 <c:set var="tileCount" value="${tileCount - 1}" />
             </c:if>
             <c:set scope="request" var="tileClass" value="col-sm-${tileCount}"/>
@@ -82,7 +82,7 @@
                         </div>
                     </div><!-- ./col -->
 
-                    <c:if test="${BundleHelper.checkKappAndForm('admin','user-assets')}">
+                    <c:if test="${BundleHelper.checkKappAndForm('admin','user-asset')}">
                         <c:set var="params" value="${BridgedResourceHelper.map()}"/>
                         <c:set target="${params}" property="User" value="${identity.username}"/>
                         <c:set scope="request" var="assetList" value="${BridgedResourceHelper.search('User Assets',params)}"/>
@@ -116,6 +116,21 @@
                             </div>
                         </div><!-- ./col -->
                     </c:if>
+
+                    <div class="${tileClass}">
+                        <!-- small box -->
+                        <div class="small-box bg-orange">
+                            <div class="inner">
+                                <h3>Help</h3>
+                                <p>&nbsp;</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-life-ring"></i>
+                            </div>
+                            <a href="${bundle.spaceLocation}/${kapp.slug}/help" class="small-box-footer">Ask a Question <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div><!-- ./col -->
+
                 </div><!-- /.row -->
 
                 <div class="row">

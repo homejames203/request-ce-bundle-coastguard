@@ -17,10 +17,10 @@
                   <li class="item">
                      <div class="product-img">
                         <c:choose>
-                           <c:when test="${not empty form.getAttributeValue('Image')}">
-                              <img src="${bundle.location}/images/forms/${form.getAttributeValue('Image')}"  alt="${text.escape(popForm.name)}"/>
+                           <c:when test="${not empty popForm.getAttributeValue('Image')}">
+                              <img src="${bundle.location}/images/forms/${popForm.getAttributeValue('Image')}"  alt="${text.escape(popForm.name)}"/>
                            </c:when>
-                           <c:when test="${form.getAttributeValue('Icon')}">
+                           <c:when test="${not empty popForm.getAttributeValue('Icon')}">
                              <i class="fa ${form.getAttributeValue('Icon')}"/>
                            </c:when>
                         </c:choose>

@@ -1,3 +1,14 @@
+<%-- AUTHENTICATION REQUIRED AND USER IS ANONYMOUS --%>
+<%
+    if (kapp == null && identity.isAnonymous() && !"Yes".equalsIgnoreCase(space.getAttributeValue("Allow Anonymous"))) {
+        response.sendRedirect(bundle.getSpaceLocation()+"/app/login");
+        return;
+    } else if (kapp != null && identity.isAnonymous() && !"Yes".equalsIgnoreCase(kapp.getAttributeValue("Allow Anonymous"))) {
+        response.sendRedirect(bundle.getSpaceLocation()+"/app/login?kapp="+kapp.getSlug());
+        return;
+    }
+%>
+
 <%-- INVALID SETUP ROUTING --%>
 <%
     // If the request is scoped to a specific Kapp (space display pages are not)

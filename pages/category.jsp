@@ -36,16 +36,15 @@
                 <c:import url="${bundle.path}/partials/formCard.jsp" charEncoding="UTF-8"/>
             </c:forEach>
             </div>
+            <c:set var="categorySubmissions" value="${SubmissionHelper.categorySubmissions(category.slug)}" />
             <div class="col-xs-12 col-sm-4">
-                <div class="box box-solid">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">My ${text.escape(category.name)} Tickets</h3>
-                    </div>
-                    <div class="box-body">
-                       <ul class="products-list product-list-in-box">
-                        <c:set var="categorySubmissions" value="${SubmissionHelper.categorySubmissions(category.slug)}" />
-                        <c:choose>
-                            <c:when test="${not empty categorySubmissions}">
+                <c:if test="${not empty categorySubmissions}">
+                    <div class="box box-solid">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">My ${text.escape(category.name)} Tickets</h3>
+                        </div>
+                        <div class="box-body">
+                           <ul class="products-list product-list-in-box">
                                 <c:forEach var="submission" begin="0" end="5" items="${categorySubmissions}">
                                     <li class="item">
                                         <c:choose>
@@ -60,14 +59,10 @@
                                         <div><label>Status:</label> ${submission.coreState}</div>
                                     </li><!-- /.item -->
                                 </c:forEach>
-                            </c:when>
-                            <c:otherwise>
-                               <h4>No Open Tickets</h4>
-                            </c:otherwise>
-                         </c:choose>
-                      </ul>
+                            </ul>
+                        </div>
                     </div>
-                </div>
+                </c:if>
             </div>
         </div>
     </section>

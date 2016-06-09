@@ -85,7 +85,6 @@
                                 <c:if test="${category.hasNonEmptySubcategories()}">
                                     <i class="fa fa-angle-left pull-right <c:if test="${category.hasNonEmptySubcategories()}">treeview</c:if>"></i>
                                 </c:if>
-
                             </a>
                             <c:if test="${category.hasNonEmptySubcategories()}">
                                 <c:set var="sidebarSubCat" value="${category}" scope="request"/>

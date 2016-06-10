@@ -307,12 +307,4 @@
             element.html(moment(element.text()).fromNow());
         });
     });
-        bundle.config = { 
-            renderers: { 
-                fieldConstraintViolations: function(form, fieldConstraintViolations) {
-                    console.log(fieldConstraintViolations);
-                    $('.errors').notifie({type:'alert',severity:'danger',message:fieldConstraintViolations['Error Text'][0]});
-                },
-            } 
-        };
 })(jQuery, moment);

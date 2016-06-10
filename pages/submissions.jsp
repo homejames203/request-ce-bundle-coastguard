@@ -94,9 +94,14 @@
                                 <tr>
                                     <td>${text.escape(submission.form.name)}</td>
                                     <c:choose>
-                                        <c:when test="${type eq 'Approvals' || type eq 'Requests'}">
+                                        <c:when test="${type eq 'Requests'}">
                                             <td>
                                                 <a href="${bundle.kappLocation}?page=submission&id=${submission.id}">${text.escape(submission.label)}</a>
+                                            </td>
+                                        </c:when>
+                                        <c:when test="${type eq 'Approvals'}">
+                                            <td>
+                                                <a href="${bundle.kappLocation}/submission&id/${submission.id}">${text.escape(submission.label)}</a>
                                             </td>
                                         </c:when>
                                         <c:otherwise>

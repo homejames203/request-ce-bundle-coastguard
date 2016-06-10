@@ -17,7 +17,7 @@
         <c:set scope="page" var="typeVariables" value="${['bg-green','fa-thumbs-o-up']}"/>
     </c:when>
     <c:when test="${paramtype eq 'work-order'}">
-        <c:set scope="request" var="openSubmissionsList" value="${SubmissionHelper.retrieveRecentSubmissionsByKapp(pace.getAttributeValue('QApp Slug'), 'Open', 999)}"/>
+        <c:set scope="request" var="openSubmissionsList" value="${SubmissionHelper.retrieveRecentSubmissionsByKapp(space.getAttributeValue('QApp Slug'), 'Open', 999)}"/>
         <c:set scope="request" var="closedSubmissionsList" value="${SubmissionHelper.retrieveRecentSubmissions('Work Order', 'Closed',1000)}"/>
         <c:set scope="request" var="type" value="Tasks"/>
         <c:set scope="page" var="typeVariables" value="${['bg-maroon','fa-tasks']}"/>
@@ -93,9 +93,18 @@
                                 <c:set var="statusColor" value="label-success"/>
                                 <tr>
                                     <td>${text.escape(submission.form.name)}</td>
-                                    <td>
-                                        <a target="_blank" href="${bundle.spaceLocation}/${space.getAttributeValue('QApp Slug')}#/queue/filter/Mine/details/${submission.id}/summery">${text.escape(submission.label)}</a>
-                                    </td>
+                                    <c:choose>
+                                        <c:when test="${type eq 'Approvals' && type eq 'Requests'}">
+                                            <td>
+                                                <a href="${bundle.kappLocation}?page=submission&id=${submission.id}">${text.escape(submission.label)}</a>
+                                            </td>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <td>
+                                                <a target="_blank" href="${bundle.spaceLocation}/${space.getAttributeValue('QApp Slug')}#/queue/filter/Mine/details/${submission.id}/summery">${text.escape(submission.label)}</a>
+                                            </td>
+                                        </c:otherwise>
+                                    </c:choose>
                                     <td data-moment>${submission.createdAt}</td>
                                     <c:choose>
                                         <c:when test="${type eq 'Approvals' && submission.form.getField('Decision') ne null}">

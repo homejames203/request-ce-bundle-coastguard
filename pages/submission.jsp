@@ -53,8 +53,15 @@
                             </dl>
                             <p>${submission.form.description}</p>
                             <div class="box-body">
-                                <a class="btn btn-info" href="${bundle.spaceLocation}/submissions/${submission.id}?review">Review Submitted Form</a>
-                                <a class="btn btn-primary" href="${bundle.spaceLocation}/${kapp.slug}/${submission.form.slug}">Request Again</a>
+                                <c:choose>
+                                    <c:when test="${submission.type.name == 'Approval' && submission.coreState == 'Draft'}">
+                                        <a class="btn btn-info" href="${bundle.spaceLocation}/submissions/${submission.id}">Approve Submitted Form</a>
+                                    </c:when>
+                                    <c:otherwise>    
+                                        <a class="btn btn-info" href="${bundle.spaceLocation}/submissions/${submission.id}?review">Review Submitted Form</a>
+                                        <a class="btn btn-primary" href="${bundle.spaceLocation}/${kapp.slug}/${submission.form.slug}">Request Again</a>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                         </div>
                     </div>

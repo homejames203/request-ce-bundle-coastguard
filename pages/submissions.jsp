@@ -11,8 +11,8 @@
 <c:set var="paramtype" value="${Text.defaultIfBlank(param['type'],'request')}" />
 <c:choose>
     <c:when test="${paramtype eq 'approval'}">
-        <c:set scope="request" var="openSubmissionsList" value="${SubmissionHelper.retrieveRecentSubmissions('Approval', 'Submitted', 1000)}"/>
-        <c:set scope="request" var="closedSubmissionsList" value="${SubmissionHelper.retrieveRecentSubmissions('Approval', 'Closed',1000)}"/>
+        <c:set scope="request" var="openSubmissionsList" value="${SubmissionHelper.retrieveRecentSubmissions('Approval', 'Draft', 1000)}"/>
+        <c:set scope="request" var="closedSubmissionsList" value="${SubmissionHelper.retrieveRecentSubmissions('Approval', 'Submitted',1000)}"/>
         <c:set scope="request" var="type" value="Approvals"/>
         <c:set scope="page" var="typeVariables" value="${['bg-green','fa-thumbs-o-up']}"/>
     </c:when>

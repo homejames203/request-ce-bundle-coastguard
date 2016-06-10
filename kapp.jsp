@@ -58,7 +58,7 @@
                         <!-- small box -->
                         <div class="small-box bg-green">
                             <div class="inner">
-                                <h3>${fn:length(SubmissionHelper.retrieveRecentSubmissions('Approval', 'Submitted',999))}</h3>
+                                <h3>${fn:length(SubmissionHelper.retrieveRecentSubmissions('Approval', 'Draft',999))}</h3>
                                 <p>My Approvals</p>
                             </div>
                             <div class="icon">

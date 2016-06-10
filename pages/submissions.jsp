@@ -14,17 +14,20 @@
         <c:set scope="request" var="openSubmissionsList" value="${SubmissionHelper.retrieveRecentSubmissions('Approval', 'Submitted', 1000)}"/>
         <c:set scope="request" var="closedSubmissionsList" value="${SubmissionHelper.retrieveRecentSubmissions('Approval', 'Closed',1000)}"/>
         <c:set scope="request" var="type" value="Approvals"/>
+        <c:set scope="page" var="typeVariables" value="${['bg-green','fa-thumbs-o-up']}"/>
     </c:when>
     <c:when test="${paramtype eq 'work-order'}">
-        <c:set scope="request" var="openSubmissionsList" value="${SubmissionHelper.retrieveRecentSubmissions('Work Order', 'Submitted',1000)}"/>
+        <c:set scope="request" var="openSubmissionsList" value="${SubmissionHelper.retrieveRecentSubmissionsByKapp('qapp', 'Open', 999)}"/>
         <c:set scope="request" var="closedSubmissionsList" value="${SubmissionHelper.retrieveRecentSubmissions('Work Order', 'Closed',1000)}"/>
         <c:set scope="request" var="type" value="Tasks"/>
+        <c:set scope="page" var="typeVariables" value="${['bg-maroon','fa-tasks']}"/>
     </c:when>
     <c:otherwise>
         <c:set scope="request" var="openSubmissionsList" value="${SubmissionHelper.retrieveRecentSubmissions('Service', 'Submitted',1000)}"/>
         <c:set scope="request" var="closedSubmissionsList" value="${SubmissionHelper.retrieveRecentSubmissions('Service', 'Closed',1000)}"/>
         <c:set scope="request" var="draftSubmissionsList" value="${SubmissionHelper.retrieveRecentSubmissions('Service', 'Draft',1000)}"/>
         <c:set scope="request" var="type" value="Requests"/>
+        <c:set scope="page" var="typeVariables" value="${['bg-aqua','fa-shopping-cart']}"/>
     </c:otherwise>
 </c:choose>
 <bundle:layout page="${bundle.path}/layouts/layout.jsp">
@@ -32,11 +35,11 @@
         <title>${text.escape(space.name)} Submissions</title>
     </bundle:variable>
     <section class="content-header">
-        <h1>
-            My ${type}
-        </h1>
+        <span class="small-box-custom ${typeVariables[0]}">
+            <h1><i class="fa ${typeVariables[1]}"></i> My ${type}</h1>
+        </span>
         <ol class="breadcrumb">
-            <li><a href="#">
+            <li><a href="${bundle.kappLocation}">
                 <i class="fa fa-home"></i> 
                 Home</a>
             </li>
@@ -91,7 +94,7 @@
                                 <tr>
                                     <td>${text.escape(submission.form.name)}</td>
                                     <td>
-                                        <a href="${bundle.kappLocation}?page=submission&id=${submission.id}">${text.escape(submission.label)}</a>
+                                        <a target="_blank" href="${bundle.spaceLocation}/${space.getAttributeValue('QApp Slug')}#/queue/filter/Mine/details/${submission.id}/summery">${text.escape(submission.label)}</a>
                                     </td>
                                     <td data-moment>${submission.createdAt}</td>
                                     <c:choose>

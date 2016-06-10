@@ -51,8 +51,23 @@ li.sidebar-include-toggle {
     }
 }
 
+.btn-primary:hover{
+    background-color: #367fa9 !important;
+}
 
-
+.small-box-custom{
+    border-radius: 2px;
+    position: relative;
+    display: inline-block;
+    box-shadow: 1px 1px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+}
+.small-box-custom > h1{
+    margin: 0;
+}
+.small-box-custom > h1 > i{
+    color: rgba(0, 0, 0, 0.2);
+}
 
 div.formDescription div.icon img {
   max-width: 100px;

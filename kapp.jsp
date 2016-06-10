@@ -67,18 +67,18 @@
                             <a href="${bundle.kappLocation}?page=submissions&type=approval" class="small-box-footer">View Your Approvals <i class="fa fa-arrow-circle-right"></i></a>
                         </div>
                     </div><!-- ./col -->
-
+                    
                     <div class="${tileClass}">
                         <!-- small box -->
                         <div class="small-box bg-maroon">
                             <div class="inner">
-                                <h3>${fn:length(SubmissionHelper.retrieveRecentSubmissions('Work Order', 'Submitted', 999))}</h3>
+                                <h3>${fn:length(SubmissionHelper.retrieveRecentSubmissionsByKapp(space.getAttributeValue('QApp Slug'), 'Open', 999))}</h3>
                                 <p>My Tasks</p>
                             </div>
                             <div class="icon">
                                 <i class="fa fa-tasks"></i>
                             </div>
-                            <a href="${bundle.kappLocation}?page=submissions&type=work-order" class="small-box-footer">View Your Tasks <i class="fa fa-arrow-circle-right"></i></a>
+                            <a target="_blank" href="${bundle.spaceLocation}/${space.getAttributeValue('QApp Slug')}#/queue/filter/__default__" class="small-box-footer">View Your Tasks <i class="fa fa-arrow-circle-right"></i></a>
                         </div>
                     </div><!-- ./col -->
 

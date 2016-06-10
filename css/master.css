@@ -232,7 +232,7 @@ form button, form input[type='submit'], form input[type='button'], .btn, section
   background-color: #00427e;
   color: #ffffff; }
   .btn-primary:hover {
-    background-color: #005db1; }
+    background-color: #005db1}
 
 .btn-primary-complement {
   background-color: #ffffff;

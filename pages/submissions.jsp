@@ -101,7 +101,7 @@
                                         </c:when>
                                         <c:when test="${type eq 'Approvals'}">
                                             <td>
-                                                <a href="${bundle.kappLocation}/submission&id/${submission.id}">${text.escape(submission.label)}</a>
+                                                <a href="${bundle.kappLocation}/submission/${submission.id}">${text.escape(submission.label)}</a>
                                             </td>
                                         </c:when>
                                         <c:otherwise>

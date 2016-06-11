@@ -18,7 +18,7 @@
     </c:when>
     <c:when test="${paramtype eq 'work-order'}">
         <c:set scope="request" var="openSubmissionsList" value="${SubmissionHelper.retrieveRecentSubmissionsByKapp(space.getAttributeValue('QApp Slug'), 'Open', 999)}"/>
-        <c:set scope="request" var="closedSubmissionsList" value="${SubmissionHelper.retrieveRecentSubmissionsByKapp(space.getAttributeValue('QApp Slug'), 'Closed',1000)}"/>
+        <c:set scope="request" var="closedSubmissionsList" value="${SubmissionHelper.retrieveRecentSubmissionsByKapp(space.getAttributeValue('QApp Slug'), 'Completed',1000)}"/>
         <c:set scope="request" var="type" value="Tasks"/>
         <c:set scope="page" var="typeVariables" value="${['bg-maroon','fa-tasks']}"/>
     </c:when>

@@ -30,6 +30,7 @@
         </bundle:stylepack>
         <bundle:scriptpack>
             <bundle:script src="${bundle.location}/libraries/jquery/jquery.min.js" />
+            <bundle:script src="${bundle.location}/libraries/underscore/underscore.js"/>
             <bundle:script src="${bundle.location}/libraries/moment/moment.js" />
             <bundle:script src="${bundle.location}/libraries/moment/moment-timezone.js" />
             <bundle:script src="${bundle.location}/libraries/kd-search/search.js"/>

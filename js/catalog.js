@@ -2,7 +2,7 @@
  * Forms Search using Twitter Typeahead. Prefetch all accessible forms
  * for the Kapp.
 **/
-(function($, moment){
+(function($, _, moment){
     var locale = window.navigator.userLanguage || window.navigator.language;
     moment.locale(locale);
 
@@ -307,4 +307,22 @@
             element.html(moment(element.text()).fromNow());
         });
     });
-})(jQuery, moment);
+    
+    /*----------------------------------------------------------------------------------------------
+     * BUNDLE.CONFIG OVERWRITES
+     *--------------------------------------------------------------------------------------------*/
+    
+    /**
+     * Overwrite the default field constraint violation error handler to use Notifie to display the errors above the individual fields.
+     */
+    bundle.config = bundle.config || {};
+    bundle.config.renderers = bundle.config.renderers || {};
+    bundle.config.renderers.fieldConstraintViolations = function(form, fieldConstraintViolations) {
+        _.each(fieldConstraintViolations, function(value, key){
+            $(form.getFieldByName(key).wrapper()).notifie({
+                message: value.join("<br>"),
+                exitEvents: "click"
+            });
+        });
+    }
+})(jQuery, _, moment);

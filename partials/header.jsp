@@ -141,6 +141,12 @@
                                 </a>
                             </li><!-- end message -->
                         </c:forEach>
+                        <c:if test="${identity.spaceAdmin}">
+                            <li class="divider hidden-xs"></li>
+                            <li class="hidden-xs"><a href="${bundle.spaceLocation}/app/#/${kapp.slug}/activity/overview">
+                                <i class="fa fa-dashboard fa-fw"></i> Management Console</a>
+                            </li>
+                        </c:if>
                     </ul>
                 </li>
                 <c:choose>

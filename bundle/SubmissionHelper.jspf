@@ -55,7 +55,7 @@
             return submissionComponent.searchByKapp(kapp, searchOptions);
         }
 
-        public List<Submission> retrieveRecentSubmissionsByKapp(String searchKapp, String status, Integer number){
+        public List<Submission> retrieveRecentSubmissionsByKapp(String searchKapp, String coreState, Integer number){
                         com.kineticdata.core.authentication.Identity identity =
                 (com.kineticdata.core.authentication.Identity) request.getAttribute("identity");
 
@@ -67,8 +67,8 @@
 
             searchOptions.put("end", new String[] {Time.format(end)} );
             searchOptions.put("start", new String[] {Time.format(start)} );
-            if (status != null) {
-                searchOptions.put("values[Status]", new String[] {status});
+            if (coreState != null) {
+                searchOptions.put("coreState", new String[] {coreState});
             }
             if (number != null) {
                 searchOptions.put("limit", new String[] {String.valueOf(number)});

@@ -17,8 +17,8 @@
         <c:set scope="page" var="typeVariables" value="${['bg-green','fa-thumbs-o-up']}"/>
     </c:when>
     <c:when test="${paramtype eq 'work-order'}">
-        <c:set scope="request" var="openSubmissionsList" value="${SubmissionHelper.retrieveRecentSubmissionsByKapp(space.getAttributeValue('QApp Slug'), 'Open', 999)}"/>
-        <c:set scope="request" var="closedSubmissionsList" value="${SubmissionHelper.retrieveRecentSubmissionsByKapp(space.getAttributeValue('QApp Slug'), 'Completed',1000)}"/>
+        <c:set scope="request" var="openSubmissionsList" value="${SubmissionHelper.retrieveRecentSubmissionsByKapp(space.getAttributeValue('QApp Slug'), 'Draft', 999)}"/>
+        <c:set scope="request" var="closedSubmissionsList" value="${SubmissionHelper.retrieveRecentSubmissionsByKapp(space.getAttributeValue('QApp Slug'), 'Closed',1000)}"/>
         <c:set scope="request" var="type" value="Tasks"/>
         <c:set scope="page" var="typeVariables" value="${['bg-maroon','fa-tasks']}"/>
     </c:when>
@@ -143,7 +143,10 @@
                             <tr>
                                 <th>Item Requested</th>
                                 <th>Details</th>
-                                <th>Date Submitted</th>
+                                <c:if test="${type ne 'Approvals'}">
+                                    <th>Date Submitted</th>
+                                </c:if>
+                                <th>Date Closed</th>
                                 <c:if test="${type eq 'Approvals'}">
                                     <th>Decision</th>
                                 </c:if>
@@ -160,7 +163,10 @@
                                         <td>
                                             <a href="${bundle.kappLocation}?page=submission&id=${submission.id}">${text.escape(submission.label)}</a>
                                         </td>
-                                        <td data-moment>${submission.createdAt}</td>
+                                        <c:if test="${type ne 'Approvals'}">
+                                            <td data-moment>${submission.submittedAt}</td>
+                                        </c:if>
+                                        <td data-moment>${submission.closedAt}</td>
                                         <c:choose>
                                             <c:when test="${type eq 'Approvals' && submission.form.getField('Decision') ne null}">
                                                 <c:if test="${submission.getValue('Decision') eq 'Approved'}">

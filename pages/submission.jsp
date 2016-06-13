@@ -46,8 +46,12 @@
                                         </c:otherwise>
                                     </c:choose>
                                 </c:if>
-                                <dt>Request Date:</dt>
+                                <dt>Date Submitted:</dt>
                                 <dd data-moment>${submission.submittedAt}</dd>
+                                <c:if test="${submission.type.name != 'Approval' && submission.closedAt != null}">
+                                    <dt>Date Closed:</dt>
+                                    <dd data-moment>${submission.closedAt}</dd>
+                                </c:if>
                                 <dt>Status:</dt>
                                 <dd>${submission.coreState}</dd>
                             </dl>

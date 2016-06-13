@@ -325,4 +325,11 @@
             });
         });
     }
+    bundle.config.renderers.submitErrors = function(response) {
+        $('[data-form]').notifie({
+            message: 'There was a ' + response.status + ' : "' + response.statusText + '" error.' ,
+            exitEvents: "click"
+        });
+        console.log(response)
+    }
 })(jQuery, _, moment);

@@ -30,7 +30,7 @@
                 </c:when>
                 <c:when test="${not empty form.getAttributeValue('Icon')}">
                     <div class="icon">
-                        <i class="fa ${form.getAttributeValue('Icon')}"/>
+                        <i class="fa ${form.getAttributeValue('Icon')}"></i>
                     </div>
                 </c:when>
             </c:choose>

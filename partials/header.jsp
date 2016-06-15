@@ -20,8 +20,8 @@
                     <img class="pull-left" src="${BundleHelper.getLogo(kapp)}" alt="logo" style="display:block; max-height:40px; margin:5px;">
                     <strong class="pull-right">
                         <c:choose>
-                            <c:when test="${not empty kapp.getAttribute('Company Name')}">
-                                ${kapp.getAttributeValue('Company Name')}
+                            <c:when test="${not empty kapp.getAttribute('Company Logo')}">
+                                ${kapp.getAttributeValue('Company Logo')}
                                 <div class="small">${kapp.name}</div>
                             </c:when>
                             <c:otherwise>

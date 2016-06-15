@@ -8,17 +8,15 @@
     <div class="login-logo">
       <a href="#" class="logo">
           <!-- logo for regular state and mobile devices -->
-          <span class="logo-lg">
-              <c:if test="${not empty kapp.getAttribute('Company Logo')}">
+          <span class="logo-lg"> 
                 <c:choose>
-                  <c:when test ="${fn:containsIgnoreCase(kapp.getAttribute('Company Logo').value, 'http')}">
-                    <img class="pull-left" style="width:100%;" src="${kapp.getAttribute('Company Logo').value}" alt="logo">
-                  </c:when>
-                  <c:otherwise>
-                    <img class="pull-left" style="width:100%;" src="${bundle.location}/${kapp.getAttribute('Company Logo').value}" alt="logo">
-                  </c:otherwise>
+                    <c:when test="${not empty space.getAttribute('Company Name') && not empty space.getAttributeValue('Company Name')}">
+                        ${space.getAttributeValue('Company Name')}
+                    </c:when>
+                    <c:otherwise>
+                        ${space.name}
+                    </c:otherwise>
                 </c:choose>
-              </c:if>
           </span>
       </a>
     </div>

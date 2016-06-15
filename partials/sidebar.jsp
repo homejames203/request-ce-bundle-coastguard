@@ -88,7 +88,7 @@
                                 <span>${text.escape(category.name)}</span>
                                 <%-- If Subs exist, angle-left, otherwise show form count --%>
                                 <c:if test="${category.hasNonEmptySubcategories()}">
-                                    <i class="fa fa-angle-left pull-right <c:if test="${category.hasNonEmptySubcategories()}">treeview</c:if>"></i>
+                                    <i class="fa fa-angle-right pull-right <c:if test="${category.hasNonEmptySubcategories()}">treeview</c:if>"></i>
                                 </c:if>
                             </a>
                             <c:if test="${category.hasNonEmptySubcategories()}">

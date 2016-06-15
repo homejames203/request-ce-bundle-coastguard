@@ -2,7 +2,7 @@
 <%@include file="../bundle/initialization.jspf" %>
 <c:choose>
     <c:when test="${param['type'] eq 'request'}">
-        <c:set var="status" value="${Text.defaultIfBlank(param['status'],'Draft')}" />
+        <c:set var="status" value="${Text.defaultIfBlank(param['status'],'Submitted')}" />
     </c:when>
     <c:otherwise>
         <c:set var="status" value="${Text.defaultIfBlank(param['status'],'Submitted')}" />
@@ -50,11 +50,6 @@
     <section class="content">
         <div class="nav-tabs-custom ">
             <ul class="nav nav-tabs">
-                <c:if test="${paramtype != 'work-order' && type != 'Approvals'}">
-                    <li <c:if test="${status eq 'Draft'}">class="active"</c:if>>
-                        <a href="#tab_3" data-toggle="tab" aria-expanded="false">Draft</a>
-                    </li>
-                </c:if>
                 <li <c:if test="${status eq 'Submitted'}">class="active"</c:if>>
                     <a href="#tab_1" data-toggle="tab" aria-expanded="false">
                         <c:choose>
@@ -70,6 +65,11 @@
                 <li <c:if test="${status eq 'Closed'}">class="active"</c:if>>
                     <a href="#tab_2" data-toggle="tab" aria-expanded="false">Closed</a>
                 </li>
+                <c:if test="${paramtype != 'work-order' && type != 'Approvals'}">
+                    <li <c:if test="${status eq 'Draft'}">class="active"</c:if>>
+                        <a href="#tab_3" data-toggle="tab" aria-expanded="false">Draft</a>
+                    </li>
+                </c:if>
             </ul>
 
             <div class="tab-content">

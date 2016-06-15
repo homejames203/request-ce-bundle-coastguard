@@ -1,5 +1,6 @@
 div.notifie {
   display: none;
+  clear: both;
 }
 
 div.notifie div.notifie-message {

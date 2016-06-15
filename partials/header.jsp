@@ -16,12 +16,12 @@
         <span class="logo-lg">
             <c:choose>
                 <%-- Check to See if Company Logo / Name Attributes Exists --%>
-                <c:when test="${not empty kapp.getAttribute('Company Logo')}">
+                <c:when test="${not empty space.getAttribute('Company Logo')}">
                     <img class="pull-left" src="${BundleHelper.getLogo(kapp)}" alt="logo" style="display:block; max-height:40px; margin:5px;">
                     <strong class="pull-right">
                         <c:choose>
-                            <c:when test="${not empty kapp.getAttribute('Company Logo')}">
-                                ${kapp.getAttributeValue('Company Logo')}
+                            <c:when test="${not empty space.getAttribute('Company Logo')}">
+                                ${space.getAttributeValue('Company Logo')}
                                 <div class="small">${kapp.name}</div>
                             </c:when>
                             <c:otherwise>
@@ -34,8 +34,8 @@
                 <c:otherwise>
                     <i class="fa fa-home"></i> 
                     <c:choose>
-                        <c:when test="${not empty kapp.getAttribute('Company Name')}">
-                           ${kapp.getAttributeValue('Company Name')}
+                        <c:when test="${not empty space.getAttribute('Company Name')}">
+                           ${space.getAttributeValue('Company Name')}
                            <div class="small">${kapp.name}</div>
                         </c:when>
                         <c:otherwise>
@@ -79,10 +79,12 @@
                                                 </div>
                                                 <h4>
                                                     ${broadcastAlert.get('Subject')}
-                                                    <small>
-                                                        <i class="fa fa-clock-o"></i>
-                                                        <span  data-moment>${broadcastAlert.get('createdAt')}</span>
-                                                    </small>
+                                                    <div>
+                                                        <small>
+                                                            <i class="fa fa-clock-o"></i>
+                                                            <span data-moment>${broadcastAlert.get('createdAt')}</span>
+                                                        </small>
+                                                    </div>
                                                 </h4>
                                                 <p>${broadcastAlert.get('Message')}</p>
                                             </a>
@@ -114,9 +116,9 @@
                                                 <h3>
                                                     ${Submissions.retrieve(approval.getValue('Parent Instance ID')).form.name}
                                                 </h3>
-                                                <p>
+                                                <h3>
                                                     <span>${approval.label}</span>
-                                                <p>
+                                                </h3>
                                             </a>
                                         </li><!-- end task item -->
                                     </c:forEach>
@@ -135,7 +137,7 @@
                     <ul class="dropdown-menu">
                         <c:forEach var="spaceKapp" items="${space.kapps}">
                             <li><!-- start message -->
-                                <a href="${bundle.spaceLocation}/${spaceKapp.slug}/">   
+                                <a href="${bundle.spaceLocation}/${spaceKapp.slug}/">  
                                     <i class="fa ${spaceKapp.getAttributeValue("Icon")} fa-fw fa-1x"></i>
                                     <span>${spaceKapp.name}</span>
                                 </a>

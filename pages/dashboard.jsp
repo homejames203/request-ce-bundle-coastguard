@@ -12,7 +12,7 @@
         <bundle:script src="${bundle.location}/js/dashboard.js" />
     </bundle:scriptpack>
     <bundle:variable name="head">
-        <title>${kapp.getAttribute('Company Name').value} - Management Dashboard</title>
+        <title>${space.getAttribute('Company Name').value} - Management Dashboard</title>
     </bundle:variable>
 
 

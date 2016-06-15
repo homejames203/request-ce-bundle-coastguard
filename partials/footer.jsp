@@ -6,8 +6,8 @@
     </div>
     <strong>Copyright &copy; 2014-2016 <a href="${bundle.kappLocation}">
         <c:choose>
-            <c:when test="${not empty kapp.getAttribute('Company Name')}">
-               ${kapp.getAttributeValue('Company Name')}
+            <c:when test="${not empty space.getAttribute('Company Name')}">
+               ${space.getAttributeValue('Company Name')}
             </c:when>
             <c:otherwise>
                 ${kapp.name}

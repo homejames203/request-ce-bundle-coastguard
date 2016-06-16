@@ -29,7 +29,7 @@ TO IMPLEMENT:
     // typeahead-user-id-attribute  *OPTIONAL      (If filtering results to not include logged in user (for person searching) bridge attribute for the user's Id)
     // typeahead-placeholder        *OPTIONAL      (Placholder text to put into the search field)
     // typeahead-min-length         *OPTIONAL      (Minium Length to begin search)
-    // typeahead-additional-params  *OPTIONAL      (Comma separated List of additional values to be provided to the bridge)  -- NEED TO FIGURE THIS OUT SOON
+    // typeahead-additional-params  *OPTIONAL      (Comma separated List of additional values to be provided to the bridge)  (e.g Bridge Param 1:STRING::XYZ,Bridge Param 2:FIELD::FieldName)
     // typeahead-config-object      *OPTIONAL      (templateConfiguration Callback to execute when suggestion is selected)
     //
     // END TYPEAHEAD SEARCH INPUT ATTRIBTUES
@@ -62,9 +62,10 @@ TO IMPLEMENT:
             if(!_.isEmpty($(input).attr('typeahead-bridge-location'))) typeaheadConfig['bridgeLocation'] = $(input).attr('typeahead-bridge-location')
             if(!_.isEmpty($(input).attr('typeahead-attributes-to-show'))) typeaheadConfig['attrsToShow'] = $(input).attr('typeahead-attributes-to-show').split(',')
             if(!_.isEmpty($(input).attr('typeahead-attribute-to-set'))) typeaheadConfig['attrToSet'] = $(input).attr('typeahead-attribute-to-set')
+
             if(!_.isEmpty($(input).attr('typeahead-query-field'))){
                 typeaheadConfig['queryField'] = $(input).attr('typeahead-query-field')
-            } else if (!_.isEmpty(typeaheadConfig['bridgeLocation'])){
+            } else if (!_.isEmpty(typeaheadConfig['queryField'])){
                 typeaheadConfig['queryField'] = typeaheadConfig['queryField']
             } else {
                 typeaheadConfig['queryField'] = $(input).attr('name')
@@ -80,11 +81,35 @@ TO IMPLEMENT:
                 })
             } 
 
+            // Check to see if any additional parameters were specified to be passed to the bridge search
+            if(!_.isEmpty($(input).attr('typeahead-additional-params'))){
+                typeaheadConfig['additionalParams'] = {}
+                $.each($(input).attr('typeahead-additional-params').split(','), function(i, v){
+                    var fname = v.split('=')[0]
+                    var fbridgedValue = v.split('=')[1]
+                    typeaheadConfig['additionalParams'][fname] = fbridgedValue
+                })
+            }
+
             // Determine and build bridge url to use
             if(!_.isEmpty(typeaheadConfig['bridgeLocation'])){
                 typeaheadConfig['bridgeUrl'] = bundle.kappLocation() + "/" + typeaheadConfig['bridgeLocation'] + "/bridgedResources/" + typeaheadConfig['bridgedResource'] + "?values[" + typeaheadConfig['queryField'] + "]=%QUERY"
             } else {
                 typeaheadConfig['bridgeUrl'] = bundle.kappLocation() + "/" + K('form').slug() + "/bridgedResources/" + typeaheadConfig['bridgedResource']  + "?values[" + typeaheadConfig['queryField'] + "]=%QUERY"
+            }
+
+            // If additional Parameters were passed, append them to the bridge URL
+            if(!_.isEmpty(typeaheadConfig['additionalParams'])){
+                $.each(typeaheadConfig['additionalParams'], function(name,value){
+                    var addtlParam = "";
+                    if(value.split('::')[0].toLowerCase() === 'string'){
+                        addtlParam = '&values[' + name + ']=' + value;
+                    } else if(value.split('::')[0].toLowerCase() === 'field') {
+                        addtlParam = '&values[' + name + ']=' + K('field['+ value +']').value();
+                    }
+                    var addtlParam = '&values[' + name + ']=' + value;
+                    typeaheadConfig['bridgeUrl'] += addtlParam
+                })
             }
 
             // Stop processing if no fields or bridgedresource have been defined 
@@ -176,6 +201,7 @@ typeaheadConfigurations = {
         emptyMessage: 'No results found',
         userIdAttribute : 'yes', // If filtering results to not include logged in user (for person searching) bridge attribute for the user's Id
         queryField:  'Name',
+        additionalParams: null,
         minLength: 3,
         bridgedResource: 'People - By Name',
         bridgeLocation: null,

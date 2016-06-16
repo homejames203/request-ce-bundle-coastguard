@@ -143,5 +143,15 @@ bundle.config.ready = function(form) {
     // default datepicker behavior
     $('form div[data-element-type="wrapper"]:has( >label )').children('label').removeClass('col-sm-12 col-sm-6 col-sm-4');
     $('form div[data-element-type="wrapper"]:has( >label )').children('input').addClass('form-control');
+
+    // Initialize typeahead searching on Kinetic Forms if the library exists
+    if(typeAheadSearch !== undefined) { typeAheadSearch(); }
+
+    // Help Text Setup (Popover / Bootstrap)
+    $('div[help-text]').each(function(){
+        var hlptxt = $(this).attr('help-text')
+        $(this).children('label').first().append("&nbsp;&nbsp;", $("<i class='fa fa-info-circle fa-1x' aria-hidden='true' tabindex='0' data-toggle='popover' data-trigger='hover' title='Help' role='button'></i>").attr('data-content', hlptxt));
+    });
+    $('[data-toggle="popover"]').popover()
 };
 </script>

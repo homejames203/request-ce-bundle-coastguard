@@ -12,8 +12,6 @@ TO IMPLEMENT:
 5. Add the css (at the bottom of this file) to custom head content, or include it within your form's jsp
 */
 
-// TODO - typeahead-additional-params
-
 (function($, _, moment){
     
     //------------------------------------------------------------
@@ -208,6 +206,7 @@ typeaheadConfigurations = {
         }
     },
     personConfiguration:{
-        faClass: 'fa-user'
+        faClass: 'fa-user',
+        bridgeLocation: 'shared-resources'
     }
 };

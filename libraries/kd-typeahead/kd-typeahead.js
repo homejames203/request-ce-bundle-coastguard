@@ -3,38 +3,47 @@
 * jQuery / underscore / moment
 */
 
-/*
-TO IMPLEMENT:
-1. Configure the required attributes on any input element within any Kinetic Form
-2. Configure a bridge resource 
-3. Create an on load event to call the typeAheadSearch() function OR call the typeAheadSearch() function from within the bundle.config's ready callback in your bundle
-4. Add this code to custom head content, or include it within your form's jsp
-5. Add the css (at the bottom of this file) to custom head content, or include it within your form's jsp
+/**
+* TO IMPLEMENT:
+* 1. Configure the required attributes on any input element within any Kinetic Form
+* 2. Configure a bridge resource 
+* 3. Create an on load event to call the typeAheadSearch() function OR call the typeAheadSearch() function from within the bundle.config's ready callback in your bundle
+* 4. Add this code to custom head content, or include it within your form's jsp
+* 5. Add the css (at the bottom of this file) to custom head content, or include it within your form's jsp
+*/
+
+/**
+* DESCRIPTION
+* kd-typeahead is meant for making it easy to creat typeahead searches in Kinetic Forms
+* 
+* The typeahead functionality is implemented on any input element with an attribute called "uses-typeahead". Additional input attributes can be specified to 
+* allow form builders to manipulate the typeahead behavior. 
+* 
+* There is a default configuration object that is used for each typeahead search. It can be overridden by a custom configuration object added to the bundle 
+* or to the forms custom head content. Additional attributes can be added to the input element that will override the custom or default configuration object.
+*/
+
+/*------------------------------------------------------------
+* TYPEAHEAD SEARCH INPUT ATTRIBTUES: 
+* uses-typeahead               *REQUIRED      (Provide a value if this input uses typeahead ex. 'yes')
+* typeahead-config-object      *OPTIONAL      (Configuration object to use in lieu of the default configuration)
+* typeahead-fields-to-set      *REQUIRED      (Comma separated Field on Form to Bridge Attribute) (e.g. Login Id Field=Login Id,Name Field=Name)
+* typeahead-attribute-to-set   *REQUIRED      (Name of Bridge Attribute to Set in Typeahead Search Field) (e.g. Name)
+* typeahead-attributes-to-show *REQUIRED      (Comma separated List of Bridge Attributes to Show in Typeahead Search) (e.g. Login Id,Name)
+* typeahead-bridged-resource   *REQUIRED      (Name of Bridged Resource to Use - must match a valid bridge resource on the current or shared-resource form)
+* typeahead-bridge-location    *OPTIONAL      (If the search uses a shared-resource form specify it's slug - Defaults to current form)
+* typeahead-query-field        *OPTIONAL      (Name field the Bridged Resource is expecting to be passed as a parameter - Defaults to the typeahead search field)
+* typeahead-fa-class           *OPTIONAL      (Font awesom icon to append to typeahead search and results)
+* typeahead-empy-message       *OPTIONAL      (Message to display if no results are found)
+* typeahead-user-id-attribute  *OPTIONAL      (If filtering results to not include logged in user (for person searching) bridge attribute for the user's Id)
+* typeahead-placeholder        *OPTIONAL      (Placholder text to put into the search field)
+* typeahead-min-length         *OPTIONAL      (Minium Length to begin search)
+* typeahead-additional-params  *OPTIONAL      (Comma separated List of additional values to be provided to the bridge. 
+*                                              The values should be prefixed with STRING:: or FIELD:: depending on if you are passing a 
+*                                              hard coded string, or want the system to get a Field's Value)  (e.g Bridge Param 1=STRING::XYZ,Bridge Param 2=FIELD::FieldName )
 */
 
 (function($, _, moment){
-    
-    //------------------------------------------------------------
-    // TYPEAHEAD SEARCH INPUT ATTRIBTUES
-    // 
-    // uses-typeahead               *REQUIRED      (provide a value if this input uses typeahead)
-    // typeahead-fields-to-set      *REQUIRED      (Comma separated Field on Form to Bridge Attribute) (e.g. Login Id Field=Login Id,Name Field=Name)
-    // typeahead-attribute-to-set   *REQUIRED      (Name of Bridge Attribute to Set in Typeahead Search Field) (e.g. Name)
-    // typeahead-attributes-to-show *REQUIRED      (Comma separated List of Bridge Attributes to Show in Typeahead Search) (e.g. Login Id,Name)
-    // typeahead-bridged-resource   *REQUIRED      (Name of Bridged Resource to Use - Searches Current form then Shared Resource Form)
-    // typeahead-bridge-location    *OPTIONAL      (If the search uses a shared-resource form specify it's slug - Defaults to current form)
-    // typeahead-query-field        *OPTIONAL      (Name field the Bridged Resource is expecting to be passed as a parameter - Defaults to the typeahead search field)
-    // typeahead-fa-class           *OPTIONAL      (Font awesom icon to append to typeahead search and results)
-    // typeahead-empy-message       *OPTIONAL      (Message to display if no results are found)
-    // typeahead-user-id-attribute  *OPTIONAL      (If filtering results to not include logged in user (for person searching) bridge attribute for the user's Id)
-    // typeahead-placeholder        *OPTIONAL      (Placholder text to put into the search field)
-    // typeahead-min-length         *OPTIONAL      (Minium Length to begin search)
-    // typeahead-additional-params  *OPTIONAL      (Comma separated List of additional values to be provided to the bridge)  (e.g Bridge Param 1:STRING::XYZ,Bridge Param 2:FIELD::FieldName)
-    // typeahead-config-object      *OPTIONAL      (templateConfiguration Callback to execute when suggestion is selected)
-    //
-    // END TYPEAHEAD SEARCH INPUT ATTRIBTUES
-    //------------------------------------------------------------
-
 
     // On Load Event that Searches the current form for any "typeahead" input attributes
     typeAheadSearch = function(){
@@ -136,7 +145,7 @@ TO IMPLEMENT:
                         var dataArrayObjects = _.map(data.records.records, function(record){
                            return _.object(data.records.fields, record);
                         });
-                        if (typeaheadConfig['userIdAttribute'] === "yes"){
+                        if (_.isEmpty(typeaheadConfig['userIdAttribute'])){
                             return dataArrayObjects;
                         }
                         else {
@@ -196,21 +205,20 @@ TO IMPLEMENT:
 // CONFIGURATION Object
 typeaheadConfigurations = {
     defaultConfiguration:{
-        faClass: 'fa-cog',
-        placeholder: 'Start typing to begin your search...',
-        emptyMessage: 'No results found',
-        userIdAttribute : 'yes', // If filtering results to not include logged in user (for person searching) bridge attribute for the user's Id
-        queryField:  'Name',
-        additionalParams: null,
-        minLength: 3,
-        bridgedResource: 'People - By Name',
-        bridgeLocation: null,
-        attrsToShow: ['Full Name', 'Email', 'Telephone Number'],
-        attrToSet: 'Full Name',
-        fieldsToSet: {
-            "Requested For":"Id",
-            "Requested For Displayed Name":"Full Name"
-        },
+        faClass: 'fa-cog',  // Font awesom icon to append to typeahead search and results
+        placeholder: 'Start typing to begin your search...',  // Placholder text to put into the search field
+        emptyMessage: 'No results found', // Message to display if no results are found
+        userIdAttribute : null, // If filtering results to not include logged in user (for person searching) bridge attribute for the user's Id
+        queryField:  null, // Name field the Bridged Resource is expecting to be passed as a parameter - Defaults to the typeahead search field
+        additionalParams: null, // JS Object with name value pairs of additinal parameters to be provided to the bridge 
+                                // The values should be prefixed with STRING:: or FIELD:: depending on if you are passing a 
+                                // hard coded string, or want the system to get a Field's Value)  (e.g {"Bridge Param 1":"STRING::XYZ","Bridge Param 2":"FIELD::FieldName"} )
+        minLength: 3, // Minium Length to begin search
+        bridgedResource: null, // Name of Bridged Resource to Use - must match a valid bridge resource on the current or shared-resource form
+        bridgeLocation: null, // If the search uses a shared-resource form specify it's slug - Defaults to current form
+        attrsToShow: null, // Comma separated List of Bridge Attributes to Show in Typeahead Search dropdown. (e.g. Login Id,Name)
+        attrToSet: null, // Name of Bridge Attribute to Set in Typeahead Search Field
+        fieldsToSet: null, // JS Object with name value pairs of Fields on Form to Bridge Attribute (e.g. {"Login Id Field":"Login Id","Name Field"="Name"})
         suggestionHtml: function(data, config) {    // Data is the Data Records Returned from the Bridge Call, Config is the typeaheadConfiguration Object
             var suggestionDetails = $('<div class="tt-details"/>');
             $.each(config['attrsToShow'],function(i,attr){
@@ -231,8 +239,17 @@ typeaheadConfigurations = {
             });
         }
     },
+    // Example for Person Searching
     personConfiguration:{
+        queryField: 'Name',
         faClass: 'fa-user',
-        bridgeLocation: 'shared-resources'
+        bridgeLocation: 'shared-resources',
+        attrsToShow: ['Full Name', 'Email', 'Telephone Number'],
+        bridgedResource: 'People - By Name',
+        attrToSet: 'Full Name',
+        fieldsToSet: { // JS Object with name value pairs of Fields on Form to Bridge Attribute (e.g. {"Login Id Field":"Login Id","Name Field"="Name"})
+            "Requested For":"Id",
+            "Requested For Displayed Name":"Full Name"
+        }
     }
 };

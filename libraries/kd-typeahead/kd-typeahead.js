@@ -253,5 +253,30 @@ typeaheadConfigurations = {
             "Requested For":"Id",
             "Requested For Displayed Name":"Full Name"
         }
+    },
+    // Used by The update ram on existing server (example service)
+    searchForRam:{
+        faClass: 'fa-server',
+        placeholder: 'Start typing to begin your search...',
+        emptyMessage: 'No servers by that name found',
+        queryField:  'Host Name',
+        additionalParams: {"Class":"STRING::BMC_COMPUTERSYSTEM","DataSetId":"STRING::BMC:Asset"},
+        minLength: 2,
+        bridgedResource: 'BMC Computer System',
+        bridgeLocation: null,
+        attrsToShow: ['CI Name', 'Manufacturer', 'Product'],
+        attrToSet: 'CI Name',
+        fieldsToSet: {
+            "Host Name":"CI Name",
+            "Reconciliation Identity":"ReconciliationId"
+        },
+        selectedCallback: function(data, config) {  // Data is the row that was selected, all attributes returned from the bridge are available
+            // Loop over the Fields to Set and Set them
+            $.each( config['fieldsToSet'], function( key, value ) {
+                config['typeaheadForm'].select('field[' + key + ']').value(data[value]);
+                // Fire change event on field that was set
+                $(config['typeaheadForm'].select('field[' + key + ']').element()).change();
+            });
+        }
     }
 };

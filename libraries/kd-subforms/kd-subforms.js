@@ -355,16 +355,5 @@ subformConfigurations = {
             $(subformConfig['subformContainer']).parent().hide()
           }
         }
-    },
-    ramConfiguration:{
-        subformModal: false,  // Subform to be displayed in a modal (yes or no)
-        subformSlug: 'change-ram-on-existing-server',  // Slug of the Subform to Load
-        emptyMessage: 'No results found', // Message to display if no results are found
-        columns: [{'name':'Host Name','data':'Host Name'},{'name':'Select New Size','data':'Select New Size'}], // array of Column Name to Subform Field Object Mappings
-        subformChildSource: 'ajax',
-        ajaxUrl: null,
-        bridgedUrl: null,
-        bridgedResource: null, // Name of Bridged Resource to Use - must match a valid bridge resource on the current or shared-resource form
-        bridgeLocation: null
     }
 };

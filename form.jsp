@@ -112,12 +112,12 @@ bundle.config.fields = {
 };
 bundle.config.ready = function(form) {
     // Manipulate Default Buttons on Forms
-    $('[data-element-type="button"]').addClass('btn btn-default');
-    $('[data-button-type="submit-page"]').addClass('pull-right');
-    $('[data-button-type="save"], [data-button-type="previous-page"]').css('margin-right','15px');
+    $(form.element()).find('[data-element-type="button"]').addClass('btn btn-default');
+    $(form.element()).find('[data-button-type="submit-page"]').addClass('pull-right');
+    $(form.element()).find('[data-button-type="save"], [data-button-type="previous-page"]').css('margin-right','15px');
 
     // Loop over each Form Section and Add Appropriate Classes
-    $('div.box form section').each(function(){
+    $(form.element()).find('section').each(function(){
         // If the Section ONLY contains form buttons, add the box-footer class 
         if( $(this).find('button[data-button-type]').length > 0 && $(this).children().length === $(this).find('button[data-button-type]').length ){
             // Check to make sure it wasn't already added to the section via the builder
@@ -132,26 +132,27 @@ bundle.config.ready = function(form) {
     });
 
     // Add box-body to forms with no sections
-    if( $('div.box form section').length === 0 ){
-        $('div.box form').children().wrapAll('<div class="box-body"></div>');
+    if( $(form.element()).find('section').length === 0 ){
+        $(form.element()).children().wrapAll('<div class="box-body"></div>');
     }
 
     // Wrap all additional questions that aren't in a section with box body div
-    $('div.box form').children('.form-group').not('section').wrapAll('<div class="box-body"></div>');
+    $(form.element()).children('.form-group').not('section').wrapAll('<div class="box-body"></div>');
 
     // Work around for Date-Time fields that can't be manipulated in bundle.config.fields without overriding
     // default datepicker behavior
-    $('form div[data-element-type="wrapper"]:has( >label )').children('label').removeClass('col-sm-12 col-sm-6 col-sm-4');
-    $('form div[data-element-type="wrapper"]:has( >label )').children('input').addClass('form-control');
+    $(form.element()).find('div[data-element-type="wrapper"]:has( >label )').children('label').removeClass('col-sm-12 col-sm-6 col-sm-4');
+    $(form.element()).find('div[data-element-type="wrapper"]:has( >label )').children('input').addClass('form-control');
 
     // Initialize typeahead searching on Kinetic Forms if the library exists
-    if(typeAheadSearch !== undefined) { typeAheadSearch(); }
+    if(typeAheadSearch !== undefined) { typeAheadSearch(form); }
+    if(subformTables !== undefined) { subformTables.initialize(form); }
 
     // Help Text Setup (Popover / Bootstrap)
-    $('div[help-text]').each(function(){
+    $(form.element()).find('div[help-text]').each(function(){
         var hlptxt = $(this).attr('help-text')
         $(this).children('label').first().append("&nbsp;&nbsp;", $("<i class='fa fa-info-circle fa-1x' aria-hidden='true' tabindex='0' data-toggle='popover' data-trigger='hover' title='Help' role='button'></i>").attr('data-content', hlptxt));
     });
-    $('[data-toggle="popover"]').popover()
+    $(form.element()).find('[data-toggle="popover"]').popover()
 };
 </script>

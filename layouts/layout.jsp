@@ -36,6 +36,7 @@
             <bundle:script src="${bundle.location}/libraries/moment/moment-timezone.js" />
             <bundle:script src="${bundle.location}/libraries/kd-search/search.js"/>
             <bundle:script src="${bundle.location}/libraries/kd-typeahead/kd-typeahead.js"/>
+            <bundle:script src="${bundle.location}/libraries/kd-subforms/kd-subforms.js"/>
             <bundle:script src="${bundle.location}/libraries/bootstrap/js/bootstrap.min.js"/>
             <bundle:script src="${bundle.location}/libraries/notifie/jquery.notifie.js"/>
             <bundle:script src="${bundle.location}/libraries/jquery-datatables/jquery.dataTables.js"/>

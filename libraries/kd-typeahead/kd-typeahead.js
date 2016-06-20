@@ -46,18 +46,19 @@
 (function($, _, moment){
 
     // On Load Event that Searches the current form for any "typeahead" input attributes
-    typeAheadSearch = function(){
-
-        $(K('form').element()).find('input[uses-typeahead]').each(function(){
-            
+    typeAheadSearch = function(form){
+        
+        $(form.element()).find('input[uses-typeahead]').each(function(){
+            var typeaheadForm = form;
             // Setup Config Variables for Typeahead
             var input = $(this)
-            var typeaheadConfig = typeaheadConfigurations['defaultConfiguration']
-
+            var typeaheadConfig = $.extend({},typeaheadConfigurations['defaultConfiguration'])
+            //_.extend(typeaheadConfig, typeaheadConfigurations['defaultConfiguration']) 
+            typeaheadConfig['typeaheadForm'] = typeaheadForm;
             // Check to see if there is a typeahead config object being specified
             if($(input).attr('typeahead-config-object') !== undefined){
                 // If so, set the typeaheadConfig to the specified config object
-                _.extend(typeaheadConfig, typeaheadConfigurations[$(input).attr('typeahead-config-object')])
+                typeaheadConfig = $.extend(typeaheadConfig, typeaheadConfigurations[$(input).attr('typeahead-config-object')])
             }
 
             // Override the specified config object if any extra typeahead attributes were set
@@ -65,7 +66,7 @@
             if(!_.isEmpty($(input).attr('typeahead-min-length'))) typeaheadConfig['minLength'] = $(input).attr('typeahead-min-length')
             if(!_.isEmpty($(input).attr('typeahead-fa-class'))) typeaheadConfig['faClass'] = $(input).attr('typeahead-fa-class')
             if(!_.isEmpty($(input).attr('typeahead-placeholder'))) typeaheadConfig['placeholder'] = $(input).attr('typeahead-placeholder')
-            if(!_.isEmpty($(input).attr('typeahead-empty-message'))) typeaheadConfig['emptyMessage'] = $(input).attr('typeahead-empty-message').split(',')
+            if(!_.isEmpty($(input).attr('typeahead-empty-message'))) typeaheadConfig['emptyMessage'] = $(input).attr('typeahead-empty-message')
             if(!_.isEmpty($(input).attr('typeahead-user-id-attribute'))) typeaheadConfig['userIdAttribute'] = $(input).attr('typeahead-user-id-attribute')
             if(!_.isEmpty($(input).attr('typeahead-bridged-resource'))) typeaheadConfig['bridgedResource'] = $(input).attr('typeahead-bridged-resource')
             if(!_.isEmpty($(input).attr('typeahead-bridge-location'))) typeaheadConfig['bridgeLocation'] = $(input).attr('typeahead-bridge-location')
@@ -104,19 +105,19 @@
             if(!_.isEmpty(typeaheadConfig['bridgeLocation'])){
                 typeaheadConfig['bridgeUrl'] = bundle.kappLocation() + "/" + typeaheadConfig['bridgeLocation'] + "/bridgedResources/" + typeaheadConfig['bridgedResource'] + "?values[" + typeaheadConfig['queryField'] + "]=%QUERY"
             } else {
-                typeaheadConfig['bridgeUrl'] = bundle.kappLocation() + "/" + K('form').slug() + "/bridgedResources/" + typeaheadConfig['bridgedResource']  + "?values[" + typeaheadConfig['queryField'] + "]=%QUERY"
+                typeaheadConfig['bridgeUrl'] = bundle.kappLocation() + "/" + typeaheadForm.slug() + "/bridgedResources/" + typeaheadConfig['bridgedResource']  + "?values[" + typeaheadConfig['queryField'] + "]=%QUERY"
             }
 
             // If additional Parameters were passed, append them to the bridge URL
             if(!_.isEmpty(typeaheadConfig['additionalParams'])){
                 $.each(typeaheadConfig['additionalParams'], function(name,value){
                     var addtlParam = "";
+                    var valToSet = value.split('::')[1]
                     if(value.split('::')[0].toLowerCase() === 'string'){
-                        addtlParam = '&values[' + name + ']=' + value;
+                        addtlParam = '&values[' + name + ']=' + valToSet;
                     } else if(value.split('::')[0].toLowerCase() === 'field') {
-                        addtlParam = '&values[' + name + ']=' + K('field['+ value +']').value();
+                        addtlParam = '&values[' + name + ']=' + typeaheadForm.select('field['+ valToSet +']').value();
                     }
-                    var addtlParam = '&values[' + name + ']=' + value;
                     typeaheadConfig['bridgeUrl'] += addtlParam
                 })
             }
@@ -133,7 +134,7 @@
             $(input).closest('.input-group').prepend($('<span class="input-group-addon" id="basic-addon1"><i class="fa ' + typeaheadConfig['faClass'] + '" aria-hidden="true"></i></span>'));
             $(input).attr('placeholder', typeaheadConfig['placeholder'] )
             $(input).attr('data-provide', 'typeahead').addClass('typeahead');
-            
+
             // BLOODHOUND Search
             var bridgeSearch = new Bloodhound({
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
@@ -162,10 +163,11 @@
                 {
                     hint: true,
                     highlight: true,
-                    minLength: typeaheadConfig['minLength']
+                    minLength: typeaheadConfig['minLength'],
                 },
                 {
                     name: 'typeahead-search',
+                    limit: 100,
                     display: typeaheadConfig['attrToSet'],
                     source: bridgeSearch,
                     templates: {
@@ -233,9 +235,9 @@ typeaheadConfigurations = {
         selectedCallback: function(data, config) {  // Data is the row that was selected, all attributes returned from the bridge are available
             // Loop over the Fields to Set and Set them
             $.each( config['fieldsToSet'], function( key, value ) {
-                K('field[' + key + ']').value(data[value]);
+                config['typeaheadForm'].select('field[' + key + ']').value(data[value]);
                 // Fire change event on field that was set
-                $(K('field[' + key + ']').element()).change();
+                $(config['typeaheadForm'].select('field[' + key + ']').element()).change();
             });
         }
     },
@@ -247,9 +249,33 @@ typeaheadConfigurations = {
         attrsToShow: ['Full Name', 'Email', 'Telephone Number'],
         bridgedResource: 'People - By Name',
         attrToSet: 'Full Name',
-        fieldsToSet: { // JS Object with name value pairs of Fields on Form to Bridge Attribute (e.g. {"Login Id Field":"Login Id","Name Field"="Name"})
+        fieldsToSet: {
             "Requested For":"Id",
             "Requested For Displayed Name":"Full Name"
+        }
+    },
+    searchForRam:{
+        faClass: 'fa-server',
+        placeholder: 'Start typing to begin your search...',
+        emptyMessage: 'No servers by that name found',
+        queryField:  'Host Name',
+        additionalParams: {"Class":"STRING::BMC_COMPUTERSYSTEM","DataSetId":"STRING::BMC:Asset"},
+        minLength: 2,
+        bridgedResource: 'BMC Computer System',
+        bridgeLocation: null,
+        attrsToShow: ['CI Name', 'Manufacturer', 'Product'],
+        attrToSet: 'CI Name',
+        fieldsToSet: {
+            "Host Name":"CI Name",
+            "Reconciliation Identity":"ReconciliationId"
+        },
+        selectedCallback: function(data, config) {  // Data is the row that was selected, all attributes returned from the bridge are available
+            // Loop over the Fields to Set and Set them
+            $.each( config['fieldsToSet'], function( key, value ) {
+                config['typeaheadForm'].select('field[' + key + ']').value(data[value]);
+                // Fire change event on field that was set
+                $(config['typeaheadForm'].select('field[' + key + ']').element()).change();
+            });
         }
     }
 };

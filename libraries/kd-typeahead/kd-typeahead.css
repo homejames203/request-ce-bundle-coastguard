@@ -7,6 +7,8 @@
     background: white;
     width: 100%;
     border: 1px solid lightgray;
+    max-height: 150px;
+    overflow-y: auto;
 }
 .tt-suggestion {
     overflow: hidden;

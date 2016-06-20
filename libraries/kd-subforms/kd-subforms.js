@@ -203,7 +203,7 @@
                 }
             } else if (subformConfig['subformChildSource'].toLowerCase() === 'bridge'){
                 // NEED TO BUILD THE BRIDGE SUBMISSIONS HANDLING HERE
-                }
+                
             }
 
             // Build Datatable

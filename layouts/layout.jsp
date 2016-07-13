@@ -65,7 +65,7 @@
             </body>
         </c:when>
         <c:otherwise>
-            <body class="hold-transition skin-purple-light sidebar-mini">
+            <body class="hold-transition skin-red-light sidebar-mini">
                 <div class="wrapper">
                     <c:import url="${bundle.path}${themeBundlePathModifier}/partials/header.jsp" charEncoding="UTF-8"/>
                     <c:import url="${bundle.path}/partials/sidebar.jsp" charEncoding="UTF-8"/>

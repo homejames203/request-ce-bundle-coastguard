@@ -1,3 +1,37 @@
+function deleteAll(kappSlug, formSlug){
+    // Retrieve Valid Questions from Form
+    $.ajax({
+        method: 'GET',
+        url: bundle.apiLocation() + '/kapps/' + kappSlug + '/forms/' + formSlug + '/submissions?limit=999',
+        dataType: "json",
+        contentType: "application/json",
+        // If form exists, run this code
+        success: function(response, textStatus, jqXHR){
+            $.each(response.submissions, function(i,v){
+                $.ajax({
+                    method: 'DELETE',
+                    url: 'app/api/v1/submissions/'+response.submissions[i].id ,
+                    dataType: "json",
+                    contentType: "application/json",
+                    
+                    // If form creation was successful run this code
+                    success: function(response, textStatus, jqXHR){
+                        console.log("deleted");
+                    },
+                    // If there was an error, show the error
+                    error: function(jqXHR, textStatus, errorThrown){
+                        console.log(data.errorThrown);
+                    }
+                });
+            })                                
+        },
+        // If there was an error, show the error
+        error: function(jqXHR, textStatus, errorThrown){
+        }
+    });
+
+}
+
 /**
  * Forms Search using Twitter Typeahead. Prefetch all accessible forms
  * for the Kapp.

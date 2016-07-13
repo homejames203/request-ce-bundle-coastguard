@@ -114,7 +114,7 @@
                 return kapp.getAttributeValue("Company Logo");
             }
             else {
-                return bundle.getPath() + "/" + kapp.getAttributeValue("Company Logo");
+                return bundle.getPath() + "/images/" + kapp.getAttributeValue("Company Logo");
             }
         }
 

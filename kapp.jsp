@@ -26,7 +26,8 @@
             <c:set scope="request" var="tileClass" value="col-sm-${tileCount}"/>
             <%-- Header --%>
             <section class="content-header">
-                <h1>
+                <img class="pull-left" src="${BundleHelper.getLogo(kapp)}" alt="logo" style="display:block; max-height:40px; margin:5px;">
+                <h1 style="padding-top: 12px">
                     Enterprise Request Management System
                 </h1>
                 <ol class="breadcrumb">
